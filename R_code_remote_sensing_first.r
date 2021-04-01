@@ -51,3 +51,39 @@ plot(p224r63_2011$B1_sre, col=cl)
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
+
+# 2 row and 1 column? (just invert number)
+par(mfrow=c(2,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+#if i want the number of column first i will use "col" instead of "row" 
+par(mfcol=c(1,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+#plot the first 4 bands of landsat
+# 4 row and 1 col
+par(mfrow=c(4,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+# a quadrat of bands
+par(mfrow=c(2,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+#every bands with own ColorRampPalette
+par(mfrow=c(2,2))
+clb <- colorRampPalette(c("dark blue","blue","light blue"))(100) 
+plot(p224r63_2011$B1_sre, col=clb)
+clg <- colorRampPalette(c("dark green","green","light green"))(100)
+plot(p224r63_2011$B2_sre, col=clg)
+clr <- colorRampPalette(c("dark red","red","pink"))(100) #using pink because light red doesn't exist
+plot(p224r63_2011$B3_sre, col=clr)
+clnir <- colorRampPalette(c("dark orange","orange","yellow"))(100)
+plot(p224r63_2011$B4_sre, col=clnir)
