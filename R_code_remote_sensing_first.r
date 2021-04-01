@@ -87,3 +87,4 @@ clr <- colorRampPalette(c("dark red","red","pink"))(100) #using pink because lig
 plot(p224r63_2011$B3_sre, col=clr)
 clnir <- colorRampPalette(c("dark orange","orange","yellow"))(100)
 plot(p224r63_2011$B4_sre, col=clnir)
+
