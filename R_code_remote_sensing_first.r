@@ -47,7 +47,7 @@ plot(p224r63_2011$B1_sre, col=cl)
 #close the band window manually or with command dev.off()
 
 #we can also plot 2 bands in the same windows with the function "par" followed by the plots we are interested
-#we are doing a multiframe (fm)
+#we are doing a multiframe (fm) with 1 row and 2 column
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
