@@ -23,3 +23,31 @@ plot(p224r63_2011, col=cl)
 #change with my new colours
 cl <- colorRampPalette(c("blue","yellow","green","red"))(100)
 plot(p224r63_2011, col=cl)
+
+#important command: dev.off() to clean the current graph
+
+#DAY 3
+#Landsat bands
+#B1=blue
+#B2=green
+#B3=red
+#B4=nir
+#B5=mir
+#B6=thermal infrared (tir?)
+#B7=mir*
+
+dev.off()
+# to see just 1 band we plot the file with B1 linked (using $ command)
+plot(p224r63_2011$B1_sre)
+
+#exercise: plot band 1 with a predefined color ramp palette
+cl <- colorRampPalette(c("blue","yellow","green","red"))(100)
+plot(p224r63_2011$B1_sre, col=cl)
+
+#close the band window manually or with command dev.off()
+
+#we can also plot 2 bands in the same windows with the function "par" followed by the plots we are interested
+#we are doing a multiframe (fm)
+par(mfrow=c(1,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
