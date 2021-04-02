@@ -133,3 +133,11 @@ plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
 #for the next time istall new package "RTtoolbox"
 install.packages("RStoolbox")
 library(RStoolbox) #to check if package is istalled corretly
+
+#Add new image! p224r63_1988, same place different year (Multitemporal set)
+library(raster) #remember to R to use raster package
+setwd("D:/lab/") #connect the folder where image is
+p224r63_1988 <- brick("p224r63_1988_masked.grd") #import the image/file on R and rename it/associate a name
+p224r63_2011 <- brick("p224r63_2011_masked.grd") #that one was the image already used previously 
+p224r63_1988 #check the info about the image
+plot(p224r63_1988) #check all bands without any edit
