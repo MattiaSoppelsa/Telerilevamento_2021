@@ -1,11 +1,12 @@
 # My first code in R for remote sensing!
-setwd("D:/lab/") #connecting lab folder to software
-
 #how import packages on R
 instal.packages("raster")
+
 #to use the packages on R
 library(raster)
-#we can also connect the image/file to a name
+setwd("D:/lab/") #connecting lab folder to software
+
+#we can connect the image/file to a name
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
 #to check info about our image/file
@@ -88,3 +89,43 @@ plot(p224r63_2011$B3_sre, col=clr)
 clnir <- colorRampPalette(c("dark orange","orange","yellow"))(100)
 plot(p224r63_2011$B4_sre, col=clnir)
 
+#DAY4: Visualizing Data by RGB plotting
+
+#Landsat bands (just to remember)
+#B1=blue
+#B2=green
+#B3=red
+#B4=nir
+#B5=mir
+#B6=thermal infrared (tir?)
+#B7=mir*
+
+#"stretch" function= Linear stretch of values in a Raster object, useful for viewing our bands
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") #changing the bands in different components allows us to view interesting details
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+#exercise mount a 2x2 multiframe with plotRGB
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") #changing the bands in different components allows us to view interesting details
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+#import image in pdf in "lab" folder
+pdf("il_mio_primo_pdf_con_R.pdf")
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+dev.off()
+
+#histogram stretch, function with greater range of intermediate values (nir mount on green)
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist") #here we can see better the wetlands
+
+#par with natural colours, false colours, false colours with histogram stretch
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
