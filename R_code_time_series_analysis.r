@@ -4,4 +4,4 @@
 
 #we use the raster package
 library(raster) 
-setwd("D:/lab/greenland
+setwd("D:/lab/greenland") #setting the folder we will use
