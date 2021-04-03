@@ -112,8 +112,8 @@ plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") #changing the bands in different components allows us to view interesting details
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
-#import image in pdf in "lab" folder
-pdf("il_mio_primo_pdf_con_R.pdf")
+#import image in pdf in "lab" folder (form pdf to dev.off())
+pdf("il_mio_primo_pdf_con_R.pdf")  
 par(mfrow=c(2,2))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
@@ -141,3 +141,29 @@ p224r63_1988 <- brick("p224r63_1988_masked.grd") #import the image/file on R and
 p224r63_2011 <- brick("p224r63_2011_masked.grd") #that one was the image already used previously 
 p224r63_1988 #check the info about the image
 plot(p224r63_1988) #check all bands without any edit
+
+#link the components of the RGB scheme to the bands, each bands with respective "natural colours"), and plot it
+plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="lin") #shift all by 1, Nir band used, no more blue
+#compare the same image with same parameter, but taken in different year (1988-2011)
+par(mfrow=c(1,2))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+
+#using also histogram streatch
+par(mfrow=c(2,2))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
+
+#and make a pdf in lab folder
+pdf("Confrontation_1988-2011.pdf")
+par(mfrow=c(2,2))
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="hist")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="hist")
+dev.off()
+
+#END
