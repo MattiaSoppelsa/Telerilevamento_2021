@@ -53,3 +53,4 @@ melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
 melt
 
 levelplot(melt)
+  
