@@ -36,7 +36,7 @@ plotRGB(TGr, 1, 2, 3, stretch="Lin") #2000/2005/2010 all together.
 plotRGB(TGr, 2, 3, 4, stretch="Lin") #plot rgb con valori satellitari che riguardano la temperatura
 plotRGB(TGr, 4, 3, 2, stretch="Lin")
 
-levelplot(TGr) 
+levelplot(TGr)                     #library("rasterVis")
   
 levelplot(TGr$lst_2000) #evidence level you want
 
@@ -53,4 +53,13 @@ melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
 melt
 
 levelplot(melt)
-  
+
+#matrix algebra, we can reduct a single pixel's value of a matrix with the same pixels of other matrix   ("melt$" per legarlo al file melt da cui ricaviamo le 2 matrici)
+melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
+
+clb <- colorRampPalette(c("blue","white","red"))(100)   #gli mettiamo una colorRampPalette con i colori che ci aggradano
+plot(melt_amount, col=clb)               #visualiziamo e possiamo vedere in rosso i valori più alti (ghiacciai sciolti)
+melt_amount #per vedere i parametri, come ad esempio i valori minimi e massimi di differenza
+levelplot(melt_amount, col.regions=clb)
+
+
