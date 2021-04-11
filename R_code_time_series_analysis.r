@@ -26,11 +26,28 @@ rlist<-list.files(pattern="lst")
 rlist
 
 #using import<- lapply(rlist,raster)
-#lapply serve per applicare la funzione raster a tutta la lista appena creata, o meglio "selezionata"
-import<- lapply(rlist,raster)
+#lapply serve per applicare la funzione raster a tutta la lista appena creata (o meglio "selezionata")
+import<- lapply(rlist,raster)  #lapply (1°function), raster (2°f.), rlist (list of data) 
 import
 
-TGr<-stack(import) 
+TGr<-stack(import) #Stacking vectors concatenates multiple vectors into a single vector along with a factor indicating where each observation originated. 
 
 plotRGB(TGr, 1, 2, 3, stretch="Lin") #2000/2005/2010 all together.
 plotRGB(TGr, 2, 3, 4, stretch="Lin") #plot rgb con valori satellitari che riguardano la temperatura
+plotRGB(TGr, 4, 3, 2, stretch="Lin")
+
+levelplot(TGr) 
+  
+levelplot(TGr$lst_2000) #evidence level you want
+
+cl <- colorRampPalette(c("blue","light blue","pink","red"))(100) #range of level of color, 100, from blue to red.
+levelplot(TGr, col.regions=cl) #show level with different color (of cl, blue->red)
+
+levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) # "names.attr=c()" to name the single attributes, name always with ""
+levelplot(TGr,col.regions=cl,main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) #("main" to add title of page)
+
+# Melt
+meltlist <- list.files(pattern="melt")
+melt_import <- lapply(meltlist,raster)
+melt <- stack(melt_import)
+melt
