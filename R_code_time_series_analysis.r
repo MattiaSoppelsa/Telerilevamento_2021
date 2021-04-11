@@ -44,10 +44,12 @@ cl <- colorRampPalette(c("blue","light blue","pink","red"))(100) #range of level
 levelplot(TGr, col.regions=cl) #show level with different color (of cl, blue->red)
 
 levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) # "names.attr=c()" to name the single attributes, name always with ""
-levelplot(TGr,col.regions=cl,main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) #("main" to add title of page)
+levelplot(TGr,col.regions=cl,main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) #("main" to add title of page/graph)
 
-# Melt
-meltlist <- list.files(pattern="melt")
-melt_import <- lapply(meltlist,raster)
-melt <- stack(melt_import)
+# Melt,scioglimento ghiacciai dal 1979 al 2007
+meltlist <- list.files(pattern="melt") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
+melt_import <- lapply(meltlist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
+melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
 melt
+
+levelplot(melt)
