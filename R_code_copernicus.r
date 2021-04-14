@@ -16,3 +16,10 @@ wain #per vedere i parametri dell'immagine
 cl<-colorRampPalette(c("light blue","green","red","pink"))(100) 
 plot(wain,col=cl)
 #per diminuire la risoluzione andando ad aumentare la grandezza dei pixels
+# con la funzione main="" posso aggiungere un titolo
+plot(wain,col=cl,main="2016-04-01")
+#se la funzione è troppo pesante posso aggregare un'area di pixels e la trasformiamo in un unico pixel "medio"
+wain50 <-aggregate(wain,fact=50)  #ogni 50x50 pixel è come se fosse 1
+wain100 <-aggregate(wain,fact=100)  # ogni 100x100
+
+bio <-raster("bio_global.xml")
