@@ -22,4 +22,4 @@ plot(wain,col=cl,main="2016-04-01")
 wain50 <-aggregate(wain,fact=50)  #ogni 50x50 pixel è come se fosse 1
 wain100 <-aggregate(wain,fact=100)  # ogni 100x100
 
-bio <-raster("bio_global.xml")
+#ricorda usare file sempre con estensione .nc
