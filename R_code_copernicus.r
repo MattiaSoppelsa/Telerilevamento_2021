@@ -23,3 +23,8 @@ wain50 <-aggregate(wain,fact=50)  #ogni 50x50 pixel è come se fosse 1
 wain100 <-aggregate(wain,fact=100)  # ogni 100x100
 
 #ricorda usare file sempre con estensione .nc
+
+#per esportazione file in pdf (file r -> file TEX -> pdf
+library(knitr)
+# stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
+stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #serve .txt finale 
