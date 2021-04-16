@@ -8,6 +8,7 @@ setwd("D:/lab/")
 library(knitr)
 
 #tinytex::install_tinytex()
+#texlive-msg-translations
 
 # stitch("R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
 stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #serve .txt finale 
