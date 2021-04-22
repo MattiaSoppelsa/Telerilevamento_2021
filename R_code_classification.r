@@ -20,6 +20,21 @@ soc<-unsuperClass(so, nClasses=3)
 plot(soc$map)
 
 #Unsupervised Classification with 20 classes
-soc<-unsuperClass(so, nClasses=20)
+soc20<-unsuperClass(so, nClasses=20)
 
-plot(soc$map)
+plot(soc20$map)
+
+#we can use favorite colors using "colorRampPalette"
+cl <- colorRampPalette(c("yellow","red","brown"))(100)
+#plotted with new colors
+plot(soc$map, col=cl)
+
+#Download an image from: 
+#https://www.esa.int/ESA_Multimedia/Missions/Solar_Orbiter/(result_type)/images
+sun <-brick("sun.png")
+
+#Unsupervised classification with 3 classes:
+sunc<-unsuperClass(sun, nClasses=3)  #sunc is a classified object
+plot(sunc$map)
+
+
