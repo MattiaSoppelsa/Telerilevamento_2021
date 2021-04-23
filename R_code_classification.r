@@ -37,4 +37,23 @@ sun <-brick("sun.png")
 sunc<-unsuperClass(sun, nClasses=3)  #sunc is a classified object
 plot(sunc$map)
 
+#R_code Grand Canyon classification
+#link of used image: https://landsat.visibleearth.nasa.gov/view.php?id=80948
 
+library(raster)
+library(RStoolbox)
+setwd("D:/lab")
+gc<- brick("dolansprings_oli_2013088_canyon_lrg.jpg") #bring the image on R
+
+plotRGB(gc, r=1, g=2, b=3, stretch="lin") #plot in RGD "mode" in linear mode
+
+#we can use hist to use tutti i legami possibili per visualizzare l'immagine
+plotRGB(gc, r=1, g=2, b=3, stretch="hist")
+
+gcc2 <- unsuperClass(gc, nClasses=2)
+gcc2
+plot(gcc2$map)
+
+#using 4 classes
+gcc4 <- unsuperClass(gc, nClasses=4)
+plot(gcc4$map)
