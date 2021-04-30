@@ -1,0 +1,55 @@
+#R_code_Vegetation_index
+
+library(raster) #=require(raster)
+setwd("D:/lab/") # Windows
+
+
+defor1 <- brick("defor1.jpg")
+defor2 <- brick("defor2.jpg")
+
+# b1=NIR, b2=red, b3=green
+
+par(mfrow=c(2,1))
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+
+defor1 #vediamo i nomi delle nostre variabili "names"
+
+dvi1 <- defor1$defor1.1 - defor1$defor1.2  #commento
+
+#dev.off()
+plot(dvi1)
+
+
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(dvi1,col=cl)
+
+#per visualizzare e titolare
+plot(dvi1, col=cl, main="DVI at time 1")
+
+#per defor2
+defor2 #controllo i nomi delle bande
+
+dvi2 <- defor2$defor2.1 - defor2$defor2.2  #in pratica sottraggo la banda NIR alla banda del rosso
+
+plot(dvi2)
+
+cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
+plot(dvi2,col=cl)
+
+par(mfrow=c(2,1))          #metto a confronto
+plot(dvi1, col=cl, main="DVI at time 1")
+plot(dvi2, col=cl, main="DVI at time 2")
+#posso anche trovare la differenza tra le due mappe. DVI prima mappa - DVI seconda
+
+difdvi <- dvi1 - dvi2 #per ogni pixels
+
+# dev.off() per visualizzare l'immagine meglio
+cld <- colorRampPalette(c('blue','white','red'))(100)
+plot(difdvi, col=cld)
+
+#calcoliamo NVDI
+# (NIR-RED)/ (NIR+RED)
+ndvi1
+
+
