@@ -92,3 +92,4 @@ plot(copNDVI)
 levelplot(copNDVI)
 
 
+
