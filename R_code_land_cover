@@ -5,7 +5,7 @@ library(RStoolbox)
 #install.packages("ggplot2")
 library(ggplot2)
 #install.packages("gridExtra")
-library(gridExtra)gri
+library(gridExtra)
 
 setwd("D:/lab/")
 
@@ -31,4 +31,69 @@ p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
 grid.arrange(p1, p2, nrow=2)
+
+#Unsupervides classification 
+d1c <- unsuperClass(defor1, nClasses=2)
+
+plot(d1c$map) 
+
+#set.seed() would allow you to attain the same result
+
+d2c <- unsuperClass(defor2, nClasses=2) #classe 2 foresta, classe 1 campi coltivati (fiume indistinto) 
+plot(d2c$map)
+
+d2c3 <- unsuperClass(defor2, nClasses=3) # with 3 classi nell'immagine c'è un'ulteriore distinzione nella parte agricola (bianco giallo)
+plot(d2c3$map)
+
+#frequency
+freq(d1c$map)
+#     value  count
+#[1,]     1  35867
+#[2,]     2 305425
+
+#prima di tutto si somma 
+s1 <- 305425 + 35867  
+s1 #341292
+#continuiamo con la proporzione
+prop1 <- freq(d1c$map)/s1 
+prop1
+
+# prop1
+#            value     count
+#[1,] 2.930042e-06 0.1050918
+#[2,] 5.860085e-06 0.8949082
+
+
+s2 <- 342726
+prop2 <- freq(d2c$map) /s2
+prop2 
+
+#            value     count
+#[1,] 2.917783e-06 0.4776002    campi coltivati
+#[2,] 5.835565e-06 0.5223998    foresta
+
+#Build a dataframe
+cover <- c("Forest","Agriculture")
+percent_1992 <- c(89.49, 10.50)
+percent_2006 <- c(52.23, 47.76)
+
+percentages <- data.frame(cover, percent_1992, percent_2006)
+percentages
+
+#with ggplot we can plot 
+
+ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+
+# 2006 plot percentages 
+ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
+
+#assegnamo nomi!
+p1 <- ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+p2 <- ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
+
+#mettiamo a confronto le percentuali di copertura vegetale e campi coltivati anni 1992/2006
+grid.arrange(p1, p2, nrow=1)
+
+
+
 
