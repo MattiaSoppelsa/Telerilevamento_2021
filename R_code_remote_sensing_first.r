@@ -1,24 +1,29 @@
 # My first code in R for remote sensing!
-#how import packages on R
-instal.packages("raster")
 
-#to use the packages on R
+#according to the work to be done we have to use different packages
+#we download it in our pc through R with the function:
+install.packages("raster")
+
+#everytime we have to use the packages on R we have to recall it:
 library(raster)
-setwd("D:/lab/") #connecting lab folder to software
 
-#we can connect the image/file to a name
+#connecting lab folder (where we put all the data regarding R)  to software
+setwd("D:/lab/") 
+
+#we can connect the image/file in lab folder to a name to recall easly
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-#to check info about our image/file
+#to check info about our image/file like class, dimension (pixels number), resolution, and also the names of the different bandes
 p224r63_2011
 
-#how to show all the Bandes of a file/image
+#how to show (graphically) all the Bandes of a image
 plot(p224r63_2011)
 
-#colour change and set levels(out of my function), all renamed
+#colour change and set number levels
+#we can "memorize" the new parameters by renaming them
 cl <- colorRampPalette(c("black","grey","light grey"))(100)
 
-#plotted with new colors
+#plotted with new colors. using the function "col" 
 plot(p224r63_2011, col=cl)
 
 #change with my new colours
@@ -58,7 +63,7 @@ par(mfrow=c(2,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
-#if i want the number of column first i will use "col" instead of "row" 
+#if i want the number of column first i will use "col" instead of "row"  (#doesn't work anymore)
 par(mfcol=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
