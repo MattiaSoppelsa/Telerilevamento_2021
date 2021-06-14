@@ -57,7 +57,7 @@ plotRGB(ENpca$map, r=1, g=2, b=3, stretch="lin")
                                  
 str(ENpca)  #
 
-#10. Compute the variability (local standard deviation) of the first band
+#10. Compute the variability (local standard deviation) of the first band (da riguardare)
 ENpc1 <- ENpca$map$PC1
 ENpc1 <- focal(ENpca$map$PC1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 clsd <- colorRampPalette(c("blue", "green","pink","magenta","orange", "brown", "red", "yellow"))(100)
