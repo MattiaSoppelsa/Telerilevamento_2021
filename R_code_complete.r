@@ -4,7 +4,7 @@
 #-----------------------------------------------------------
  
 # day 1. Remote sensing first code
-# day 2. Time series analysi
+# day 2. Time series analysis
 # day 3. R code copernicus.r
 # day 4. R code knitr
 # day 5. R code multivariate analysis.r (rpca)
