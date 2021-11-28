@@ -93,8 +93,8 @@ plotRGB(padua, 3,2,1, stretch="lin")
 plotRGB(padua, 5,4,3, stretch="lin")
 plotRGB(padua, 4,3,2, stretch="lin")
 
-n d v i <− ( b$band4 − b$band3 ) / ( b$band4 + b$band3 )
-ndvi <- (B04 - B03) / (B04 + B03
+
+ndvi <- (B04 - B03) / (B04 + B03)
 
 h5ls("D:/lab/congo/VNP15A2H.A2021321.h20v09.001.2021329102942.h5")
 my <- h5read(h5ls)
@@ -170,12 +170,71 @@ writeRaster(x = ndvi1,
               datatype="INT2S", # save as a INTEGER rather than a float
              # # overwrite = TRUE)  # OPTIONAL - be careful. This will OVERWRITE previous files.
 
+
+# # how to efficiently import multiple raster (.tif) files into R # #
+
+#first import all files in a single folder as a list 
+rastlist <- list.files(path = "/path/to/wd", pattern='.TIF$', 
+all.files=TRUE, full.names=FALSE)
+
+#import all raster files in folder using lapply
+allrasters <- lapply(rastlist, raster)
+
+#to check the index numbers of all imported raster list elements
+allrasters
+
+#call single raster element
+allrasters[[1]]
+
+#to run a function on an individual raster e.g., plot 
+plot(allrasters[[1]])
+
+
 ------------------------------------------------------------------------------------------------------------------------------
+#TUTTO PERCORSO PER NDVI R.CONGO
+#importo immagini lago turkana (a)1984 - (b)1990 - (c)2013 - (d)2021
+library(sp)
+library(rgdal)
+library(raster)
+setwd("D:/lab/R.congo/")
 
 
+c1 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B2.TIF")
+c2 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B3.TIF")
+c3 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B4.TIF")
+c4 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B5.TIF")
 
 
+d1 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B2.TIF")
+d2 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B3.TIF")
+d3 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B4.TIF")
+d4 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B5.TIF")
 
+congo2 <- stack(c1,c2,c3,c4)
+ndvi2 <- (c4-c3)/(c4+c3)
+plot(ndvi2)
 
+par(mfrow=c(2,2))
+plot(ndvi1)
+plot(ndvi)
+plot(ndvi2)
 
+--da finire--
 
+#prova con lapply e rasterlist
+
+rastlist <- list.files(path = "D:/lab/R.congo/", pattern='.TIF$', all.files=TRUE, full.names=FALSE)
+allrasters <- lapply(rastlist, raster)
+allrasters
+allrasters[[1]]
+
+ndvi84 <- (allrasters[[16]] - allrasters[[15]]) / (allrasters[[16]] + allrasters[[15]])
+ndvi90 <- (allrasters[[12]] - allrasters[[11]]) / (allrasters[[12]] + allrasters[[11]])
+ndvi13 <- (allrasters[[8]] - allrasters[[7]]) / (allrasters[[8]] + allrasters[[7]])
+ndvi21 <- (allrasters[[4]] - allrasters[[3]]) / (allrasters[[4]] + allrasters[[3]])
+
+par(mfrow=c(2,2))
+plot(ndvi84)
+plot(ndvi90)
+plot(ndvi13)
+plot(ndvi21)
