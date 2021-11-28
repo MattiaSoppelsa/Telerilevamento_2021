@@ -238,3 +238,66 @@ plot(ndvi84)
 plot(ndvi90)
 plot(ndvi13)
 plot(ndvi21)
+
+plot(ndvi84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
+plot(ndvi90,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
+plot(ndvi13,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
+plot(ndvi21,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
+
+cl84 <- colorRampPalette(c("blue","grey","green"))(100)
+plot(ndvi84, col=cl84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
+cl90 <- colorRampPalette(c("blue","grey","green"))(100)
+plot(ndvi90, col=cl90,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
+cl13 <- colorRampPalette(c("blue","grey","green"))(100)
+plot(ndvi13, col=cl13,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
+cl21 <- colorRampPalette(c("blue","grey","green"))(100)
+plot(ndvi21, col=cl21,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
+
+#oppure anche con "transparent"
+
+cl84 <- colorRampPalette(c("blue","transparent","green"))(100)
+plot(ndvi84, col=cl84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
+plot(ndvi90, col=cl84,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
+plot(ndvi13, col=cl84,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
+plot(ndvi21, col=cl84,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
+
+
+hist(ndvi84, main = "LAGO TURKANA 1984", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi90, main = "LAGO TURKANA 1990", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi13, main = "LAGO TURKANA 2013", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi21, main = "LAGO TURKANA 2021", col = "springgreen", xlab = "NDVI Index Value")
+
+
+-------------------------------------------------------------------------------------------------
+
+## CASO MALAWI ##
+library(raster)
+library(rgdal)
+
+setwd("D:/lab/malawi/")
+rastlist <- list.files(path = "D:/lab/malawi/", pattern='.TIF$', all.files=TRUE, full.names=FALSE)
+m <- lapply(rastlist, raster)
+m
+
+ndvi12 <- (m[[8]] - m[[7]])/(m[[8]] + m[[7]])
+ndvi13 <- (m[[2]] - m[[1]])/(m[[2]] + m[[1]])
+ndvi14 <- (m[[4]] - m[[3]])/(m[[4]] + m[[3]])
+ndvi15 <- (m[[6]] - m[[5]])/(m[[6]] + m[[5]])
+
+cl <- colorRampPalette(c("blue","transparent","green"))(100)
+par(mfrow=c(2,2))
+plot(ndvi12, col=cl,main = "MALAWI 2012", axes = FALSE, box = FALSE)
+plot(ndvi13, col=cl,main = "MALAWI 2013", axes = FALSE, box = FALSE)
+plot(ndvi14, col=cl,main = "MALAWI 2014", axes = FALSE, box = FALSE)
+plot(ndvi15, col=cl,main = "MALAWI 2015", axes = FALSE, box = FALSE)
+
+par(mfrow=c(2,2))
+hist(ndvi12, main = "MALAWI 2012", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi13, main = "MALAWI 2013", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi14, main = "MALAWI 2014", col = "springgreen", xlab = "NDVI Index Value")
+hist(ndvi15, main = "MALAWI 2015", col = "springgreen", xlab = "NDVI Index Value")
+
+#INSOMMA :/
+
+...............................................................................................................................................
+
