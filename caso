@@ -301,3 +301,34 @@ hist(ndvi15, main = "MALAWI 2015", col = "springgreen", xlab = "NDVI Index Value
 
 ...............................................................................................................................................
 
+
+## ABRUZZO - PIANA DEL FUCINO ##
+
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+
+setwd("D:/lab/abru/R20m/")
+rlist <- list.files(pattern="T33TUG")
+rlist
+import <- lapply(rlist,raster)
+ab20 <- stack(import)
+# Funzione plot: del singolo file
+plot(ab20)
+# Funzione plotRGB: crea plot con immagini sovrapposte
+plotRGB(ab20, 1, 2, 3, stretch="Lin")
+plotRGB(ab20, 2, 3, 4, stretch="Lin")
+
+# Funzione levelplot: disegna più grafici di colore falso con una singola legenda
+levelplot(ab20)
+# Cambio di colori a piacimento (colorRampPalette si può usare solo su immagine singole, non su RGB)
+clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
+
+rastlist <- list.files(path = "D:/lab/abru/", pattern='.T33TUG$', all.files=TRUE, full.names=FALSE)
+allrasters <- lapply(rastlist, raster)
+allrasters
+
