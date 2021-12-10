@@ -332,3 +332,80 @@ rastlist <- list.files(path = "D:/lab/abru/", pattern='.T33TUG$', all.files=TRUE
 allrasters <- lapply(rastlist, raster)
 allrasters
 
+--------------------------------------------------------------------------------------------------------------------------
+#  CASO GRAN CANARIE  #
+
+library(raster)
+library(rgdal)
+setwd("D:/lab/granca/")
+
+rastlist <- list.files(path = "D:/lab/granca/", pattern='20190806', all.files=TRUE, full.names=FALSE)
+p <- lapply(rastlist, raster)
+rastlist <- list.files(path = "D:/lab/granca/", pattern='20190822', all.files=TRUE, full.names=FALSE)
+d <- lapply(rastlist, raster)
+
+
+ par(mfrow=c(2,2))
+ plot(m[[1]])
+ plot(m[[2]])
+ plot(m[[3]])
+ plot(m[[4]])
+ 
+ par(mfrow=c(2,2))
+ plot(n[[5]])
+ plot(n[[6]])
+ plot(n[[7]])
+ plot(n[[8]])
+
+
+cl <- colorRampPalette(c("blue","green","red"))(100)
+plot(m[[4]], col=cl,main = "NIR G.C. 6 agosto 2019 ", axes = FALSE, box = FALSE)
+
+######ab20 <- stack(m)
+# Funzione plot: del singolo file
+######plot(ab20)
+
+
+rastlist <- list.files(path = "D:/lab/granca/", pattern='20190806', all.files=TRUE, full.names=FALSE)
+p <- lapply(rastlist, raster)
+import <- lapply(rastlist, raster)
+gc06 <- stack(import)
+rlist <- list.files(path = "D:/lab/granca/", pattern='20190822', all.files=TRUE, full.names=FALSE)
+d <- lapply(rlist, raster)
+importa <- lapply(rlist,raster)
+gc22 <- stack(importa)
+
+plotRGB(gc06, r=3, g=2, b=1)
+
+## riscontrato errore!! Errore in grDevices::rgb(RGB[, 1], RGB[, 2], RGB[, 3], alpha = alpha, maxColorValue = scale) : 
+##  intensità colore 7243, non in 0:255
+
+# devo ridimensionare, guardo il range delle bande:
+print(gc06)
+# o più in dettaglio:
+cellStats(gc06, min)
+cellStats(gc06, max)
+# If you know the maximum and 0 is the minimum then this would be enough:
+# plotRGB(gc06, r=3, g=2, d=1, scale = [max])  #MEGLIO COSI
+
+setValues(m[[1]], scales::rescale(values(m[[1]]), to = c(0, 255)))  
+setValues(m[[2]], scales::rescale(values(m[[1]]), to = c(0, 255)))  
+setValues(m[[3]], scales::rescale(values(m[[1]]), to = c(0, 255)))  
+setValues(m[[4]], scales::rescale(values(m[[1]]), to = c(0, 255)))  
+
+plotRGB(gc06, r=3, g=2, b=1, scale = 65535)  
+plotRGB(gc22, r=3, g=2, b=1, scale = 65535)  
+
+plotRGB(gc06, r=4, g=3, b=1, scale = 65535)  
+plotRGB(gc22, r=4, g=3, b=1, scale = 65535)
+
+par(mfrow=c(2,1))
+plotRGB(gc06, r=4, g=3, b=2, scale = 65535, stretch="lin")  
+plotRGB(gc22, r=4, g=3, b=2, scale = 65535, stretch="lin")
+
+par(mfrow=c(2,1))
+plotRGB(gc06, r=4, g=3, b=2, scale = 65535, stretch="hist")  
+plotRGB(gc22, r=4, g=3, b=2, scale = 65535, stretch="hist")
+
+cl <- colorRampPalette(c("green","yellow","red"))(300)
+plot(gc06, col=cl,main = "2006", axes = FALSE, box = FALSE)
