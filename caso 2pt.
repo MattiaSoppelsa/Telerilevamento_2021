@@ -1,0 +1,59 @@
+## CASO BRASILE Disastro ambientale di Brumadinho, 25 gennaio 2019  e cambiamento della copertura forestale e i livelli di co2 da **** al 2021 ##
+
+##LIBRARY NECESSARIE ##
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+
+#settiamo la nostra cartella da cui prenderemo le immagini
+setwd("D:/lab/brasil")
+rlist <- list.files(pattern="20200912_02")
+tlist <- list.files(pattern="20210707_02")
+
+import <- lapply(rlist,raster)
+importa <- lapply(tlist,raster)
+
+p13 <- stack(import)
+p21 <- stack(importa)
+
+plot(p13)
+plot(p21)
+# Funzione plotRGB: crea plot con immagini sovrapposte
+plotRGB(p13, 1, 2, 3, stretch="Lin")
+plotRGB(p13, 2, 3, 4, stretch="Lin")
+plotRGB(p21, 1, 2, 3, stretch="Lin")
+plotRGB(p21, 2, 3, 4, stretch="Lin")
+
+# Funzione levelplot: disegna più grafici di colore falso con una singola legenda
+levelplot(p13)
+# Cambio di colori a piacimento (colorRampPalette si può usare solo su immagine singole, non su RGB)
+clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
+# Nuovo levelplot col cambio di colori, nome e titolo
+levelplot(p13,col.regions=clr, main="bands", names.attr=c("B2","B3", "B4", "B5"))
+ # levelplot anche su p21 
+levelplot(p21)
+clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
+levelplot(p21,col.regions=clr, main="bands", names.attr=c("B2","B3", "B4", "B5"))
+
+# proviamo a trovare ndvi di ciascuna
+
+ndvi13 <- (p13[[4]] - p13[[3]]) / (p13[[4]] + p13[[3]])
+ndvi21 <- (p21[[4]] - p21[[3]]) / (p21[[4]] + p21[[3]])
+
+par(mfrow=c(2,1))
+plot(ndvi13)
+plot(ndvi21)
+
+cl<-colorRampPalette(c("blue","pink","green","yellow"))(100)
+par(mfrow=c(2,1))
+plot(ndvi13, col=cl)
+plot(ndvi21, col=cl)
+
+plot(ndvi13, scale = 65535, col=cl,)  
+plotRGB(gc22, r=3, g=2, b=1, scale = 65535)
+
+-0.3525606, 0.7461424 
