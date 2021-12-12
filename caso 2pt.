@@ -57,3 +57,8 @@ plot(ndvi13, scale = 65535, col=cl,)
 plotRGB(gc22, r=3, g=2, b=1, scale = 65535)
 
 -0.3525606, 0.7461424 
+
+
+hist(p13, main="Distribution of elevation values", 
+     col= "purple", 
+     maxpixels=10000)
