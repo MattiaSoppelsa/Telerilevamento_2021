@@ -62,3 +62,34 @@ plotRGB(gc22, r=3, g=2, b=1, scale = 65535)
 hist(p13, main="Distribution of elevation values", 
      col= "purple", 
      maxpixels=10000)
+
+
+############################################################    GENNAIO-FEBBRAIO 2019    ##########################################################################
+
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+
+#settiamo la nostra cartella da cui prenderemo le immagini
+setwd("D:/lab/brasil/sentinel/inc")
+
+rlist <- list.files(pattern="7T131239")
+tlist <- list.files(pattern="131241")
+
+import <- lapply(rlist,raster)
+importa <- lapply(tlist,raster)
+
+g <- stack(import)
+f <- stack(importa)
+
+
+par(mfrow=c(2,1))
+plotRGB(g, 4, 3, 1, stretch="lin")
+plotRGB(f, 4, 3, 1, stretch="lin")
+
+ndvig <- (g[[4]] - g[[3]] / g[[4]] + g[[3]])
+ndvif <- (f[[4]] - f[[3]] / f[[4]] + f[[3]])
