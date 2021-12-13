@@ -85,11 +85,22 @@ importa <- lapply(tlist,raster)
 
 g <- stack(import)
 f <- stack(importa)
-
+g1 <- aggregate(g, fact=10)
+f1 <- aggregate(f, fact=10)
 
 par(mfrow=c(2,1))
-plotRGB(g, 4, 3, 1, stretch="lin")
-plotRGB(f, 4, 3, 1, stretch="lin")
+plotRGB(g1, 4, 3, 1, stretch="lin")
+plotRGB(f1, 4, 3, 1, stretch="lin")
 
-ndvig <- (g[[4]] - g[[3]] / g[[4]] + g[[3]])
-ndvif <- (f[[4]] - f[[3]] / f[[4]] + f[[3]])
+plotRGB(g1, 3, 2, 1, stretch="lin")
+plotRGB(f1, 3, 2, 1, stretch="lin")
+
+ndvig <- (g1[[4]] - g1[[3]] / g1[[4]] + g1[[3]])
+ndvif <- (f1[[4]] - f1[[3]] / f1[[4]] + f1[[3]])
+
+undvig <- unsuperClass(ndvig, nClasses=5)
+undvif <- unsuperClass(ndvif, nClasses=5)
+par(mfrow=c(1,2))
+plot(undvig$map)
+plot(undvif$map)
+
