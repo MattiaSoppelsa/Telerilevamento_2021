@@ -104,3 +104,36 @@ par(mfrow=c(1,2))
 plot(undvig$map)
 plot(undvif$map)
 
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+###  INNONDAZIONE AUSTRALIA FEBBREIO-MARZO 2012  ###
+library(raster)
+
+setwd("D:/lab/innondazioni/murru")
+rastlist <- list.files(path = "D:/lab/innondazioni/murru/", pattern='20120320', all.files=TRUE, full.names=FALSE)
+mar_import <- lapply(rastlist, raster)
+mar <-stack(mar_import)
+
+
+feblist <- list.files(pattern="20120217") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
+feb_import <- lapply(feblist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
+feb <- stack(feb_import) #raccolgo i vari files in un "vettore" unico =melt
+feb
+
+marlist <- list.files(pattern="20120320")
+mar_import <- lapply(marlist,raster)
+mar <- stack(mar_import)
+mar
+
+meltlist <- list.files(pattern="20120320") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
+melt_import <- lapply(meltlist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
+melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
+melt
+
+
+
+
+
+
+
