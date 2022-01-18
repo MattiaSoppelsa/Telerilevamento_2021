@@ -108,7 +108,14 @@ plot(undvif$map)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ###  INNONDAZIONE AUSTRALIA FEBBREIO-MARZO 2012  ###
-library(raster)
+
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
 
 setwd("D:/lab/innondazioni/murru")
 rastlist <- list.files(path = "D:/lab/innondazioni/murru/", pattern='20120320', all.files=TRUE, full.names=FALSE)
@@ -132,8 +139,74 @@ melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
 melt
 
 
+-------------------------------------------------------------------------------------------------------------------------------------
+
+# CASO DEFORESTAZIONE INDONESIA, modificazione coertura forestale - riconoscimento tramite satellite delle foreste di palma? - ....... - 
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+
+setwd("D:/lab/riua/test")
+
+# questa
+import <- lapply(rlist,raster)
+importa <- lapply(tlist,raster)
+
+g <- stack(import)
+f <- stack(importa)
+
+# o questa
+
+meltlist <- list.files(pattern="20120320") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
+melt_import <- lapply(meltlist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
+melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
+melt
+
+meltlist13 <- list.files(pattern="2013")
+melt_import13 <- lapply(meltlist13,raster)
+melt13 <- stack(melt_import13)
+melt13
+
+plotRGB(melt13, 3, 2, 1, stretch="lin")
+
+meltlist19 <- list.files(pattern="2019")
+melt_import19 <- lapply(meltlist19,raster)
+melt19 <- stack(melt_import19)
+melt19
+
+plotRGB(melt19, 3, 2, 1, stretch="lin")
+
+par(mfrow=c(1,2))
+plotRGB(melt13, 3, 2, 1, stretch="lin")
+plotRGB(melt19, 3, 2, 1, stretch="lin")
 
 
+meltlist21 <- list.files(pattern="2021")
+melt_import21 <- lapply(meltlist21,raster)
+melt21 <- stack(melt_import21)
+melt21
 
+meltlist16 <- list.files(pattern="2016")
+melt_import16 <- lapply(meltlist16,raster)
+melt16 <- stack(melt_import16)
+melt16
 
+par(mfrow=c(2,2)) 
+plotRGB(melt13, 3, 2, 1, stretch="lin")
+plotRGB(melt16, 3, 2, 1, stretch="lin")
+plotRGB(melt19, 3, 2, 1, stretch="lin")
+plotRGB(melt21, 3, 2, 1, stretch="lin")
 
+plotRGB(melt13 - melt21, 3, 2, 1, stretch="lin")
+
+ndvi13 <- (melt13[[3]] - melt13[[2]])/(melt13[[3]] + melt13[[2]])
+
+ndvi21 <- (melt21[[3]] - melt21[[2]])/(melt21[[3]] + melt21[[2]])
+
+par(mfrow=c(1,2))
+plot(ndvi13)
+plot(ndvi21)
