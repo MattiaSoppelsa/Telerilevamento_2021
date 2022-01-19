@@ -195,7 +195,7 @@ melt_import16 <- lapply(meltlist16,raster)
 melt16 <- stack(melt_import16)
 melt16
 
-par(mfrow=c(2,2)) 
+par(mfrow=c(2,2))   # posso provare con la funzione stretch="hist" per evidenziarne i valori
 plotRGB(melt13, 3, 2, 1, stretch="lin")
 plotRGB(melt16, 3, 2, 1, stretch="lin")
 plotRGB(melt19, 3, 2, 1, stretch="lin")
@@ -210,3 +210,5 @@ ndvi21 <- (melt21[[3]] - melt21[[2]])/(melt21[[3]] + melt21[[2]])
 par(mfrow=c(1,2))
 plot(ndvi13)
 plot(ndvi21)
+
+# click(immagine che voglio, id=T, xy=T, cell=T, type="p", pch=16, col="magenta") --> per iconcine, guarda "pch R plot symbols"
