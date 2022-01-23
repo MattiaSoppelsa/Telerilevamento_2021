@@ -161,7 +161,7 @@ f <- stack(importa)
 
 # o questa
 
-meltlist <- list.files(pattern="20120320") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
+meltlist <- list.files(pattern="LC08_L2SP") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
 melt_import <- lapply(meltlist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
 melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
 melt
