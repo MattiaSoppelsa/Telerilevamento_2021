@@ -211,4 +211,8 @@ par(mfrow=c(1,2))
 plot(ndvi13)
 plot(ndvi21)
 
+cl <- colorRampPalette(c("black","grey","light grey"))(100)
+par(mfrow=c(1,2))
+plot(ndvi13, col=cl)
+plot(ndvi21, col=cl)
 # click(immagine che voglio, id=T, xy=T, cell=T, type="p", pch=16, col="magenta") --> per iconcine, guarda "pch R plot symbols"
