@@ -216,3 +216,4 @@ par(mfrow=c(1,2))
 plot(ndvi13, col=cl)
 plot(ndvi21, col=cl)
 # click(immagine che voglio, id=T, xy=T, cell=T, type="p", pch=16, col="magenta") --> per iconcine, guarda "pch R plot symbols"
+image(melt13[[1]], col= viridis_pal(option="D")(10))
