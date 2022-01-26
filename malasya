@@ -1,0 +1,38 @@
+library(raster)
+library(tidyverse)
+library(sf)
+library(rpart)
+library(rpart.plot)
+library(rasterVis)
+library(mapedit)
+library(mapview)
+library(caret)
+library(forcats)
+
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+library(viridis)
+
+setwd("D:/lab/malasya/")
+
+band1 <- raster("T47NRF_20211015T032719_B01.jp2")
+band2 <- raster("T47NRF_20211015T032719_B02.jp2")
+band3 <- raster("T47NRF_20211015T032719_B03.jp2")
+band4 <- raster("T47NRF_20211015T032719_B04.jp2")
+band5 <- raster("T47NRF_20211015T032719_B05.jp2")
+band6 <- raster("T47NRF_20211015T032719_B06.jp2")
+band7 <- raster("T47NRF_20211015T032719_B07.jp2")
+band8 <- raster("T47NRF_20211015T032719_B08.jp2")
+band8a <- raster("T47NRF_20211015T032719_B8A.jp2")
+band9 <- raster("T47NRF_20211015T032719_B09.jp2")
+band10 <- raster("T47NRF_20211015T032719_B10.jp2")
+band11 <- raster("T47NRF_20211015T032719_B11.jp2")
+band12 <- raster("T47NRF_20211015T032719_B12.jp2")
+
+band3 <- aggregate(band3, fact = 6)
+
