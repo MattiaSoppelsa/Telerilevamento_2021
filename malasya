@@ -34,5 +34,21 @@ band10 <- raster("T47NRF_20211015T032719_B10.jp2")
 band11 <- raster("T47NRF_20211015T032719_B11.jp2")
 band12 <- raster("T47NRF_20211015T032719_B12.jp2")
 
+bands <- melt(band1, band2, band3, band4, band5, band6, band7, band8, band8a, band9, band10, band11, band12)
 band3 <- aggregate(band3, fact = 6)
 
+#aggregate from 40x40 resolution to 120x120 (factor = 3)
+#banda.aggregate <- aggregate(banda, fact=3)
+#res(banda.aggregate)
+#[1] 120 120
+
+#disaggregate from 40x40 resolution to 10x10 (factor = 4)
+#meuse.raster.disaggregate <- disaggregate(meuse.raster, fact=4)
+#res(meuse.raster.disaggregate)
+#[1] 10 10
+
+#band8adis <- disaggregate(band8a, fact=2)
+banda.aggregate <- aggregate(banda, fact=3)
+band5dis <- disaggregate(band5, fact=2)
+
+bands <- stack(band2, band3, band4, band8, band5dis, band8adis)
