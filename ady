@@ -42,11 +42,11 @@ ady21 <- stack(imp21)
 
 
 
-plotRGB(ady86, 3, 2, 1, stretch="lin")
-plot(ady96)
-plot(ady06)
-plot(ady16)
-plot(ady21)
+plotRGB(ady86, 3, 2, 1, stretch="lin", axes=T, main="WOW")
+plotRGB(ady96, 3, 2, 1, stretch="lin")
+plotRGB(ady06, 3, 2, 1, stretch="lin")
+plotRGB(ady16, 3, 2, 1, stretch="lin")
+plotRGB(ady21, 3, 2, 1, stretch="lin")
 
 ## CALCOLO DELL'NDVI ##
 # NDVI = (NIR - red)/(NIR + red)
@@ -122,3 +122,25 @@ Standard deviation     4044.3736894 1798.6253625 1.050480e+03 2.796536e+02 231.9
 Proportion of Variance    0.7848485    0.1552261 5.294914e-02 3.752528e-03   0.00258192 6.417840e-04
 Cumulative Proportion     0.7848485    0.9400746 9.930238e-01 9.967763e-01   0.99935822 1.000000e+00
 
+--------------------------------------------
+par(mfrow=c(2,2))
+plotRGB(ady86_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady96_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady06_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady16_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady21_pca$map, 1, 2, 3, stretch="Lin")
+
+--------------------------------------
+# multiframe con ggplot
+
+ady86_gg <- ggRGB(ady86_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1986") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady96_gg <- ggRGB(ady96_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1996") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady06_gg <- ggRGB(ady06_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2006") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady16_gg <- ggRGB(ady16_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2016") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady21_gg <- ggRGB(ady21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+#utilizzo la funzione grid.arrange per visualizzarli assieme 
+
+grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
+
+------------------------------------------------------------------------------------------------------------
