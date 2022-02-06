@@ -1,0 +1,67 @@
+library(raster)
+library(rgdal)
+library(rasterVis)
+library(ggplot2)
+library(gridExtra) #da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
+
+setwd("D:/lab/ady")
+
+## INDICE
+# 1: importazione immagini satellitari (x mese e anno)
+#
+#
+# 4: Raggruppamento degli anni per banda
+------------------------------------------------------------------------------------------------------------
+#### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
+
+
+#immagine del 24/08/86, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
+list86 <-list.files(pattern="19860824")
+imp86 <-lapply(list86, raster)
+ady86 <- stack(imp86)
+
+#immagine del 19/08/96
+list96 <-list.files(pattern="19960819")
+imp96 <-lapply(list96, raster)
+ady96 <- stack(imp96)
+
+#immagine del 01/09/06
+list06 <-list.files(pattern="20060901")
+imp06 <-lapply(list06, raster)
+ady06 <- stack(imp06)
+
+#immagine del 17/08/16
+list16 <-list.files(pattern="20160827")
+imp16<-lapply(list16, raster)
+ady16 <- stack(imp16)
+
+#immagine del 25/08/2021
+list21 <-list.files(pattern="20210825")
+imp21 <-lapply(list21, raster)
+ady21 <- stack(imp21)
+
+
+
+plotRGB(ady86, 3, 2, 1, stretch="lin")
+plot(ady96)
+plot(ady06)
+plot(ady16)
+plot(ady21)
+
+## CALCOLO DELL'NDVI ##
+# NDVI = (NIR - red)/(NIR + red)
+
+NDVI86 <- (ady86[[4]] - ady86[[3]]) / (ady86[[4]] + ady86[[3]])
+NDVI96 <- (ady96[[4]] - ady96[[3]]) / (ady96[[4]] + ady96[[3]])
+NDVI06 <- (ady06[[4]] - ady06[[3]]) / (ady06[[4]] + ady06[[3]])
+NDVI16 <- (ady16[[4]] - ady16[[3]]) / (ady16[[4]] + ady16[[3]])
+NDVI21 <- (ady21[[4]] - ady21[[3]]) / (ady21[[4]] + ady21[[3]])
+ 
+cl <- colorRampPalette(c("white","grey","black","red"))(100)
+
+par(mfrow=c(2,3))
+plot(NDVI86, col=cl)
+plot(NDVI96, col=cl)
+plot(NDVI06, col=cl)
+plot(NDVI16, col=cl)
+plot(NDVI21, col=cl)
