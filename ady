@@ -27,7 +27,7 @@ ady96 <- stack(imp96)
 
 #immagine del 01/09/06
 list06 <-list.files(pattern="20060901")
-imp06 <-lapply(list06, raster)
+imp06<-lapply(list06, raster)
 ady06 <- stack(imp06)
 
 #immagine del 17/08/16
@@ -60,8 +60,65 @@ NDVI21 <- (ady21[[4]] - ady21[[3]]) / (ady21[[4]] + ady21[[3]])
 cl <- colorRampPalette(c("white","grey","black","red"))(100)
 
 par(mfrow=c(2,3))
-plot(NDVI86, col=cl)
-plot(NDVI96, col=cl)
-plot(NDVI06, col=cl)
-plot(NDVI16, col=cl)
-plot(NDVI21, col=cl)
+plot(NDVI86, main="Anno 1986", col=cl)
+plot(NDVI96, main="Anno 1996", col=cl)
+plot(NDVI06, main="Anno 2006", col=cl)
+plot(NDVI16, main="Anno 2016", col=cl)
+plot(NDVI21, main="Anno 2021", col=cl)
+
+
+
+# calcolo(PCA)
+# Prima del calcolo uso la funzione aggregate per cambiare la grandezza delle immagini di unfact=10
+
+ady86_res <- aggregate(ady86, fact=10) 
+ady96_res <- aggregate(ady96, fact=10) 
+ady06_res <- aggregate(ady06, fact=10) 
+ady16_res <- aggregate(ady16, fact=10) 
+ady21_res <- aggregate(ady21, fact=10) 
+
+#Ora sono pronto per il calcolo della PCA
+
+ady86_pca <- rasterPCA(ady86_res) 
+ady96_pca <- rasterPCA(ady96_res)
+ady06_pca <- rasterPCA(ady06_res)
+ady16_pca <- rasterPCA(ady16_res)
+ady21_pca <- rasterPCA(ady21_res)
+
+# uso l'opzione summary per lo studio delle componenti
+
+summary(ady86_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     3690.1105007 1575.9737220 686.24103034 3.154144e+02 231.95765106 1.073445e+02
+Proportion of Variance    0.8136133    0.1484011   0.02813796 5.944321e-03   0.00321482 6.884921e-04
+Cumulative Proportion     0.8136133    0.9620144   0.99015237 9.960967e-01   0.99931151 1.000000e+00
+
+summary(ady96_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5      Comp.6
+Standard deviation     3953.7834909 1541.2703811 1.184101e+03 3.748356e+02 3.178603e+02 1.24026e+02
+Proportion of Variance    0.7948572    0.1207872 7.129199e-02 7.144061e-03 5.137313e-03 7.82148e-04
+Cumulative Proportion     0.7948572    0.9156445 9.869365e-01 9.940805e-01 9.992179e-01 1.00000e+00
+
+summary(ady06_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     3828.9345188 1486.2336726 1.019486e+03 4.150360e+02 2.759049e+02 1.781540e+02
+Proportion of Variance    0.8060179    0.1214404 5.714145e-02 9.470225e-03 4.185118e-03 1.744938e-03
+Cumulative Proportion     0.8060179    0.9274583 9.845997e-01 9.940699e-01 9.982551e-01 1.000000e+00
+
+summary(ady16_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     4171.3349860 2034.2394618 1.271277e+03 3.030372e+02 2.247925e+02 1.083410e+02
+Proportion of Variance    0.7465131    0.1775381 6.933742e-02 3.939847e-03 2.167958e-03 5.035854e-04
+Cumulative Proportion     0.7465131    0.9240512 9.933886e-01 9.973285e-01 9.994964e-01 1.000000e+00
+
+summary(ady21_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     4044.3736894 1798.6253625 1.050480e+03 2.796536e+02 231.96887709 1.156519e+02
+Proportion of Variance    0.7848485    0.1552261 5.294914e-02 3.752528e-03   0.00258192 6.417840e-04
+Cumulative Proportion     0.7848485    0.9400746 9.930238e-01 9.967763e-01   0.99935822 1.000000e+00
+
