@@ -144,3 +144,15 @@ ady21_gg <- ggRGB(ady21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") 
 grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
 
 ------------------------------------------------------------------------------------------------------------
+
+
+##   FIRME SPETTRALI  ##
+
+# Funzione plotRGB: yellowstone_1989
+plotRGB(ady86, r=1, g=2, b=3, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+
+
