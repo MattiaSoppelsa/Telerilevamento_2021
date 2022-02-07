@@ -4,6 +4,14 @@ library(rasterVis)
 library(ggplot2)
 library(gridExtra) #da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
 
+library(raster) 
+library(rasterVis) # posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(grid)
+
 setwd("D:/lab/ady")
 
 ## INDICE
@@ -40,6 +48,29 @@ list21 <-list.files(pattern="20210825")
 imp21 <-lapply(list21, raster)
 ady21 <- stack(imp21)
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Landsat 4/5 spectral bands:
+  
+#nBanda  = freq    -->  nome riassegnato 
+# Band 1 = Blue    -->  B2  [[1]]
+# Band 2 = Green   -->  B3  [[2]]
+# Band 3 = Red     -->  B4  [[3]]
+# Band 4 = NIR     -->  B5  [[4]]
+# Band 5 = SWIR-1  -->  B6  [[5]]
+# Band 6 = Thermal infrared   --> removed
+# Band 7 = SWIR-2  -->  B7  [[6]]
+
+
+# Landsat 8 spectral bands:
+# Band 1 = Coastal / Aerosol  --> removed
+# Band 2 = Blue              [[1]]
+# Band 3 = Green             [[2]]
+# Band 4 = Red               [[3]]
+# Band 5 = NIR               [[4]]
+# Band 6 = SWIR-1            [[5]]
+# Band 7 = SWIR-2            [[6]]
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 plotRGB(ady86, 3, 2, 1, stretch="lin", axes=T, main="WOW")
@@ -146,13 +177,95 @@ grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textG
 ------------------------------------------------------------------------------------------------------------
 
 
+
+
+------------------------------------------------------------------------------------------------------
+# PC1
+ady_pc1 <- ady86_pca$map$PC1 
+#marz11_pc1 <- marz11_pca$map$PC1
+#marz19_pc1 <- marz19_pca$map$PC1
+                 
+# level.plot di PC1 sfrutto una gamma di colori più ampia e le immagini sono più definite
+# visualizziamo inoltre i livelli di contorno     
+#levelplot(feb20_pc1)
+#levelplot(marz11_pc1)
+#levelplot(marz19_pc1)
+#dev.off()
+
+# funzione focal moving window
+feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+#marz11_mw <-focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+#marz19_mw <-focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+--------------------------------------------------------------------------------------
 ##   FIRME SPETTRALI  ##
 
-# Funzione plotRGB: yellowstone_1989
-plotRGB(ady86, r=1, g=2, b=3, stretch="lin") # "lin": lineare, amplia i valori
+# Funzione plotRGB: ady 86
+plotRGB(ady86, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
 # Bisogna avere la mappa fatta con plotRGB aperta sotto
 # Funzione: click, usa immagine plotRGB per creare le firme spettrali 
 click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
 
+#    x        y     cell       X19860824_B2   X19860824_B3  X19860824_B4  X19860824_B5  X19860824_B6  X19860824_B7
+# 1 348750 -1923780 27806972           8659           9763          9695         18754         15285         11263
+# 2 302250 -1919970 26823585           8884           9499         10004         12860         14651         11939
+# 3 365430 -1852620  9469596           8894           8334          7785          7849          7422          7355 
+# 4 354660 -1957800 36574123           8133           8508          8171         17476         11105          8677
+
+bande_ady86 <- c(1,2,3,4,5,6)
+area_agricola_86 <- c(8659,9763,9695,18754,15285,11263)
+area_rocciosa_86 <- c(8884,9499,10004,12860,14651,11939)
+area_marina_86 <- c(8894,8334,7785,7849,7422,7355)
+area_boscosa_86 <- c(8133,8508,8171,17476,11105,8677)
+# Creo un data.frame
+
+spectrals_86 <- data.frame(area_agricola_86, area_rocciosa_86, area_marina_86, area_boscosa_86)
+
+# Carico file info (spectrals)
+spectrals_86
+
+#   area_agricola_86 area_rocciosa_86 area_marina_86 area_boscosa_86
+# 1             8659             8884           8894            8133
+# 2             9763             9499           8334            8508
+# 3             9695            10004           7785            8171
+# 4            18754            12860           7849           17476
+# 5            15285            14651           7422           11105
+# 6            11263            11939           7355            8677
+
+# plotto firme spettrali
+# uso funzione ggplot
+# introduco funzione geom_line
+# funzione labs per modificare eticheete, legende e plottaggio
+
+spct_86 <- ggplot(spectrals_86, aes(x=bande_ady86)) +
+ geom_line(aes(y=area_agricola_86), color="orange") +
+ geom_line(aes(y=area_rocciosa_86), color="brown") +
+ geom_line(aes(y=area_marina_86), color="blue") +
+ geom_line(aes(y=area_boscosa_86), color="green") +
+ labs(x="firma spettrale 1986",y="reflectance")
+
+# Funzione plotRGB: ady 21
 
 
+bande_ady21 <- c(1,2,3,4,5,6)
+area_agricola_21 <- c(8659,9763,9695,18754,15285,11263)
+area_rocciosa_21 <- c(8884,9499,10004,12860,14651,11939)
+area_marina_21 <- c(8894,8334,7785,7849,7422,7355)
+area_boscosa_21 <- c(8133,8508,8171,17476,11105,8677)
+
+spectrals_21 <- data.frame(area_agricola_21, area_rocciosa_21, area_marina_21, area_boscosa_21)
+spectrals_21
+
+spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
+ geom_line(aes(y=area_agricola_21), color="orange") +
+ geom_line(aes(y=area_rocciosa_21), color="brown") +
+ geom_line(aes(y=area_marina_21), color="blue") +
+ geom_line(aes(y=area_boscosa_21), color="green") +
+ labs(x="firma spettrale 2021",y="reflectance")
+ 
+ grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
+ 
+ 
+ 
+ 
+ 
