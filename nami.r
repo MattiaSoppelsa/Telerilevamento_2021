@@ -16,13 +16,13 @@ setwd("D:/lab/nami")
 #### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
 
 #immagine del 08/04/2021, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
-list21i<-list.files(pattern="20210408")
-imp21i<-lapply(list21i, raster)
+list21i <-list.files(pattern="20210408")
+imp21i <-lapply(list21i, raster)
 eto21i <- stack(imp21i)
 
 #immagine del 31/03/2018
-list18i<-list.files(pattern="20180331")
-imp18i<-lapply(list18i, raster)
+list18i <-list.files(pattern="20180331")
+imp18i <-lapply(list18i, raster)
 eto18i <- stack(imp18i)
 
 #immagine del 18/04/2013
@@ -74,6 +74,18 @@ plotRGB(eto18i, 3, 2, 1, stretch="lin", main="31/03/18")
 plotRGB(eto18f, 3, 2, 1, stretch="lin", main="09/10/18")
 plotRGB(eto21i, 3, 2, 1, stretch="lin", main="08/04/21")
 plotRGB(eto21f, 3, 2, 1, stretch="lin", main="01/10/21")
+
+#plotto con RGB falsi colori 
+
+par(mfrow=c(4,2))
+plotRGB(eto08i, 4, 2, 1, stretch="lin", main="20/04/08")
+plotRGB(eto08f, 4, 2, 1, stretch="lin", main="27/09/08")
+plotRGB(eto13i, 4, 2, 1, stretch="lin", main="18/04/13")
+plotRGB(eto13f, 4, 2, 1, stretch="lin", main="11/10/13")
+plotRGB(eto18i, 4, 2, 1, stretch="lin", main="31/03/18")
+plotRGB(eto18f, 4, 2, 1, stretch="lin", main="09/10/18")
+plotRGB(eto21i, 4, 2, 1, stretch="lin", main="08/04/21")
+plotRGB(eto21f, 4, 2, 1, stretch="lin", main="01/10/21")
 ----------------------------------------------------------------------------------------------------------------
 
 # gradico dei valori di riflettanza per una banda (nota che l'immagine è stata ridotta di dimensioni di un fact=10)
@@ -139,11 +151,11 @@ xmax_new<- min(xmax1) #prendo valore minimo
 
 ymin1<- c(ymin(extent(B2_20080420)), ymin(extent(B2_20080927)), ymin(extent(B2_20130418)), ymin(extent(B2_20131011)), ymin(extent(B2_20180331)), 
           ymin(extent(B2_20181009)), ymin(extent(B2_20210408)), ymin(extent(B2_20211001)))
-ymin_new1<- max(ymin1)
+ymin_new1<- max(ymin1) #prendo valore massimo
 
 ymax1<- c(ymax(extent(B2_20080420)), ymax(extent(B2_20080927)), ymax(extent(B2_20130418)), ymax(extent(B2_20131011)), ymax(extent(B2_20180331)), 
           ymax(extent(B2_20181009)), ymax(extent(B2_20210408)), ymax(extent(B2_20211001)))
-ymax_new<- min(ymax1)
+ymax_new<- min(ymax1) #prendo valore minimo 
 
 #controllo quali siano in nuovi valori delle cordinate della nuova estensione
 xmin_new
@@ -244,3 +256,5 @@ importde<-lapply(listde, raster)
 listde
 bandsde <- stack(importde)
 plot(bandsde)
+----------------------------------------------------------------------------------------------------------------------------
+
