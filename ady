@@ -273,7 +273,7 @@ ady_un06 <- unsuperClass(ady06, nClasses=4)
 ady_un16 <- unsuperClass(ady16, nClasses=4)
 ady_un21 <- unsuperClass(ady21, nClasses=4)
 
-tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+tropical <- colorRampPalette(c("blue","green","orange","red","black"))(100)
 # per colorare 
 cols3 <- brewer.pal(3, "Pastel1")
 
@@ -305,4 +305,107 @@ plot(ady_un96_res$map, main="1996", col=cols3)
 plot(ady_un06_res$map,main="2006", col=cols3)
 plot(ady_un16_res$map,main="2016", col=cols3)
 plot(ady_un21_res$map, main="2021", col=cols3)
+---------------------------------------------------------------------------------------------------------
+
+ady_tot <- stack(ady86_res,ady96_res,ady06_res,ady16_res,ady21_res)  #PROBLEMA ESTENSIONE STACK
+ady_tot_uns <- unsuperClass(ady_tot, nClasses=4)
+plot(ady_tot_uns, col=tropical)
+ ---------------------------------------------------------------------------------------------------
  
+ # CAMBIO DI ESTENSIONE
+ 
+xmin<- c(xmin(extent(ady86_res)), xmin(extent(ady96_res)), xmin(extent(ady06_res)), xmin(extent(ady16_res)), xmin(extent(ady21_res)))         
+xmin_new<- max(xmin) #prendo valore massimo
+
+xmax<- c(xmax(extent(ady86_res)), xmax(extent(ady96_res)), xmax(extent(ady06_res)), xmax(extent(ady16_res)), xmax(extent(ady21_res)))        
+xmax_new<- min(xmax) #prendo valore minimo
+
+ymin<- c(ymin(extent(ady86_res)), ymin(extent(ady96_res)), ymin(extent(ady06_res)), ymin(extent(ady16_res)), ymin(extent(ady21_res)))           
+ymin_new<- max(ymin) #prendo valore massimo
+
+ymax<- c(ymax(extent(ady86_res)), ymax(extent(ady96_res)), ymax(extent(ady06_res)), ymax(extent(ady16_res)), ymax(extent(ady21_res)))           
+ymax_new<- min(ymax) #prendo valore minimo 
+
+#controllo quali siano in nuovi valori delle cordinate della nuova estensione
+xmin_new
+xmax_new
+ymin_new
+ymax_new
+
+e <- extent(161085, 388785, -2022585, -1815885)
+
+ady86_res_crop <- crop(ady86_res, extent(e))
+ady96_res_crop <- crop(ady96_res, extent(e))
+ady06_res_crop <- crop(ady06_res, extent(e))
+ady16_res_crop <- crop(ady16_res, extent(e))
+ady21_res_crop <- crop(ady21_res, extent(e))
+
+#guardo se hanno stessa estensione
+# extent(ady86_res_crop)
+# extent(ady21_res_crop)
+
+ady_tot <- stack(ady86_res_crop, ady96_res_crop, ady06_res_crop, ady16_res_crop,ady21_res_crop)
+ady_tot # informazione...stack con tutte le bande di tutti gli anni
+
+# proseguo con Unsuperclass
+#  Faccio un unsuperclass dello stacc selezionando le bande dei vari anni #
+
+set.seed(1)
+ady_tot_uns86 <- (unsuperClass(ady_tot[[1]] + ady_tot[[2]] + ady_tot[[3]] + ady_tot[[4]] + ady_tot[[5]] + ady_tot[[6]], nClasses=4))
+set.seed(1)
+ady_tot_uns96 <- (unsuperClass(ady_tot[[7]] + ady_tot[[8]] + ady_tot[[9]] + ady_tot[[10]] + ady_tot[[11]] + ady_tot[[12]], nClasses=4))
+set.seed(1)
+ady_tot_uns06 <- (unsuperClass(ady_tot[[13]] + ady_tot[[14]] + ady_tot[[15]] + ady_tot[[16]] + ady_tot[[17]] + ady_tot[[18]], nClasses=4))
+set.seed(1)
+ady_tot_uns16 <- (unsuperClass(ady_tot[[19]] + ady_tot[[20]] + ady_tot[[21]] + ady_tot[[22]] + ady_tot[[23]] + ady_tot[[24]], nClasses=4))
+set.seed(1)
+ady_tot_uns21 <- (unsuperClass(ady_tot[[25]] + ady_tot[[26]] + ady_tot[[27]] + ady_tot[[28]] + ady_tot[[29]] + ady_tot[[30]], nClasses=4))
+
+par(mfrow=c(2,3),  # mar=c(2.5,2.5,2.5,2.5))  # x margini
+
+plot(ady_tot_uns86$map, main="1986", col=cols3)
+plot(ady_tot_uns96$map, main="1996", col=cols3)
+plot(ady_tot_uns06$map, main="2006", col=cols3)
+plot(ady_tot_uns16$map, main="2016", col=cols3)
+plot(ady_tot_uns21$map, main="2021", col=cols3)
+
+#ma visualizzazione sbagliata quindi provo con 
+######
+#ady_tot_uns <- (unsuperClass(ady_tot, nClasses=4))  ### rpoblema che non mi divide per anni!! ###
+#plot(ady_tot_uns$map, col=tropical)
+
+#par(mfrow=c(2,3),  mar=c(2.5,2.5,2.5,2.5))
+#plot(ady_tot_uns[[1]]$map, col=tropical)
+#plot(ady_un86_res$map, main="1986", col=cols3)
+#plot(ady_un96_res$map, main="1996", col=cols3)
+#plot(ady_un06_res$map,main="2006", col=cols3)
+#plot(ady_un16_res$map,main="2016", col=cols3)
+#plot(ady_un21_res$map, main="2021", col=cols3)
+
+
+#### 
+## provo a effettuare unsuperClass delle immagini (con più bande) dei vari anni e poi effettuo stack e ggplotto il tutto ##
+
+set.seed(1)
+ady_un86_res <- unsuperClass(ady86_res_crop, nClasses=10)
+set.seed(1)
+ady_un96_res <- unsuperClass(ady96_res_crop, nClasses=10)
+set.seed(1)
+ady_un06_res <- unsuperClass(ady06_res_crop, nClasses=10)
+set.seed(1)
+ady_un16_res <- unsuperClass(ady16_res_crop, nClasses=10)
+set.seed(1)
+ady_un21_res <- unsuperClass(ady21_res_crop, nClasses=10)
+
+ady_tot <- stack(ady_un86_res, ady_un96_res, ady_un06_res, ady_un16_res, ady_un21_res)
+
+gg86 <- ggplot() + geom_raster(ady_un86_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1986")
+gg96 <- ggplot() + geom_raster(ady_un96_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1996")
+gg06 <- ggplot() + geom_raster(ady_un06_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2006")
+gg16 <- ggplot() + geom_raster(ady_un16_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2016")
+gg21 <- ggplot() + geom_raster(ady_un21_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2021")
+
+grid.arrange(gg86, gg96, gg06, gg16, gg21, nrow=2)
+
+## Fallito anche questo tentativo ##
+######
