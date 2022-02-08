@@ -386,15 +386,15 @@ plot(ady_tot_uns21$map, main="2021", col=cols3)
 #### 
 ## provo a effettuare unsuperClass delle immagini (con più bande) dei vari anni e poi effettuo stack e ggplotto il tutto ##
 
-set.seed(1)
+set.seed(999)
 ady_un86_res <- unsuperClass(ady86_res_crop, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un96_res <- unsuperClass(ady96_res_crop, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un06_res <- unsuperClass(ady06_res_crop, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un16_res <- unsuperClass(ady16_res_crop, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un21_res <- unsuperClass(ady21_res_crop, nClasses=10)
 
 ady_tot <- stack(ady_un86_res, ady_un96_res, ady_un06_res, ady_un16_res, ady_un21_res)
