@@ -265,7 +265,44 @@ spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
  
  grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
  
+set.seed(420)
  
+ady_un86 <- unsuperClass(ady86, nClasses=4)
+ady_un96 <- unsuperClass(ady96, nClasses=4)
+ady_un06 <- unsuperClass(ady06, nClasses=4)
+ady_un16 <- unsuperClass(ady16, nClasses=4)
+ady_un21 <- unsuperClass(ady21, nClasses=4)
+
+tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+# per colorare 
+cols3 <- brewer.pal(3, "Pastel1")
+
+par(mfrow=c(2,3))
+plot(ady_un86$map, main="1986", col=tropical)
+plot(ady_un96$map, main="1996", col=tropical)
+plot(ady_un06$map,main="2006", col=tropical)
+plot(ady_un16$map,main="2016", col=tropical)
+plot(ady_un21$map, main="2021", col=tropical)
  
- 
+
+#provo unsuperclass con le bande ridotte
+
+set.seed(1)
+ady_un86_res <- unsuperClass(ady86_res, nClasses=10)
+set.seed(1)
+ady_un96_res <- unsuperClass(ady96_res, nClasses=10)
+set.seed(1)
+ady_un06_res <- unsuperClass(ady06_res, nClasses=10)
+set.seed(1)
+ady_un16_res <- unsuperClass(ady16_res, nClasses=10)
+set.seed(1)
+ady_un21_res <- unsuperClass(ady21_res, nClasses=10)
+
+
+par(mfrow=c(2,3),  mar=c(2.5,2.5,2.5,2.5))
+plot(ady_un86_res$map, main="1986", col=cols3)
+plot(ady_un96_res$map, main="1996", col=cols3)
+plot(ady_un06_res$map,main="2006", col=cols3)
+plot(ady_un16_res$map,main="2016", col=cols3)
+plot(ady_un21_res$map, main="2021", col=cols3)
  
