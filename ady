@@ -1,15 +1,11 @@
-library(raster)
-library(rgdal)
-library(rasterVis)
-library(ggplot2)
-library(gridExtra) #da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
+## ESAME CAIRNS ##
 
 library(raster) 
 library(rasterVis) # posso utilizzare la funzione levelplot
 library(rgdal) # mi permette di analizzare le firme spettrali
 library(ggplot2) # mi permette l'uso delle funzioni ggplot
 library(RStoolbox)# permette l'uso della Unsupervised Classification
-library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
 library(grid)
 
 setwd("D:/lab/ady")
