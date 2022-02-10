@@ -405,8 +405,23 @@ ady_un16_res <- unsuperClass(ady16_res, nClasses=10)
 set.seed(999)
 ady_un21_res <- unsuperClass(ady21_res, nClasses=10)
 
+par(mfrow=c(2,3),  mar=c(2,2,2,2))
 plot(ady_un86_res$map)
-plotady_un96_res
+plot(ady_un96_res$map)
+plot(ady_un06_res$map)
+plot(ady_un16_res$map)
+plot(ady_un21_res$map)
+
+freq(ady_un86_res$map)
+freq(ady_un96_res$map)
+freq(ady_un06_res$map)
+freq(ady_un16_res$map)
+freq(ady_un21_res$map)
+
+s1 <- 2087293 + 4697269 + 3313430 + 621084
+# proporzione di pixel delle quattro classi
+freq(d1y$map)                      
+prop1 <- freq(d1y$map)/s1
 
 #par(mfrow=c(2,3),  mar=c(2,2,2,2))
 #plot(ady_un86_res$map, main="1986", col=cols3)
@@ -414,12 +429,58 @@ plotady_un96_res
 #plot(ady_un06_res$map,main="2006", col=cols3)
 #plot(ady_un16_res$map,main="2016", col=cols3)
 #plot(ady_un21_res$map, main="2021", col=cols3)
+
+### Provo a fare unsuperclass con NDVI ##
 ---------------------------------------------------------------------------------------------------------
 
 ady_tot <- stack(ady86_res,ady96_res,ady06_res,ady16_res,ady21_res)  #PROBLEMA ESTENSIONE STACK
 ady_tot_uns <- unsuperClass(ady_tot, nClasses=4)
 plot(ady_tot_uns, col=tropical)
  ---------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
  # CAMBIO DI ESTENSIONE
  
