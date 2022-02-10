@@ -286,89 +286,6 @@ feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 #marz11_mw <-focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 #marz19_mw <-focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 
---------------------------------------------------------------------------------------
-##   FIRME SPETTRALI  ##
-
-# Funzione plotRGB: ady 86
-plotRGB(ady86, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
-# Bisogna avere la mappa fatta con plotRGB aperta sotto
-# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
-click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
-
-#    x        y     cell       X19860824_B2   X19860824_B3  X19860824_B4  X19860824_B5  X19860824_B6  X19860824_B7
-# 1 348750 -1923780 27806972           8659           9763          9695         18754         15285         11263
-# 2 302250 -1919970 26823585           8884           9499         10004         12860         14651         11939
-# 3 365430 -1852620  9469596           8894           8334          7785          7849          7422          7355 
-# 4 354660 -1957800 36574123           8133           8508          8171         17476         11105          8677
-
-summary(348750,-1923780)
-
-bande_ady86 <- c(1,2,3,4,5,6)
-area_agricola_86 <- c(8659,9763,9695,18754,15285,11263)
-area_rocciosa_86 <- c(8884,9499,10004,12860,14651,11939)
-area_marina_86 <- c(8894,8334,7785,7849,7422,7355)
-area_boscosa_86 <- c(8133,8508,8171,17476,11105,8677)
-# Creo un data.frame
-
-spectrals_86 <- data.frame(area_agricola_86, area_rocciosa_86, area_marina_86, area_boscosa_86)
-
-# Carico file info (spectrals)
-spectrals_86
-
-#   area_agricola_86 area_rocciosa_86 area_marina_86 area_boscosa_86
-# 1             8659             8884           8894            8133
-# 2             9763             9499           8334            8508
-# 3             9695            10004           7785            8171
-# 4            18754            12860           7849           17476
-# 5            15285            14651           7422           11105
-# 6            11263            11939           7355            8677
-
-# plotto firme spettrali
-# uso funzione ggplot
-# introduco funzione geom_line
-# funzione labs per modificare eticheete, legende e plottaggio
-
-spct_86 <- ggplot(spectrals_86, aes(x=bande_ady86)) +
- geom_line(aes(y=area_agricola_86), color="orange") +
- geom_line(aes(y=area_rocciosa_86), color="brown") +
- geom_line(aes(y=area_marina_86), color="blue") +
- geom_line(aes(y=area_boscosa_86), color="green") +
- labs(x="firma spettrale 1986",y="reflectance")
- 
- 
-
-# Funzione plotRGB: ady 21
-plotRGB(ady21, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
-# Bisogna avere la mappa fatta con plotRGB aperta sotto
-# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
-click(ady21, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
-
-#        x        y     cell X20210825_B2 X20210825_B3 X20210825_B4 X20210825_B5 X20210825_B6 X20210825_B7
-# 1 348960 -1922670 30095252         8423         9704         9162        22694        14978        10876
-# 2 286440 -1968060 41563221         8196         8795         9173        13857        14661        11260
-# 3 368910 -1851360 12075880         8313         8515         7098         7010         7543         7621
-# 4 352530 -1967340 41383480         7673         8073         7822        15217        10392         8431
-
-
-
-bande_ady21 <- c(1,2,3,4,5,6)
-area_agricola_21 <- c(8423,9704,9162,22694,14978,10876)
-area_rocciosa_21 <- c(8196,8795,9173,13857,14661,11260)
-area_marina_21 <- c(8313,8515,7098,7010,7543,7621)
-area_boscosa_21 <- c(7673,8073,7822,15217,10392,8431)
-
-
-spectrals_21 <- data.frame(area_agricola_21, area_rocciosa_21, area_marina_21, area_boscosa_21)
-spectrals_21
-
-spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
- geom_line(aes(y=area_agricola_21), color="orange") +
- geom_line(aes(y=area_rocciosa_21), color="brown") +
- geom_line(aes(y=area_marina_21), color="blue") +
- geom_line(aes(y=area_boscosa_21), color="green") +
- labs(x="firma spettrale 2021",y="reflectance")
- 
- grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
  -------------------------------------------------------------------------------------------------------------------------------------------------------
  ###   UnSuperClass ##  Unsupervised classification
 
@@ -417,6 +334,15 @@ freq(ady_un96_res$map)
 freq(ady_un06_res$map)
 freq(ady_un16_res$map)
 freq(ady_un21_res$map)
+
+e <- extent(200000,356000,-1980000,-1840000)
+ady_un86_c<- crop(ady86, e)	
+plotRGB(ady_un86_c, 4, 3, 2, stretch="lin") 
+
+set.seed(999)
+ady_un86 <- unsuperClass(ady_un86_c, nClasses=5)
+plot(ady_un86$map)
+freq(ady_un86$map)
 
 s1 <- 2087293 + 4697269 + 3313430 + 621084
 # proporzione di pixel delle quattro classi
@@ -646,6 +572,90 @@ Geodetic CRS:  WGS 84
 5         1470       marker POINT (145.7707 -17.24329)
 6         1476       marker POINT (145.7309 -17.31938)
 
+
+###### firme spettrali da non fare ###
+##   FIRME SPETTRALI  ##
+
+# Funzione plotRGB: ady 86
+plotRGB(ady86, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+#    x        y     cell       X19860824_B2   X19860824_B3  X19860824_B4  X19860824_B5  X19860824_B6  X19860824_B7
+# 1 348750 -1923780 27806972           8659           9763          9695         18754         15285         11263
+# 2 302250 -1919970 26823585           8884           9499         10004         12860         14651         11939
+# 3 365430 -1852620  9469596           8894           8334          7785          7849          7422          7355 
+# 4 354660 -1957800 36574123           8133           8508          8171         17476         11105          8677
+
+summary(348750,-1923780)
+
+bande_ady86 <- c(1,2,3,4,5,6)
+area_agricola_86 <- c(8659,9763,9695,18754,15285,11263)
+area_rocciosa_86 <- c(8884,9499,10004,12860,14651,11939)
+area_marina_86 <- c(8894,8334,7785,7849,7422,7355)
+area_boscosa_86 <- c(8133,8508,8171,17476,11105,8677)
+# Creo un data.frame
+
+spectrals_86 <- data.frame(area_agricola_86, area_rocciosa_86, area_marina_86, area_boscosa_86)
+
+# Carico file info (spectrals)
+spectrals_86
+
+#   area_agricola_86 area_rocciosa_86 area_marina_86 area_boscosa_86
+# 1             8659             8884           8894            8133
+# 2             9763             9499           8334            8508
+# 3             9695            10004           7785            8171
+# 4            18754            12860           7849           17476
+# 5            15285            14651           7422           11105
+# 6            11263            11939           7355            8677
+
+# plotto firme spettrali
+# uso funzione ggplot
+# introduco funzione geom_line
+# funzione labs per modificare eticheete, legende e plottaggio
+
+spct_86 <- ggplot(spectrals_86, aes(x=bande_ady86)) +
+ geom_line(aes(y=area_agricola_86), color="orange") +
+ geom_line(aes(y=area_rocciosa_86), color="brown") +
+ geom_line(aes(y=area_marina_86), color="blue") +
+ geom_line(aes(y=area_boscosa_86), color="green") +
+ labs(x="firma spettrale 1986",y="reflectance")
+ 
+ 
+
+# Funzione plotRGB: ady 21
+plotRGB(ady21, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady21, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+#        x        y     cell X20210825_B2 X20210825_B3 X20210825_B4 X20210825_B5 X20210825_B6 X20210825_B7
+# 1 348960 -1922670 30095252         8423         9704         9162        22694        14978        10876
+# 2 286440 -1968060 41563221         8196         8795         9173        13857        14661        11260
+# 3 368910 -1851360 12075880         8313         8515         7098         7010         7543         7621
+# 4 352530 -1967340 41383480         7673         8073         7822        15217        10392         8431
+
+
+
+bande_ady21 <- c(1,2,3,4,5,6)
+area_agricola_21 <- c(8423,9704,9162,22694,14978,10876)
+area_rocciosa_21 <- c(8196,8795,9173,13857,14661,11260)
+area_marina_21 <- c(8313,8515,7098,7010,7543,7621)
+area_boscosa_21 <- c(7673,8073,7822,15217,10392,8431)
+
+
+spectrals_21 <- data.frame(area_agricola_21, area_rocciosa_21, area_marina_21, area_boscosa_21)
+spectrals_21
+
+spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
+ geom_line(aes(y=area_agricola_21), color="orange") +
+ geom_line(aes(y=area_rocciosa_21), color="brown") +
+ geom_line(aes(y=area_marina_21), color="blue") +
+ geom_line(aes(y=area_boscosa_21), color="green") +
+ labs(x="firma spettrale 2021",y="reflectance")
+ 
+ grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
 
 ## PROBLEMI ##
 #Plottare più immagini con unsuperclass ma con stessa colorazioni delle classi 
