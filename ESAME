@@ -70,13 +70,12 @@ imp21 <-lapply(list21, raster)
 ady21 <- stack(imp21)
 
 #ritaglio con la funzione crop l'area dell'immagine che mi interessa
-
 e <- extent(200000,356000,-1980000,-1840000)
-ady86_crop<- crop(ady86, e)	
-ady96_crop<- crop(ady96, e)	
-ady06_crop<- crop(ady06, e)	
-ady16_crop<- crop(ady16, e)	
-ady21_crop<- crop(ady21, e)	
+ady86_crop <- crop(ady86, e)
+ady96_crop <- crop(ady86, e)
+ady06_crop <- crop(ady86, e)
+ady16_crop <- crop(ady86, e)
+ady21_crop <- crop(ady86, e)
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
@@ -317,17 +316,29 @@ cols3 <- brewer.pal(3, "Pastel1")
  
 
 #provo unsuperclass con le bande ridotte
+set.seed(999)
+ady_un86_res <- unsuperClass(ady86_crop, nClasses=5)
+set.seed(999)
+ady_un96_res <- unsuperClass(ady96_crop, nClasses=5)
+set.seed(999)
+ady_un06_res <- unsuperClass(ady06_crop, nClasses=5)
+set.seed(999)
+ady_un16_res <- unsuperClass(ady16_crop, nClasses=5)
+set.seed(999)
+ady_un21_res <- unsuperClass(ady21_crop, nClasses=5)
+
 
 set.seed(999)
-ady_un86_res <- unsuperClass(ady86_res, nClasses=10)
+ady_un86_res <- unsuperClass(ady86_res, nClasses=5)
 set.seed(999)
-ady_un96_res <- unsuperClass(ady96_res, nClasses=10)
+ady_un96_res <- unsuperClass(ady96_res, nClasses=5)
 set.seed(999)
-ady_un06_res <- unsuperClass(ady06_res, nClasses=10)
+ady_un06_res <- unsuperClass(ady06_res, nClasses=5)
 set.seed(999)
-ady_un16_res <- unsuperClass(ady16_res, nClasses=10)
+ady_un16_res <- unsuperClass(ady16_res, nClasses=5)
 set.seed(999)
-ady_un21_res <- unsuperClass(ady21_res, nClasses=10)
+ady_un21_res <- unsuperClass(ady21_res, nClasses=5)
+
 
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
 plot(ady_un86_res$map)
