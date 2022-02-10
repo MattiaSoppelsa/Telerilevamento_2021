@@ -74,6 +74,7 @@ ady21 <- stack(imp21)
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
 # plottaggio con colori naturali 
+par(mfrow=c(3,2))
 plotRGB(ady86, 3, 2, 1, stretch="lin", axes=T, main="1986")
 plotRGB(ady96, 3, 2, 1, stretch="lin", axes=T, main="1996")
 plotRGB(ady06, 3, 2, 1, stretch="lin", axes=T, main="2006")
@@ -81,12 +82,20 @@ plotRGB(ady16, 3, 2, 1, stretch="lin", axes=T, main="2016")
 plotRGB(ady21, 3, 2, 1, stretch="lin", axes=T, main="2021")
 
 #plottaggio con R= Nir, G= Red, B= blue
+par(mfrow=c(3,2))
+plotRGB(ady86, 4, 3, 1, stretch="lin", axes=T, main="1986")
+plotRGB(ady96, 4, 3, 1, stretch="lin", axes=T, main="1996")
+plotRGB(ady06, 4, 3, 1, stretch="lin", axes=T, main="2006")
+plotRGB(ady16, 4, 3, 1, stretch="lin", axes=T, main="2016")
+plotRGB(ady21, 4, 3, 1, stretch="lin", axes=T, main="2021")
 
-#par(mfrow=c(3,1))
-#plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
-#plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-#plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
-#plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
+#Plottaggio con R= Nir, G= red, B= green 
+par(mfrow=c(3,2))
+plotRGB(ady86, 4, 3, 2, stretch="lin", axes=T, main="1986")
+plotRGB(ady96, 4, 3, 2, stretch="lin", axes=T, main="1996")
+plotRGB(ady06, 4, 3, 2, stretch="lin", axes=T, main="2006")
+plotRGB(ady16, 4, 3, 2, stretch="lin", axes=T, main="2016")
+plotRGB(ady21, 4, 3, 2, stretch="lin", axes=T, main="2021")
 
 
 ## CALCOLO DELL'NDVI ##
@@ -99,6 +108,7 @@ NDVI16 <- (ady16[[4]] - ady16[[3]]) / (ady16[[4]] + ady16[[3]])
 NDVI21 <- (ady21[[4]] - ady21[[3]]) / (ady21[[4]] + ady21[[3]])
  
 cl <- colorRampPalette(c("white","grey","black","red"))(100)
+#changer <- colorRampPalette(c("steelblue3","black","yellow"))(100)
 
 par(mfrow=c(2,3))
 plot(NDVI86, main="Anno 1986", col=cl)
@@ -120,9 +130,35 @@ difndvi <- NDVI21 - NDVI86
 
 # BSI = (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
 
+BSI86 <- (ady86[[5]] - ady86[[3]]) / (ady86[[4]] + ady86[[1]])
+BSI96 <- (ady96[[5]] - ady96[[3]]) / (ady96[[4]] + ady96[[1]])
+BSI06 <- (ady06[[5]] - ady06[[3]]) / (ady06[[4]] + ady06[[1]])
+BSI16 <- (ady16[[5]] - ady16[[3]]) / (ady16[[4]] + ady16[[1]])
+BSI21 <- (ady21[[5]] - ady21[[3]]) / (ady21[[4]] + ady21[[1]])
+
 # Bare sandy beaches without any vegetation are shown at one extremity and urbanized areas are at the other extremity.
 # Urban areas have a slightly more extreme value compared to vegetation.
 
+tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+
+# To make a simple plot:
+par(mfrow=c(1,2))
+plot(BSI86, col=tropical)
+plot(BSI21, col=tropical)
+
+# Faccio un levelplot:
+BSI86_lvl <- levelplot(BSI86, col.regions=tropical, main="BSI nel 1986")
+BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
+grid.arrange(BSI86_lvl, BSI21_lvl, nrow=1)
+
+
+
+BSIdiff <- BSI21-BSI86
+tropinv <- colorRampPalette(c("yellow","navy","white"))(100)
+plot(BSIdiff, col=tropinv)
+
+# To create a levelplot showing the difference between the first and last year studied:
+levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1986 e il 2021"
 
 
 
@@ -182,12 +218,37 @@ Proportion of Variance    0.7848485    0.1552261 5.294914e-02 3.752528e-03   0.0
 Cumulative Proportion     0.7848485    0.9400746 9.930238e-01 9.967763e-01   0.99935822 1.000000e+00
 
 --------------------------------------------
-par(mfrow=c(2,2))
+par(mfrow=c(2,3))
 plotRGB(ady86_pca$map, 1, 2, 3, stretch="Lin")
 plotRGB(ady96_pca$map, 1, 2, 3, stretch="Lin")
 plotRGB(ady06_pca$map, 1, 2, 3, stretch="Lin")
 plotRGB(ady16_pca$map, 1, 2, 3, stretch="Lin")
 plotRGB(ady21_pca$map, 1, 2, 3, stretch="Lin")
+
+plot(ady86_pca$model)
+plot(ady96_pca$model)
+plot(ady06_pca$model)
+plot(ady16_pca$model)
+plot(ady21_pca$model)
+
+#tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+
+#non funziona
+#par(mfrow=c(2,3))
+#plot(ady86_pca[[1]]$map, col=tropical)
+#plot(ady96_pca[[1]]$map, col=tropical)
+#plot(ady06_pca[[1]]$map, col=tropical)
+#plot(ady16_pca[[1]]$map, col=tropical)
+#plot(ady21_pca[[1]]$map, col=tropical)
+
+
+ Comparison PCA 1986-2021
+par(mfrow=c(2,3))
+plotRGB(ady86_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady96_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady06_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady16_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady21_pca$map,r=1,g=2,b=3, stretch="Hist")
 
 --------------------------------------
 # multiframe con ggplot
@@ -209,14 +270,14 @@ grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textG
 
 ------------------------------------------------------------------------------------------------------
 # PC1
-ady_pc1 <- ady86_pca$map$PC1 
-#marz11_pc1 <- marz11_pca$map$PC1
+ady86_pc1 <- ady86_pca$map$PC1 
+ady21_pc1 <- ady21_pca$map$PC1
 #marz19_pc1 <- marz19_pca$map$PC1
                  
 # level.plot di PC1 sfrutto una gamma di colori più ampia e le immagini sono più definite
 # visualizziamo inoltre i livelli di contorno     
-#levelplot(feb20_pc1)
-#levelplot(marz11_pc1)
+#levelplot(ady86_pc1)
+#levelplot(ady21_pc1)
 #levelplot(marz19_pc1)
 #dev.off()
 
@@ -239,6 +300,8 @@ click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
 # 2 302250 -1919970 26823585           8884           9499         10004         12860         14651         11939
 # 3 365430 -1852620  9469596           8894           8334          7785          7849          7422          7355 
 # 4 354660 -1957800 36574123           8133           8508          8171         17476         11105          8677
+
+summary(348750,-1923780)
 
 bande_ady86 <- c(1,2,3,4,5,6)
 area_agricola_86 <- c(8659,9763,9695,18754,15285,11263)
@@ -271,15 +334,29 @@ spct_86 <- ggplot(spectrals_86, aes(x=bande_ady86)) +
  geom_line(aes(y=area_marina_86), color="blue") +
  geom_line(aes(y=area_boscosa_86), color="green") +
  labs(x="firma spettrale 1986",y="reflectance")
+ 
+ 
 
 # Funzione plotRGB: ady 21
+plotRGB(ady21, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady21, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+#        x        y     cell X20210825_B2 X20210825_B3 X20210825_B4 X20210825_B5 X20210825_B6 X20210825_B7
+# 1 348960 -1922670 30095252         8423         9704         9162        22694        14978        10876
+# 2 286440 -1968060 41563221         8196         8795         9173        13857        14661        11260
+# 3 368910 -1851360 12075880         8313         8515         7098         7010         7543         7621
+# 4 352530 -1967340 41383480         7673         8073         7822        15217        10392         8431
+
 
 
 bande_ady21 <- c(1,2,3,4,5,6)
-area_agricola_21 <- c(8659,9763,9695,18754,15285,11263)
-area_rocciosa_21 <- c(8884,9499,10004,12860,14651,11939)
-area_marina_21 <- c(8894,8334,7785,7849,7422,7355)
-area_boscosa_21 <- c(8133,8508,8171,17476,11105,8677)
+area_agricola_21 <- c(8423,9704,9162,22694,14978,10876)
+area_rocciosa_21 <- c(8196,8795,9173,13857,14661,11260)
+area_marina_21 <- c(8313,8515,7098,7010,7543,7621)
+area_boscosa_21 <- c(7673,8073,7822,15217,10392,8431)
+
 
 spectrals_21 <- data.frame(area_agricola_21, area_rocciosa_21, area_marina_21, area_boscosa_21)
 spectrals_21
@@ -294,46 +371,49 @@ spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
  grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
  -------------------------------------------------------------------------------------------------------------------------------------------------------
  ###   UnSuperClass ##  Unsupervised classification
-set.seed(420)
+
+#set.seed(999)
  
-ady_un86 <- unsuperClass(ady86, nClasses=4)
-ady_un96 <- unsuperClass(ady96, nClasses=4)
-ady_un06 <- unsuperClass(ady06, nClasses=4)
-ady_un16 <- unsuperClass(ady16, nClasses=4)
-ady_un21 <- unsuperClass(ady21, nClasses=4)
+#ady_un86 <- unsuperClass(ady86, nClasses=4)
+#ady_un96 <- unsuperClass(ady96, nClasses=4)
+#ady_un06 <- unsuperClass(ady06, nClasses=4)
+#ady_un16 <- unsuperClass(ady16, nClasses=4)
+#ady_un21 <- unsuperClass(ady21, nClasses=4)
 
 tropical <- colorRampPalette(c("blue","green","orange","red","black"))(100)
 # per colorare 
 cols3 <- brewer.pal(3, "Pastel1")
 
-par(mfrow=c(2,3))
-plot(ady_un86$map, main="1986", col=tropical)
-plot(ady_un96$map, main="1996", col=tropical)
-plot(ady_un06$map,main="2006", col=tropical)
-plot(ady_un16$map,main="2016", col=tropical)
-plot(ady_un21$map, main="2021", col=tropical)
+#par(mfrow=c(2,3))
+#plot(ady_un86$map, main="1986", col=tropical)
+#plot(ady_un96$map, main="1996", col=tropical)
+#plot(ady_un06$map,main="2006", col=tropical)
+#plot(ady_un16$map,main="2016", col=tropical)
+#plot(ady_un21$map, main="2021", col=tropical)
  
 
 #provo unsuperclass con le bande ridotte
 
-set.seed(1)
+set.seed(999)
 ady_un86_res <- unsuperClass(ady86_res, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un96_res <- unsuperClass(ady96_res, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un06_res <- unsuperClass(ady06_res, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un16_res <- unsuperClass(ady16_res, nClasses=10)
-set.seed(1)
+set.seed(999)
 ady_un21_res <- unsuperClass(ady21_res, nClasses=10)
 
+plot(ady_un86_res$map)
+plotady_un96_res
 
-par(mfrow=c(2,3),  mar=c(2.5,2.5,2.5,2.5))
-plot(ady_un86_res$map, main="1986", col=cols3)
-plot(ady_un96_res$map, main="1996", col=cols3)
-plot(ady_un06_res$map,main="2006", col=cols3)
-plot(ady_un16_res$map,main="2016", col=cols3)
-plot(ady_un21_res$map, main="2021", col=cols3)
+#par(mfrow=c(2,3),  mar=c(2,2,2,2))
+#plot(ady_un86_res$map, main="1986", col=cols3)
+#plot(ady_un96_res$map, main="1996", col=cols3)
+#plot(ady_un06_res$map,main="2006", col=cols3)
+#plot(ady_un16_res$map,main="2016", col=cols3)
+#plot(ady_un21_res$map, main="2021", col=cols3)
 ---------------------------------------------------------------------------------------------------------
 
 ady_tot <- stack(ady86_res,ady96_res,ady06_res,ady16_res,ady21_res)  #PROBLEMA ESTENSIONE STACK
@@ -402,6 +482,7 @@ plot(ady_tot_uns21$map, main="2021", col=cols3)
 ######
 #ady_tot_uns <- (unsuperClass(ady_tot, nClasses=4))  ### rpoblema che non mi divide per anni!! ###
 #plot(ady_tot_uns$map, col=tropical)
+
 
 #par(mfrow=c(2,3),  mar=c(2.5,2.5,2.5,2.5))
 #plot(ady_tot_uns[[1]]$map, col=tropical)
