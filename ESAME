@@ -70,12 +70,12 @@ imp21 <-lapply(list21, raster)
 ady21 <- stack(imp21)
 
 #ritaglio con la funzione crop l'area dell'immagine che mi interessa
-e <- extent(200000,356000,-1980000,-1840000)
+e <- extent(200000,356000,-1980000,-1850000)
 ady86_crop <- crop(ady86, e)
-ady96_crop <- crop(ady86, e)
-ady06_crop <- crop(ady86, e)
-ady16_crop <- crop(ady86, e)
-ady21_crop <- crop(ady86, e)
+ady96_crop <- crop(ady96, e)
+ady06_crop <- crop(ady06, e)
+ady16_crop <- crop(ady16, e)
+ady21_crop <- crop(ady21, e)
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
@@ -295,39 +295,31 @@ feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
  -------------------------------------------------------------------------------------------------------------------------------------------------------
  ###   UnSuperClass ##  Unsupervised classification
 
-#set.seed(999)
- 
-#ady_un86 <- unsuperClass(ady86_crop, nClasses=4)
-#ady_un96 <- unsuperClass(ady96_crop, nClasses=4)
-#ady_un06 <- unsuperClass(ady06_crop, nClasses=4)
-#ady_un16 <- unsuperClass(ady16_crop, nClasses=4)
-#ady_un21 <- unsuperClass(ady21_crop, nClasses=4)
 
-tropical <- colorRampPalette(c("blue","green","orange","red","black"))(100)
+set.seed(999)
+ady_un86 <- unsuperClass(ady86_crop, nClasses=10)
+set.seed(999)
+ady_un96 <- unsuperClass(ady96_crop, nClasses=10)
+set.seed(999)
+ady_un06 <- unsuperClass(ady06_crop, nClasses=10)
+set.seed(999)
+ady_un16 <- unsuperClass(ady16_crop, nClasses=10)
+set.seed(999)
+ady_un21 <- unsuperClass(ady21_crop, nClasses=10)
+
+tropical <- colorRampPalette(c("blue","green","red","black"))(100)
 # per colorare 
-cols3 <- brewer.pal(3, "Pastel1")
+#cols3 <- brewer.pal(3, "Pastel1")
 
-#par(mfrow=c(2,3))
-#plot(ady_un86$map, main="1986", col=tropical)
-#plot(ady_un96$map, main="1996", col=tropical)
-#plot(ady_un06$map,main="2006", col=tropical)
-#plot(ady_un16$map,main="2016", col=tropical)
-#plot(ady_un21$map, main="2021", col=tropical)
+par(mfrow=c(2,3))
+plot(ady_un86$map, main="1986", col=tropical)
+plot(ady_un96$map, main="1996", col=tropical)
+plot(ady_un06$map,main="2006", col=tropical)
+plot(ady_un16$map,main="2016", col=tropical)
+plot(ady_un21$map, main="2021", col=tropical)
  
 
 #provo unsuperclass con le bande ridotte
-set.seed(999)
-ady_un86_res <- unsuperClass(ady86_crop, nClasses=5)
-set.seed(999)
-ady_un96_res <- unsuperClass(ady96_crop, nClasses=5)
-set.seed(999)
-ady_un06_res <- unsuperClass(ady06_crop, nClasses=5)
-set.seed(999)
-ady_un16_res <- unsuperClass(ady16_crop, nClasses=5)
-set.seed(999)
-ady_un21_res <- unsuperClass(ady21_crop, nClasses=5)
-
-
 set.seed(999)
 ady_un86_res <- unsuperClass(ady86_res, nClasses=5)
 set.seed(999)
@@ -339,13 +331,20 @@ ady_un16_res <- unsuperClass(ady16_res, nClasses=5)
 set.seed(999)
 ady_un21_res <- unsuperClass(ady21_res, nClasses=5)
 
+cl <- colorRampPalette(c("yellow", "orange", "light blue", "green", "dark green"))(100) 
+cls <- colorRampPalette(c("yellow", "light blue", "orange", "green", "dark green"))(100) 
+par(mfrow=c(1,2))
+plot(ady_un86_res$map, col=cl)
+plot(ady_un21_res$map, col=cls)
+freq(ady_un86_res$map)
+freq(ady_un21_res$map)
 
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
-plot(ady_un86_res$map)
-plot(ady_un96_res$map)
-plot(ady_un06_res$map)
-plot(ady_un16_res$map)
-plot(ady_un21_res$map)
+plot(ady_un86_res$map, col=cl)
+plot(ady_un96_res$map, col=cl)
+plot(ady_un06_res$map, col=cl)
+plot(ady_un16_res$map, col=cl)
+plot(ady_un21_res$map, col=cl)
 
 freq(ady_un86_res$map)
 freq(ady_un96_res$map)
