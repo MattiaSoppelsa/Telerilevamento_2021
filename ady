@@ -108,7 +108,25 @@ plot(NDVI16, main="Anno 2016", col=cl)
 plot(NDVI21, main="Anno 2021", col=cl)
 
 
+#RStoolbox: spectralIndicies   #DA PROVARE
+vi1 <- spectralIndices(ady86, green = 3, red = 2, nir = 1)
+plot(vi1,col=cl)
 
+#DIFFERENZA NDVI
+
+difndvi <- NDVI21 - NDVI86
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+# __________Bare Soil Index (BSI)_____________________________________________________________________________________________________________________________________________
+
+# BSI = (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
+
+# Bare sandy beaches without any vegetation are shown at one extremity and urbanized areas are at the other extremity.
+# Urban areas have a slightly more extreme value compared to vegetation.
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 # calcolo(PCA)
 # Prima del calcolo uso la funzione aggregate per cambiare la grandezza delle immagini di unfact=10
 
