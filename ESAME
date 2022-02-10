@@ -11,7 +11,7 @@ library(grid)
 library(mapedit) 
 library(mapview)
 
-setwd("D:/lab/ady")
+setwd("D:/lab/asc")
 
 ## INDICE
 # 1: importazione immagini satellitari (x mese e anno)
@@ -23,59 +23,65 @@ setwd("D:/lab/ady")
 
 # Landsat 4/5 spectral bands:  
 # nBanda = freq    -->  nome riassegnato 
-# Band 1 = Blue    -->  B2  [[1]]
-# Band 2 = Green   -->  B3  [[2]]
-# Band 3 = Red     -->  B4  [[3]]
-# Band 4 = NIR     -->  B5  [[4]]
-# Band 5 = SWIR-1  -->  B6  [[5]]
+# Band 1 = Blue    -->   [[1]]
+# Band 2 = Green   -->    [[2]]
+# Band 3 = Red     -->    [[3]]
+# Band 4 = NIR     -->    [[4]]
+# Band 5 = SWIR-1  -->   [[5]]
 # Band 6 = Thermal infrared   --> removed
 # Band 7 = SWIR-2  -->  B7  [[6]]
 
 # Landsat 8 spectral bands:
 # Band 1 = Coastal / Aerosol  --> removed
-# Band 2 = Blue              [[1]]
-# Band 3 = Green             [[2]]
-# Band 4 = Red               [[3]]
-# Band 5 = NIR               [[4]]
-# Band 6 = SWIR-1            [[5]]
-# Band 7 = SWIR-2            [[6]]
+# Band 2 = Blue         B1     [[1]]
+# Band 3 = Green        B2     [[2]]
+# Band 4 = Red          B3     [[3]]
+# Band 5 = NIR          B4     [[4]]
+# Band 6 = SWIR-1       B5     [[5]]
+# Band 7 = SWIR-2       B7     [[6]]
 
 ------------------------------------------------------------------------------------------------------------
 #### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
 
 
-#immagine del 24/08/86, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
-list86 <-list.files(pattern="19860824")
-imp86 <-lapply(list86, raster)
-ady86 <- stack(imp86)
+#immagine del 29/06/1987, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
+list87 <-list.files(pattern="19870629")
+imp87 <-lapply(list87, raster)
+asc87 <- stack(imp87)
 
-#immagine del 19/08/96
-list96 <-list.files(pattern="19960819")
-imp96 <-lapply(list96, raster)
-ady96 <- stack(imp96)
+#immagine del 28/07/1992
+list92 <-list.files(pattern="19920728")
+imp92 <-lapply(list92, raster)
+asc92 <- stack(imp92)
 
-#immagine del 01/09/06
-list06 <-list.files(pattern="20060901")
-imp06<-lapply(list06, raster)
-ady06 <- stack(imp06)
+#immagine del 24/06/1997
+list97 <-list.files(pattern="19970624")
+imp97 <-lapply(list97, raster)
+asc97 <- stack(imp97)
 
-#immagine del 17/08/16
-list16 <-list.files(pattern="20160827")
-imp16<-lapply(list16, raster)
-ady16 <- stack(imp16)
+#immagine del 08/07/2002
+list02 <-list.files(pattern="20020708")
+imp02 <-lapply(list02, raster)
+asc02 <- stack(imp02)
 
-#immagine del 25/08/2021
-list21 <-list.files(pattern="20210825")
+#immagine del 17/07/2011
+list11 <-list.files(pattern="20110717")
+imp11 <-lapply(list11, raster)
+asc11 <- stack(imp11)
+
+#immagine del 12/07/2021
+list21 <-list.files(pattern="20210712")
 imp21 <-lapply(list21, raster)
-ady21 <- stack(imp21)
+asc21 <- stack(imp21)
 
 #ritaglio con la funzione crop l'area dell'immagine che mi interessa
-e <- extent(200000,356000,-1980000,-1850000)
-ady86_crop <- crop(ady86, e)
-ady96_crop <- crop(ady96, e)
-ady06_crop <- crop(ady06, e)
-ady16_crop <- crop(ady16, e)
-ady21_crop <- crop(ady21, e)
+e <- extent(350000,480000,3280000,3420000)
+asc87_crop <- crop(asc87, e)
+asc92_crop <- crop(asc92, e)
+asc97_crop <- crop(asc97, e)
+asc02_crop <- crop(asc02, e)
+asc11_crop <- crop(asc11, e)
+asc21_crop <- crop(asc21, e)
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
