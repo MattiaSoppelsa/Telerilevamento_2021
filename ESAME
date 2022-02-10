@@ -1,0 +1,661 @@
+## ESAME CAIRNS ##
+
+library(raster) 
+library(rasterVis) # posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
+library(grid)
+
+library(mapedit) 
+library(mapview)
+
+setwd("D:/lab/ady")
+
+## INDICE
+# 1: importazione immagini satellitari (x mese e anno)
+#
+#
+# 4: Raggruppamento degli anni per banda
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# Lista bande utilizzate
+
+# Landsat 4/5 spectral bands:  
+# nBanda = freq    -->  nome riassegnato 
+# Band 1 = Blue    -->  B2  [[1]]
+# Band 2 = Green   -->  B3  [[2]]
+# Band 3 = Red     -->  B4  [[3]]
+# Band 4 = NIR     -->  B5  [[4]]
+# Band 5 = SWIR-1  -->  B6  [[5]]
+# Band 6 = Thermal infrared   --> removed
+# Band 7 = SWIR-2  -->  B7  [[6]]
+
+# Landsat 8 spectral bands:
+# Band 1 = Coastal / Aerosol  --> removed
+# Band 2 = Blue              [[1]]
+# Band 3 = Green             [[2]]
+# Band 4 = Red               [[3]]
+# Band 5 = NIR               [[4]]
+# Band 6 = SWIR-1            [[5]]
+# Band 7 = SWIR-2            [[6]]
+
+------------------------------------------------------------------------------------------------------------
+#### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
+
+
+#immagine del 24/08/86, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
+list86 <-list.files(pattern="19860824")
+imp86 <-lapply(list86, raster)
+ady86 <- stack(imp86)
+
+#immagine del 19/08/96
+list96 <-list.files(pattern="19960819")
+imp96 <-lapply(list96, raster)
+ady96 <- stack(imp96)
+
+#immagine del 01/09/06
+list06 <-list.files(pattern="20060901")
+imp06<-lapply(list06, raster)
+ady06 <- stack(imp06)
+
+#immagine del 17/08/16
+list16 <-list.files(pattern="20160827")
+imp16<-lapply(list16, raster)
+ady16 <- stack(imp16)
+
+#immagine del 25/08/2021
+list21 <-list.files(pattern="20210825")
+imp21 <-lapply(list21, raster)
+ady21 <- stack(imp21)
+
+#ritaglio con la funzione crop l'area dell'immagine che mi interessa
+
+e <- extent(200000,356000,-1980000,-1840000)
+ady86_crop<- crop(ady86, e)	
+ady96_crop<- crop(ady96, e)	
+ady06_crop<- crop(ady06, e)	
+ady16_crop<- crop(ady16, e)	
+ady21_crop<- crop(ady21, e)	
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
+
+# plottaggio con colori naturali 
+par(mfrow=c(3,2))
+plotRGB(ady86_crop, 3, 2, 1, stretch="lin", axes=T, main="1986")
+plotRGB(ady96_crop, 3, 2, 1, stretch="lin", axes=T, main="1996")
+plotRGB(ady06_crop, 3, 2, 1, stretch="lin", axes=T, main="2006")
+plotRGB(ady16_crop, 3, 2, 1, stretch="lin", axes=T, main="2016")
+plotRGB(ady21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
+
+#plottaggio con R= Nir, G= Red, B= blue
+par(mfrow=c(3,2))
+plotRGB(ady86_crop, 4, 3, 1, stretch="lin", axes=T, main="1986")
+plotRGB(ady96_crop, 4, 3, 1, stretch="lin", axes=T, main="1996")
+plotRGB(ady06_crop, 4, 3, 1, stretch="lin", axes=T, main="2006")
+plotRGB(ady16_crop, 4, 3, 1, stretch="lin", axes=T, main="2016")
+plotRGB(ady21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
+
+#Plottaggio con R= Nir, G= red, B= green 
+par(mfrow=c(3,2))
+plotRGB(ady86_crop, 4, 3, 2, stretch="lin", axes=T, main="1986")
+plotRGB(ady96_crop, 4, 3, 2, stretch="lin", axes=T, main="1996")
+plotRGB(ady06_crop, 4, 3, 2, stretch="lin", axes=T, main="2006")
+plotRGB(ady16_crop, 4, 3, 2, stretch="lin", axes=T, main="2016")
+plotRGB(ady21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
+
+
+## CALCOLO DELL'NDVI ##
+# NDVI = (NIR - red)/(NIR + red)
+
+NDVI86 <- (ady86_crop[[4]] - ady86_crop[[3]]) / (ady86_crop[[4]] + ady86_crop[[3]])
+NDVI96 <- (ady96_crop[[4]] - ady96_crop[[3]]) / (ady96_crop[[4]] + ady96_crop[[3]])
+NDVI06 <- (ady06_crop[[4]] - ady06_crop[[3]]) / (ady06_crop[[4]] + ady06_crop[[3]])
+NDVI16 <- (ady16_crop[[4]] - ady16_crop[[3]]) / (ady16_crop[[4]] + ady16_crop[[3]])
+NDVI21 <- (ady21_crop[[4]] - ady21_crop[[3]]) / (ady21_crop[[4]] + ady21_crop[[3]])
+ 
+cl <- colorRampPalette(c("white","grey","black","red"))(100)
+#changer <- colorRampPalette(c("steelblue3","black","yellow"))(100)
+
+par(mfrow=c(2,3))
+plot(NDVI86, main="Anno 1986", col=cl)
+plot(NDVI96, main="Anno 1996", col=cl)
+plot(NDVI06, main="Anno 2006", col=cl)
+plot(NDVI16, main="Anno 2016", col=cl)
+plot(NDVI21, main="Anno 2021", col=cl)
+
+
+#RStoolbox: spectralIndicies   #DA PROVARE
+vi1 <- spectralIndices(ady86_crop, green = 3, red = 2, nir = 1)
+plot(vi1,col=cl)
+
+#DIFFERENZA NDVI
+
+difndvi <- NDVI21 - NDVI86
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+# __________Bare Soil Index (BSI)_____________________________________________________________________________________________________________________________________________
+
+# BSI = (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
+
+BSI86 <- (ady86_crop[[5]] - ady86_crop[[3]]) / (ady86_crop[[4]] + ady86_crop[[1]])
+BSI96 <- (ady96_crop[[5]] - ady96_crop[[3]]) / (ady96_crop[[4]] + ady96_crop[[1]])
+BSI06 <- (ady06_crop[[5]] - ady06_crop[[3]]) / (ady06_crop[[4]] + ady06_crop[[1]])
+BSI16 <- (ady16_crop[[5]] - ady16_crop[[3]]) / (ady16_crop[[4]] + ady16_crop[[1]])
+BSI21 <- (ady21_crop[[5]] - ady21_crop[[3]]) / (ady21_crop[[4]] + ady21_crop[[1]])
+
+# Bare sandy beaches without any vegetation are shown at one extremity and urbanized areas are at the other extremity.
+# Urban areas have a slightly more extreme value compared to vegetation.
+
+tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+
+# To make a simple plot:
+par(mfrow=c(1,2))
+plot(BSI86, col=tropical)
+plot(BSI21, col=tropical)
+
+# Faccio un levelplot:
+BSI86_lvl <- levelplot(BSI86, col.regions=tropical, main="BSI nel 1986")
+BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
+grid.arrange(BSI86_lvl, BSI21_lvl, nrow=1)
+
+
+
+BSIdiff <- BSI21-BSI86
+tropinv <- colorRampPalette(c("yellow","navy","white"))(100)
+plot(BSIdiff, col=tropinv)
+
+# To create a levelplot showing the difference between the first and last year studied:
+levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1986 e il 2021"
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+# calcolo(PCA)
+# Prima del calcolo uso la funzione aggregate per cambiare la grandezza delle immagini di unfact=10
+
+ady86_res <- aggregate(ady86_crop, fact=10) 
+ady96_res <- aggregate(ady96_crop, fact=10) 
+ady06_res <- aggregate(ady06_crop, fact=10) 
+ady16_res <- aggregate(ady16_crop, fact=10) 
+ady21_res <- aggregate(ady21_crop, fact=10) 
+
+#Ora sono pronto per il calcolo della PCA
+
+ady86_pca <- rasterPCA(ady86_res) 
+ady96_pca <- rasterPCA(ady96_res)
+ady06_pca <- rasterPCA(ady06_res)
+ady16_pca <- rasterPCA(ady16_res)
+ady21_pca <- rasterPCA(ady21_res)
+
+# uso l'opzione summary per lo studio delle componenti
+
+summary(ady86_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     3690.1105007 1575.9737220 686.24103034 3.154144e+02 231.95765106 1.073445e+02
+Proportion of Variance    0.8136133    0.1484011   0.02813796 5.944321e-03   0.00321482 6.884921e-04
+Cumulative Proportion     0.8136133    0.9620144   0.99015237 9.960967e-01   0.99931151 1.000000e+00
+
+summary(ady96_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5      Comp.6
+Standard deviation     3953.7834909 1541.2703811 1.184101e+03 3.748356e+02 3.178603e+02 1.24026e+02
+Proportion of Variance    0.7948572    0.1207872 7.129199e-02 7.144061e-03 5.137313e-03 7.82148e-04
+Cumulative Proportion     0.7948572    0.9156445 9.869365e-01 9.940805e-01 9.992179e-01 1.00000e+00
+
+summary(ady06_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     3828.9345188 1486.2336726 1.019486e+03 4.150360e+02 2.759049e+02 1.781540e+02
+Proportion of Variance    0.8060179    0.1214404 5.714145e-02 9.470225e-03 4.185118e-03 1.744938e-03
+Cumulative Proportion     0.8060179    0.9274583 9.845997e-01 9.940699e-01 9.982551e-01 1.000000e+00
+
+summary(ady16_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     4171.3349860 2034.2394618 1.271277e+03 3.030372e+02 2.247925e+02 1.083410e+02
+Proportion of Variance    0.7465131    0.1775381 6.933742e-02 3.939847e-03 2.167958e-03 5.035854e-04
+Cumulative Proportion     0.7465131    0.9240512 9.933886e-01 9.973285e-01 9.994964e-01 1.000000e+00
+
+summary(ady21_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     4044.3736894 1798.6253625 1.050480e+03 2.796536e+02 231.96887709 1.156519e+02
+Proportion of Variance    0.7848485    0.1552261 5.294914e-02 3.752528e-03   0.00258192 6.417840e-04
+Cumulative Proportion     0.7848485    0.9400746 9.930238e-01 9.967763e-01   0.99935822 1.000000e+00
+
+--------------------------------------------
+par(mfrow=c(2,3))
+plotRGB(ady86_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady96_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady06_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady16_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(ady21_pca$map, 1, 2, 3, stretch="Lin")
+
+plot(ady86_pca$model)
+plot(ady96_pca$model)
+plot(ady06_pca$model)
+plot(ady16_pca$model)
+plot(ady21_pca$model)
+
+#tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
+
+#non funziona
+#par(mfrow=c(2,3))
+#plot(ady86_pca[[1]]$map, col=tropical)
+#plot(ady96_pca[[1]]$map, col=tropical)
+#plot(ady06_pca[[1]]$map, col=tropical)
+#plot(ady16_pca[[1]]$map, col=tropical)
+#plot(ady21_pca[[1]]$map, col=tropical)
+
+
+ Comparison PCA 1986-2021
+par(mfrow=c(2,3))
+plotRGB(ady86_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady96_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady06_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady16_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(ady21_pca$map,r=1,g=2,b=3, stretch="Hist")
+
+--------------------------------------
+# multiframe con ggplot
+
+ady86_gg <- ggRGB(ady86_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1986") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady96_gg <- ggRGB(ady96_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1996") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady06_gg <- ggRGB(ady06_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2006") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady16_gg <- ggRGB(ady16_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2016") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ady21_gg <- ggRGB(ady21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+#utilizzo la funzione grid.arrange per visualizzarli assieme 
+
+grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
+
+------------------------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------------------
+# PC1
+ady86_pc1 <- ady86_pca$map$PC1 
+ady21_pc1 <- ady21_pca$map$PC1
+#marz19_pc1 <- marz19_pca$map$PC1
+                 
+# level.plot di PC1 sfrutto una gamma di colori più ampia e le immagini sono più definite
+# visualizziamo inoltre i livelli di contorno     
+#levelplot(ady86_pc1)
+#levelplot(ady21_pc1)
+#levelplot(marz19_pc1)
+#dev.off()
+
+# funzione focal moving window
+feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+#marz11_mw <-focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+#marz19_mw <-focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+
+ -------------------------------------------------------------------------------------------------------------------------------------------------------
+ ###   UnSuperClass ##  Unsupervised classification
+
+#set.seed(999)
+ 
+#ady_un86 <- unsuperClass(ady86_crop, nClasses=4)
+#ady_un96 <- unsuperClass(ady96_crop, nClasses=4)
+#ady_un06 <- unsuperClass(ady06_crop, nClasses=4)
+#ady_un16 <- unsuperClass(ady16_crop, nClasses=4)
+#ady_un21 <- unsuperClass(ady21_crop, nClasses=4)
+
+tropical <- colorRampPalette(c("blue","green","orange","red","black"))(100)
+# per colorare 
+cols3 <- brewer.pal(3, "Pastel1")
+
+#par(mfrow=c(2,3))
+#plot(ady_un86$map, main="1986", col=tropical)
+#plot(ady_un96$map, main="1996", col=tropical)
+#plot(ady_un06$map,main="2006", col=tropical)
+#plot(ady_un16$map,main="2016", col=tropical)
+#plot(ady_un21$map, main="2021", col=tropical)
+ 
+
+#provo unsuperclass con le bande ridotte
+
+set.seed(999)
+ady_un86_res <- unsuperClass(ady86_res, nClasses=10)
+set.seed(999)
+ady_un96_res <- unsuperClass(ady96_res, nClasses=10)
+set.seed(999)
+ady_un06_res <- unsuperClass(ady06_res, nClasses=10)
+set.seed(999)
+ady_un16_res <- unsuperClass(ady16_res, nClasses=10)
+set.seed(999)
+ady_un21_res <- unsuperClass(ady21_res, nClasses=10)
+
+par(mfrow=c(2,3),  mar=c(2,2,2,2))
+plot(ady_un86_res$map)
+plot(ady_un96_res$map)
+plot(ady_un06_res$map)
+plot(ady_un16_res$map)
+plot(ady_un21_res$map)
+
+freq(ady_un86_res$map)
+freq(ady_un96_res$map)
+freq(ady_un06_res$map)
+freq(ady_un16_res$map)
+freq(ady_un21_res$map)
+
+
+s1 <- 2087293 + 4697269 + 3313430 + 621084
+# proporzione di pixel delle quattro classi
+freq(d1y$map)                      
+prop1 <- freq(d1y$map)/s1
+
+#par(mfrow=c(2,3),  mar=c(2,2,2,2))
+#plot(ady_un86_res$map, main="1986", col=cols3)
+#plot(ady_un96_res$map, main="1996", col=cols3)
+#plot(ady_un06_res$map,main="2006", col=cols3)
+#plot(ady_un16_res$map,main="2016", col=cols3)
+#plot(ady_un21_res$map, main="2021", col=cols3)
+
+### Provo a fare unsuperclass con NDVI ##
+---------------------------------------------------------------------------------------------------------
+
+ady_tot <- stack(ady86_res,ady96_res,ady06_res,ady16_res,ady21_res)  #PROBLEMA ESTENSIONE STACK
+ady_tot_uns <- unsuperClass(ady_tot, nClasses=4)
+plot(ady_tot_uns, col=tropical)
+ ---------------------------------------------------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ # CAMBIO DI ESTENSIONE
+ 
+xmin<- c(xmin(extent(ady86_res)), xmin(extent(ady96_res)), xmin(extent(ady06_res)), xmin(extent(ady16_res)), xmin(extent(ady21_res)))         
+xmin_new<- max(xmin) #prendo valore massimo
+
+xmax<- c(xmax(extent(ady86_res)), xmax(extent(ady96_res)), xmax(extent(ady06_res)), xmax(extent(ady16_res)), xmax(extent(ady21_res)))        
+xmax_new<- min(xmax) #prendo valore minimo
+
+ymin<- c(ymin(extent(ady86_res)), ymin(extent(ady96_res)), ymin(extent(ady06_res)), ymin(extent(ady16_res)), ymin(extent(ady21_res)))           
+ymin_new<- max(ymin) #prendo valore massimo
+
+ymax<- c(ymax(extent(ady86_res)), ymax(extent(ady96_res)), ymax(extent(ady06_res)), ymax(extent(ady16_res)), ymax(extent(ady21_res)))           
+ymax_new<- min(ymax) #prendo valore minimo 
+
+#controllo quali siano in nuovi valori delle cordinate della nuova estensione
+xmin_new
+xmax_new
+ymin_new
+ymax_new
+
+e <- extent(161085, 388785, -2022585, -1815885)
+
+ady86_res_crop <- crop(ady86_res, extent(e))
+ady96_res_crop <- crop(ady96_res, extent(e))
+ady06_res_crop <- crop(ady06_res, extent(e))
+ady16_res_crop <- crop(ady16_res, extent(e))
+ady21_res_crop <- crop(ady21_res, extent(e))
+
+#guardo se hanno stessa estensione
+# extent(ady86_res_crop)
+# extent(ady21_res_crop)
+
+ady_tot <- stack(ady86_res_crop, ady96_res_crop, ady06_res_crop, ady16_res_crop,ady21_res_crop)
+ady_tot # informazione...stack con tutte le bande di tutti gli anni
+
+# proseguo con Unsuperclass
+#  Faccio un unsuperclass dello stacc selezionando le bande dei vari anni #
+
+set.seed(1)
+ady_tot_uns86 <- (unsuperClass(ady_tot[[1]] + ady_tot[[2]] + ady_tot[[3]] + ady_tot[[4]] + ady_tot[[5]] + ady_tot[[6]], nClasses=4))
+set.seed(1)
+ady_tot_uns96 <- (unsuperClass(ady_tot[[7]] + ady_tot[[8]] + ady_tot[[9]] + ady_tot[[10]] + ady_tot[[11]] + ady_tot[[12]], nClasses=4))
+set.seed(1)
+ady_tot_uns06 <- (unsuperClass(ady_tot[[13]] + ady_tot[[14]] + ady_tot[[15]] + ady_tot[[16]] + ady_tot[[17]] + ady_tot[[18]], nClasses=4))
+set.seed(1)
+ady_tot_uns16 <- (unsuperClass(ady_tot[[19]] + ady_tot[[20]] + ady_tot[[21]] + ady_tot[[22]] + ady_tot[[23]] + ady_tot[[24]], nClasses=4))
+set.seed(1)
+ady_tot_uns21 <- (unsuperClass(ady_tot[[25]] + ady_tot[[26]] + ady_tot[[27]] + ady_tot[[28]] + ady_tot[[29]] + ady_tot[[30]], nClasses=4))
+
+par(mfrow=c(2,3),  # mar=c(2.5,2.5,2.5,2.5))  # x margini
+
+plot(ady_tot_uns86$map, main="1986", col=cols3)
+plot(ady_tot_uns96$map, main="1996", col=cols3)
+plot(ady_tot_uns06$map, main="2006", col=cols3)
+plot(ady_tot_uns16$map, main="2016", col=cols3)
+plot(ady_tot_uns21$map, main="2021", col=cols3)
+
+#ma visualizzazione sbagliata quindi provo con 
+######
+#ady_tot_uns <- (unsuperClass(ady_tot, nClasses=4))  ### rpoblema che non mi divide per anni!! ###
+#plot(ady_tot_uns$map, col=tropical)
+
+
+#par(mfrow=c(2,3),  mar=c(2.5,2.5,2.5,2.5))
+#plot(ady_tot_uns[[1]]$map, col=tropical)
+#plot(ady_un86_res$map, main="1986", col=cols3)
+#plot(ady_un96_res$map, main="1996", col=cols3)
+#plot(ady_un06_res$map,main="2006", col=cols3)
+#plot(ady_un16_res$map,main="2016", col=cols3)
+#plot(ady_un21_res$map, main="2021", col=cols3)
+
+
+#### 
+## provo a effettuare unsuperClass delle immagini (con più bande) dei vari anni e poi effettuo stack e ggplotto il tutto ##
+
+set.seed(999)
+ady_un86_res <- unsuperClass(ady86_res_crop, nClasses=10)
+set.seed(999)
+ady_un96_res <- unsuperClass(ady96_res_crop, nClasses=10)
+set.seed(999)
+ady_un06_res <- unsuperClass(ady06_res_crop, nClasses=10)
+set.seed(999)
+ady_un16_res <- unsuperClass(ady16_res_crop, nClasses=10)
+set.seed(999)
+ady_un21_res <- unsuperClass(ady21_res_crop, nClasses=10)
+
+ady_tot <- stack(ady_un86_res, ady_un96_res, ady_un06_res, ady_un16_res, ady_un21_res)
+
+gg86 <- ggplot() + geom_raster(ady_un86_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1986")
+gg96 <- ggplot() + geom_raster(ady_un96_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1996")
+gg06 <- ggplot() + geom_raster(ady_un06_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2006")
+gg16 <- ggplot() + geom_raster(ady_un16_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2016")
+gg21 <- ggplot() + geom_raster(ady_un21_res$map, mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("2021")
+
+grid.arrange(gg86, gg96, gg06, gg16, gg21, nrow=2)
+
+## Fallito anche questo tentativo ##
+######
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+# Tentativo Supervised Classification #
+
+ady86_res <- aggregate(ady86, fact=10) 
+ady86_res2 <- aggregate(ady86_res, fact=2)
+ady86_res2
+
+ady86_res_un <- unsuperClass(ady86_res, nClasses=5)
+plot(ady86_res_un$map)
+
+plotRGB(ady86_res, 5, 4, 3, stretch="lin")
+plotRGB(ady21_res, 5, 4, 3, stretch="lin")
+
+--------------------------------------------------------------------------------------------------------
+
+
+
+# create training points in mapview
+points <- viewRGB(ady86_res2, r = 4, g = 3, b = 2)
+editMap(points)
+
+# save as clouds after first iteration
+clouds <- points$finished$geometry %>%
+st_sf(clouds)  
+mutate(class = "clouds", id = 1)
+
+# save as developed land second time
+developed <- points$finished$geometry %>% st_sf() %>% mutate(class = "developed", id = 2)
+# then save as undeveloped land after third iteration
+undeveloped <- points$finished$geometry %>% st_sf() %>% mutate(class = "undeveloped", id = 3)
+# finally save as water
+water <- points$finished$geometry %>% st_sf() %>% mutate(class = "water", id = 4)
+
+
+
+
+clouds <- points$all$geometry
+
+$finished
+Simple feature collection with 6 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 145.4339 ymin: -17.76847 xmax: 145.7707 ymax: -16.70496
+Geodetic CRS:  WGS 84
+  X_leaflet_id feature_type                   geometry
+1          557       marker  POINT (145.5469 -17.6605)
+2          837       marker POINT (145.4339 -16.70496)
+3         1231       marker  POINT (145.676 -17.60224)
+4         1237       marker POINT (145.6718 -17.76847)
+5         1470       marker POINT (145.7707 -17.24329)
+6         1476       marker POINT (145.7309 -17.31938)
+
+$all
+Simple feature collection with 6 features and 2 fields
+Geometry type: POINT
+Dimension:     XY
+Bounding box:  xmin: 145.4339 ymin: -17.76847 xmax: 145.7707 ymax: -16.70496
+Geodetic CRS:  WGS 84
+  X_leaflet_id feature_type                   geometry
+1          557       marker  POINT (145.5469 -17.6605)
+2          837       marker POINT (145.4339 -16.70496)
+3         1231       marker  POINT (145.676 -17.60224)
+4         1237       marker POINT (145.6718 -17.76847)
+5         1470       marker POINT (145.7707 -17.24329)
+6         1476       marker POINT (145.7309 -17.31938)
+
+
+###### firme spettrali da non fare ###
+##   FIRME SPETTRALI  ##
+
+# Funzione plotRGB: ady 86
+plotRGB(ady86, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady86, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+#    x        y     cell       X19860824_B2   X19860824_B3  X19860824_B4  X19860824_B5  X19860824_B6  X19860824_B7
+# 1 348750 -1923780 27806972           8659           9763          9695         18754         15285         11263
+# 2 302250 -1919970 26823585           8884           9499         10004         12860         14651         11939
+# 3 365430 -1852620  9469596           8894           8334          7785          7849          7422          7355 
+# 4 354660 -1957800 36574123           8133           8508          8171         17476         11105          8677
+
+summary(348750,-1923780)
+
+bande_ady86 <- c(1,2,3,4,5,6)
+area_agricola_86 <- c(8659,9763,9695,18754,15285,11263)
+area_rocciosa_86 <- c(8884,9499,10004,12860,14651,11939)
+area_marina_86 <- c(8894,8334,7785,7849,7422,7355)
+area_boscosa_86 <- c(8133,8508,8171,17476,11105,8677)
+# Creo un data.frame
+
+spectrals_86 <- data.frame(area_agricola_86, area_rocciosa_86, area_marina_86, area_boscosa_86)
+
+# Carico file info (spectrals)
+spectrals_86
+
+#   area_agricola_86 area_rocciosa_86 area_marina_86 area_boscosa_86
+# 1             8659             8884           8894            8133
+# 2             9763             9499           8334            8508
+# 3             9695            10004           7785            8171
+# 4            18754            12860           7849           17476
+# 5            15285            14651           7422           11105
+# 6            11263            11939           7355            8677
+
+# plotto firme spettrali
+# uso funzione ggplot
+# introduco funzione geom_line
+# funzione labs per modificare eticheete, legende e plottaggio
+
+spct_86 <- ggplot(spectrals_86, aes(x=bande_ady86)) +
+ geom_line(aes(y=area_agricola_86), color="orange") +
+ geom_line(aes(y=area_rocciosa_86), color="brown") +
+ geom_line(aes(y=area_marina_86), color="blue") +
+ geom_line(aes(y=area_boscosa_86), color="green") +
+ labs(x="firma spettrale 1986",y="reflectance")
+ 
+ 
+
+# Funzione plotRGB: ady 21
+plotRGB(ady21, r=3, g=2, b=1, stretch="lin") # "lin": lineare, amplia i valori
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(ady21, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+#        x        y     cell X20210825_B2 X20210825_B3 X20210825_B4 X20210825_B5 X20210825_B6 X20210825_B7
+# 1 348960 -1922670 30095252         8423         9704         9162        22694        14978        10876
+# 2 286440 -1968060 41563221         8196         8795         9173        13857        14661        11260
+# 3 368910 -1851360 12075880         8313         8515         7098         7010         7543         7621
+# 4 352530 -1967340 41383480         7673         8073         7822        15217        10392         8431
+
+
+
+bande_ady21 <- c(1,2,3,4,5,6)
+area_agricola_21 <- c(8423,9704,9162,22694,14978,10876)
+area_rocciosa_21 <- c(8196,8795,9173,13857,14661,11260)
+area_marina_21 <- c(8313,8515,7098,7010,7543,7621)
+area_boscosa_21 <- c(7673,8073,7822,15217,10392,8431)
+
+
+spectrals_21 <- data.frame(area_agricola_21, area_rocciosa_21, area_marina_21, area_boscosa_21)
+spectrals_21
+
+spct_21 <- ggplot(spectrals_21, aes(x=bande_ady21)) +
+ geom_line(aes(y=area_agricola_21), color="orange") +
+ geom_line(aes(y=area_rocciosa_21), color="brown") +
+ geom_line(aes(y=area_marina_21), color="blue") +
+ geom_line(aes(y=area_boscosa_21), color="green") +
+ labs(x="firma spettrale 2021",y="reflectance")
+ 
+ grid.arrange(spct_86, spct_21, nrow=2, top=textGrob("Confronto delle firme spettrali: 1986 - 2021"))
+
+## PROBLEMI ##
+#Plottare più immagini con unsuperclass ma con stessa colorazioni delle classi 
+#
