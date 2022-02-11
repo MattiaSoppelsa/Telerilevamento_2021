@@ -395,7 +395,7 @@ freq(asc_un21_res$map)
 s1 <- 2087293 + 4697269 + 3313430 + 621084
 # proporzione di pixel delle quattro classi
 freq(d1y$map)                      
-prop1 <- freq(d1y$map)/s1
+
 
 #par(mfrow=c(2,3),  mar=c(2,2,2,2))
 #plot(ady_un86_res$map, main="1986", col=cols3)
@@ -474,7 +474,7 @@ par(mfrow=c(2,3))
 #[4,]     4  5753613
 #[5,]     5   377721
 
- freq(ndvi_un_21$map)
+ freq(ndvi_un_21$map)  ## classe 2-3 desert/terra incolta 1 - 4 - 5 terreni agricoli (1 probable terreni attivi)
 #      value    count
 #[1,]     1   698849
 #[2,]     2  6858142
@@ -493,9 +493,9 @@ k2 <- unsuperClass(NDVI21, nClasses=10)
  
  
  
- 
- 
- 
+ par(mfrow=c(1,2))    ##
+  plot(ndvi_un_21$map, col=cl)
+  plotRGB(asc21_crop, 3, 2, 1, stretch="lin")
  
  
  
