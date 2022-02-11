@@ -413,17 +413,17 @@ plot(ady_tot_uns, col=tropical)
  ---------------------------------------------------------------------------------------------------
   
  set.seed(999)
- ndvi_un_87 <- unsuperClass(NDVI87, nClasses=5)
+   ndvi_un_87 <- unsuperClass(NDVI87, nClasses=5)
  set.seed(999)
- ndvi_un_92 <- unsuperClass(NDVI92, nClasses=5)
+   ndvi_un_92 <- unsuperClass(NDVI92, nClasses=5)
  set.seed(999)
- ndvi_un_97 <- unsuperClass(NDVI97, nClasses=5)
+   ndvi_un_97 <- unsuperClass(NDVI97, nClasses=5)
  set.seed(999)
- ndvi_un_02 <- unsuperClass(NDVI02, nClasses=5)
+   ndvi_un_02 <- unsuperClass(NDVI02, nClasses=5)
  set.seed(999)
- ndvi_un_11 <- unsuperClass(NDVI11, nClasses=5)
+   ndvi_un_11 <- unsuperClass(NDVI11, nClasses=5)
  set.seed(999)
- ndvi_un_21 <- unsuperClass(NDVI21, nClasses=5)
+   ndvi_un_21 <- unsuperClass(NDVI21, nClasses=5)
 
 
 par(mfrow=c(2,3))
@@ -434,7 +434,55 @@ par(mfrow=c(2,3))
  plot(ndvi_un_11$map, col=cl)
  plot(ndvi_un_21$map, col=cl)
  
- freq(asc_un87_res$map)
+ freq(ndvi_un_87$map)
+#      value   count
+#[1,]     1 6466925
+#[2,]     2 1812806
+#[3,]     3 4253480
+#[4,]     4  790852
+#[5,]     5 6902715
+
+ freq(ndvi_un_92$map)
+#      value   count
+#[1,]     1 2194030
+#[2,]     2 7587319
+#[3,]     3 1858949
+#[4,]     4 8555815
+#[5,]     5   30665
+
+ freq(ndvi_un_97$map)
+#      value    count
+#[1,]     1   137797
+#[2,]     2 10212013
+#[3,]     3  2483010
+#[4,]     4   107915
+#[5,]     5  7286043
+
+ freq(ndvi_un_02$map)
+#      value   count
+#[1,]     1 2413010
+#[2,]     2 8057517
+#[3,]     3 8975300
+#[4,]     4  636892
+#[5,]     5  144059
+
+ freq(ndvi_un_11$map)
+#      value    count
+#[1,]     1   608608
+#[2,]     2   420851
+#[3,]     3 13065985
+#[4,]     4  5753613
+#[5,]     5   377721
+
+ freq(ndvi_un_21$map)
+#      value    count
+#[1,]     1   698849
+#[2,]     2  6858142
+#[3,]     3 11790383
+#[4,]     4   445554
+#[5,]     5   433849
+#[6,]    NA        1
+ 
  
  set.seed(999)
 k2 <- unsuperClass(NDVI21, nClasses=10)
