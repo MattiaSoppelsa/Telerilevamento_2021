@@ -85,7 +85,8 @@ asc21_crop <- crop(asc21, e)
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
-# plottaggio con colori naturali 
+# plottaggio con colori naturali                                     # SALVO IMMAGINE DEL PLOTTAGGIO 6 immagini 
+
 par(mfrow=c(2,3)) mar(2,2,2,2)
 plotRGB(asc87_crop, 3, 2, 1, stretch="lin", axes=T, main="1987")
 plotRGB(asc92_crop, 3, 2, 1, stretch="lin", axes=T, main="1992")
@@ -94,7 +95,7 @@ plotRGB(asc02_crop, 3, 2, 1, stretch="lin", axes=T, main="2002")
 plotRGB(asc11_crop, 3, 2, 1, stretch="lin", axes=T, main="2011")
 plotRGB(asc21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
 
-#plottaggio con R= Nir, G= Red, B= blue
+#plottaggio con R= Nir, G= Red, B= blue                              
 par(mfrow=c(3,2))
 plotRGB(asc87_crop, 4, 3, 1, stretch="lin", axes=T, main="1987")
 plotRGB(asc92_crop, 4, 3, 1, stretch="lin", axes=T, main="1992")
@@ -111,6 +112,20 @@ plotRGB(asc21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
 #plotRGB(ady16_crop, 4, 3, 2, stretch="lin", axes=T, main="2016")
 #plotRGB(ady21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
 
+plot(asc87_crop[[4]], col=cl)
+plot(asc21_crop[[4]], col=cl)
+
+## tolgo i valori minori cosi che le immagini abbiano la stessa scala 
+
+asc21_crop_rec <- reclassify(asc21_crop, cbind(-Inf, -0.1, NA), right=FALSE)
+
+par(mfrow=c(1,2))
+plot(asc87_crop[[4]], col=cl)
+plot(asc21_crop_rec[[4]], col=cl)
+
+
+levelplot(asc87_crop[[4]])
+levelplot(asc21_crop[[4]])
 
 ## CALCOLO DELL'NDVI ##
 # NDVI = (NIR - red)/(NIR + red)
@@ -553,6 +568,34 @@ k2 <- unsuperClass(NDVI21, nClasses=10)
  par(mfrow=c(1,2))    ##
   plot(ndvi_un_21$map, col=cl)
   plotRGB(asc21_crop, 3, 2, 1, stretch="lin")
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+-------------------------------------------------------------------------------------------------------------------------------------------
+### come salvare  ####
+
+png("D:/lab/asc/ndvi_un_21.png", width = 4000, height = 1800, res = 300)
+plot(ndvi_un_21$map)
+dev.off()
+ 
+ 
+ 
+ 
+ par(mfrow=c(1,2))
+plot(asc87_crop[[4]], col=cl)
+plot(asc21_crop_rec[[4]], col=cl)
+ 
+ 
+ gg86 <- ggplot(asc87_crop[[4]], col=cl)
+ 
+ gg86 <- ggplot() + geom_raster(asc87_crop[[4]], mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1986")
+ 
+ 
+ 
  
  
  
