@@ -86,67 +86,71 @@ asc21_crop <- crop(asc21, e)
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
 # plottaggio con colori naturali 
-par(mfrow=c(3,2))
-plotRGB(ady86_crop, 3, 2, 1, stretch="lin", axes=T, main="1986")
-plotRGB(ady96_crop, 3, 2, 1, stretch="lin", axes=T, main="1996")
-plotRGB(ady06_crop, 3, 2, 1, stretch="lin", axes=T, main="2006")
-plotRGB(ady16_crop, 3, 2, 1, stretch="lin", axes=T, main="2016")
-plotRGB(ady21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
+par(mfrow=c(2,3)) mar(2,2,2,2)
+plotRGB(asc87_crop, 3, 2, 1, stretch="lin", axes=T, main="1987")
+plotRGB(asc92_crop, 3, 2, 1, stretch="lin", axes=T, main="1992")
+plotRGB(asc97_crop, 3, 2, 1, stretch="lin", axes=T, main="1997")
+plotRGB(asc02_crop, 3, 2, 1, stretch="lin", axes=T, main="2002")
+plotRGB(asc11_crop, 3, 2, 1, stretch="lin", axes=T, main="2011")
+plotRGB(asc21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
 
 #plottaggio con R= Nir, G= Red, B= blue
 par(mfrow=c(3,2))
-plotRGB(ady86_crop, 4, 3, 1, stretch="lin", axes=T, main="1986")
-plotRGB(ady96_crop, 4, 3, 1, stretch="lin", axes=T, main="1996")
-plotRGB(ady06_crop, 4, 3, 1, stretch="lin", axes=T, main="2006")
-plotRGB(ady16_crop, 4, 3, 1, stretch="lin", axes=T, main="2016")
-plotRGB(ady21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
+plotRGB(asc87_crop, 4, 3, 1, stretch="lin", axes=T, main="1987")
+plotRGB(asc92_crop, 4, 3, 1, stretch="lin", axes=T, main="1992")
+plotRGB(asc97_crop, 4, 3, 1, stretch="lin", axes=T, main="1997")
+plotRGB(asc02_crop, 4, 3, 1, stretch="lin", axes=T, main="2002")
+plotRGB(asc11_crop, 4, 3, 1, stretch="lin", axes=T, main="2011")
+plotRGB(asc21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
 
 #Plottaggio con R= Nir, G= red, B= green 
-par(mfrow=c(3,2))
-plotRGB(ady86_crop, 4, 3, 2, stretch="lin", axes=T, main="1986")
-plotRGB(ady96_crop, 4, 3, 2, stretch="lin", axes=T, main="1996")
-plotRGB(ady06_crop, 4, 3, 2, stretch="lin", axes=T, main="2006")
-plotRGB(ady16_crop, 4, 3, 2, stretch="lin", axes=T, main="2016")
-plotRGB(ady21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
+#par(mfrow=c(2,3))
+#plotRGB(ady86_crop, 4, 3, 2, stretch="lin", axes=T, main="1986")
+#plotRGB(ady96_crop, 4, 3, 2, stretch="lin", axes=T, main="1996")
+#plotRGB(ady06_crop, 4, 3, 2, stretch="lin", axes=T, main="2006")
+#plotRGB(ady16_crop, 4, 3, 2, stretch="lin", axes=T, main="2016")
+#plotRGB(ady21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
 
 
 ## CALCOLO DELL'NDVI ##
 # NDVI = (NIR - red)/(NIR + red)
 
-NDVI86 <- (ady86_crop[[4]] - ady86_crop[[3]]) / (ady86_crop[[4]] + ady86_crop[[3]])
-NDVI96 <- (ady96_crop[[4]] - ady96_crop[[3]]) / (ady96_crop[[4]] + ady96_crop[[3]])
-NDVI06 <- (ady06_crop[[4]] - ady06_crop[[3]]) / (ady06_crop[[4]] + ady06_crop[[3]])
-NDVI16 <- (ady16_crop[[4]] - ady16_crop[[3]]) / (ady16_crop[[4]] + ady16_crop[[3]])
-NDVI21 <- (ady21_crop[[4]] - ady21_crop[[3]]) / (ady21_crop[[4]] + ady21_crop[[3]])
- 
-cl <- colorRampPalette(c("white","grey","black","red"))(100)
+NDVI87 <- (asc87_crop[[4]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[3]])
+NDVI92 <- (asc92_crop[[4]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[3]])
+NDVI97 <- (asc97_crop[[4]] - asc97_crop[[3]]) / (asc97_crop[[4]] + asc97_crop[[3]])
+NDVI02 <- (asc02_crop[[4]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[3]])
+NDVI11 <- (asc11_crop[[4]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[3]])
+NDVI21 <- (asc21_crop[[4]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[3]])
+
+#cl <- colorRampPalette(c("white","grey","black","red"))(100)
 #changer <- colorRampPalette(c("steelblue3","black","yellow"))(100)
 
-par(mfrow=c(2,3))
-plot(NDVI86, main="Anno 1986", col=cl)
-plot(NDVI96, main="Anno 1996", col=cl)
-plot(NDVI06, main="Anno 2006", col=cl)
-plot(NDVI16, main="Anno 2016", col=cl)
-plot(NDVI21, main="Anno 2021", col=cl)
 
+NDVI87_lvl <- levelplot(NDVI87)
+NDVI92_lvl <- levelplot(NDVI92)
+NDVI97_lvl <- levelplot(NDVI97)
+NDVI02_lvl <- levelplot(NDVI02)
+NDVI11_lvl <- levelplot(NDVI11)
+NDVI21_lvl <- levelplot(NDVI21)
 
-#RStoolbox: spectralIndicies   #DA PROVARE
-vi1 <- spectralIndices(ady86_crop, green = 3, red = 2, nir = 1)
-plot(vi1,col=cl)
+grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
+grid.arrange(NDVI02_lvl, NDVI11_lvl, NDVI21_lvl, nrow=1)
+
 
 #DIFFERENZA NDVI
 
-difndvi <- NDVI21 - NDVI86
+#difndvi <- NDVI87 - NDVI21
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 # __________Bare Soil Index (BSI)_____________________________________________________________________________________________________________________________________________
 
 # BSI = (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
 
-BSI86 <- (ady86_crop[[5]] - ady86_crop[[3]]) / (ady86_crop[[4]] + ady86_crop[[1]])
-BSI96 <- (ady96_crop[[5]] - ady96_crop[[3]]) / (ady96_crop[[4]] + ady96_crop[[1]])
-BSI06 <- (ady06_crop[[5]] - ady06_crop[[3]]) / (ady06_crop[[4]] + ady06_crop[[1]])
-BSI16 <- (ady16_crop[[5]] - ady16_crop[[3]]) / (ady16_crop[[4]] + ady16_crop[[1]])
-BSI21 <- (ady21_crop[[5]] - ady21_crop[[3]]) / (ady21_crop[[4]] + ady21_crop[[1]])
+BSI86 <- (asc87_crop[[5]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[1]])
+BSI96 <- (asc92_crop[[5]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[1]])
+BSI06 <- (asc97_crop[[5]] - asc97_crop[[3]]) / (asc97_crop[[4]] + asc97_crop[[1]])
+BSI16 <- (asc02_crop[[5]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[1]])
+BSI11 <- (asc11_crop[[5]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[1]])
+BSI21 <- (asc21_crop[[5]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[1]])
 
 # Bare sandy beaches without any vegetation are shown at one extremity and urbanized areas are at the other extremity.
 # Urban areas have a slightly more extreme value compared to vegetation.
@@ -154,23 +158,23 @@ BSI21 <- (ady21_crop[[5]] - ady21_crop[[3]]) / (ady21_crop[[4]] + ady21_crop[[1]
 tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
 
 # To make a simple plot:
-par(mfrow=c(1,2))
-plot(BSI86, col=tropical)
-plot(BSI21, col=tropical)
+#par(mfrow=c(1,2))
+#plot(BSI86, col=tropical)
+#plot(BSI21, col=tropical)
 
 # Faccio un levelplot:
-BSI86_lvl <- levelplot(BSI86, col.regions=tropical, main="BSI nel 1986")
-BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
-grid.arrange(BSI86_lvl, BSI21_lvl, nrow=1)
+#BSI86_lvl <- levelplot(BSI86, col.regions=tropical, main="BSI nel 1986")
+#BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
+#grid.arrange(BSI86_lvl, BSI21_lvl, nrow=1)
 
 
 
-BSIdiff <- BSI21-BSI86
-tropinv <- colorRampPalette(c("yellow","navy","white"))(100)
-plot(BSIdiff, col=tropinv)
+#BSIdiff <- BSI21-BSI86
+#tropinv <- colorRampPalette(c("yellow","navy","white"))(100)
+#plot(BSIdiff, col=tropinv)
 
 # To create a levelplot showing the difference between the first and last year studied:
-levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1986 e il 2021"
+#levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1986 e il 2021"
 
 
 
@@ -178,70 +182,82 @@ levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1
 # calcolo(PCA)
 # Prima del calcolo uso la funzione aggregate per cambiare la grandezza delle immagini di unfact=10
 
-ady86_res <- aggregate(ady86_crop, fact=10) 
-ady96_res <- aggregate(ady96_crop, fact=10) 
-ady06_res <- aggregate(ady06_crop, fact=10) 
-ady16_res <- aggregate(ady16_crop, fact=10) 
-ady21_res <- aggregate(ady21_crop, fact=10) 
+asc87_res <- aggregate(asc87_crop, fact=10) 
+asc92_res <- aggregate(asc92_crop, fact=10) 
+asc97_res <- aggregate(asc97_crop, fact=10) 
+asc02_res <- aggregate(asc02_crop, fact=10) 
+asc11_res <- aggregate(asc11_crop, fact=10) 
+asc21_res <- aggregate(asc21_crop, fact=10) 
 
 #Ora sono pronto per il calcolo della PCA
 
-ady86_pca <- rasterPCA(ady86_res) 
-ady96_pca <- rasterPCA(ady96_res)
-ady06_pca <- rasterPCA(ady06_res)
-ady16_pca <- rasterPCA(ady16_res)
-ady21_pca <- rasterPCA(ady21_res)
+asc87_pca <- rasterPCA(asc87_res) 
+asc92_pca <- rasterPCA(asc92_res)
+asc97_pca <- rasterPCA(asc97_res)
+asc02_pca <- rasterPCA(asc02_res)
+asc11_pca <- rasterPCA(asc11_res)
+asc21_pca <- rasterPCA(asc21_res)
 
 # uso l'opzione summary per lo studio delle componenti
 
-summary(ady86_pca$model)
+summary(asc87_pca$model)
 Importance of components:
                              Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
-Standard deviation     3690.1105007 1575.9737220 686.24103034 3.154144e+02 231.95765106 1.073445e+02
-Proportion of Variance    0.8136133    0.1484011   0.02813796 5.944321e-03   0.00321482 6.884921e-04
-Cumulative Proportion     0.8136133    0.9620144   0.99015237 9.960967e-01   0.99931151 1.000000e+00
+Standard deviation     8180.8992914 3441.1606272 1.581357e+03 4.756984e+02 2.642683e+02 6.918789e+01
+Proportion of Variance    0.8204838    0.1451703 3.065686e-02 2.774159e-03 8.561665e-04 5.868514e-05
+Cumulative Proportion     0.8204838    0.9656541 9.963110e-01 9.990851e-01 9.999413e-01 1.000000e+00
 
-summary(ady96_pca$model)
-Importance of components:
-                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5      Comp.6
-Standard deviation     3953.7834909 1541.2703811 1.184101e+03 3.748356e+02 3.178603e+02 1.24026e+02
-Proportion of Variance    0.7948572    0.1207872 7.129199e-02 7.144061e-03 5.137313e-03 7.82148e-04
-Cumulative Proportion     0.7948572    0.9156445 9.869365e-01 9.940805e-01 9.992179e-01 1.00000e+00
-
-summary(ady06_pca$model)
+summary(asc92_pca$model)
 Importance of components:
                              Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
-Standard deviation     3828.9345188 1486.2336726 1.019486e+03 4.150360e+02 2.759049e+02 1.781540e+02
-Proportion of Variance    0.8060179    0.1214404 5.714145e-02 9.470225e-03 4.185118e-03 1.744938e-03
-Cumulative Proportion     0.8060179    0.9274583 9.845997e-01 9.940699e-01 9.982551e-01 1.000000e+00
+Standard deviation     6548.2849684 3671.5205098 1676.6232779 6.321050e+02 3.330537e+02 1.153965e+02
+Proportion of Variance    0.7183192    0.2258158    0.0470905 6.693308e-03 1.858193e-03 2.230734e-04
+Cumulative Proportion     0.7183192    0.9441349    0.9912254 9.979187e-01 9.997769e-01 1.000000e+00
 
-summary(ady16_pca$model)
+summary(asc97_pca$model)
 Importance of components:
                              Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
-Standard deviation     4171.3349860 2034.2394618 1.271277e+03 3.030372e+02 2.247925e+02 1.083410e+02
-Proportion of Variance    0.7465131    0.1775381 6.933742e-02 3.939847e-03 2.167958e-03 5.035854e-04
-Cumulative Proportion     0.7465131    0.9240512 9.933886e-01 9.973285e-01 9.994964e-01 1.000000e+00
+Standard deviation     1.084591e+04 3052.4437309 1829.5417083 9.335905e+02 4.217779e+02 1.500711e+02
+Proportion of Variance 8.954357e-01    0.0709248    0.0254793 6.634614e-03 1.354161e-03 1.714340e-04
+Cumulative Proportion  8.954357e-01    0.9663605    0.9918398 9.984744e-01 9.998286e-01 1.000000e+00
 
-summary(ady21_pca$model)
+summary(asc02_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4      Comp.5       Comp.6
+Standard deviation     1.009951e+04 3.386919e+03 1.809350e+03 9.468640e+02 418.9535827 149.78478891
+Proportion of Variance 8.655844e-01 9.734605e-02 2.778139e-02 7.608233e-03   0.0014895   0.00019039
+Cumulative Proportion  8.655844e-01 9.629305e-01 9.907119e-01 9.983201e-01   0.9998096   1.00000000
+
+summary(asc11_pca$model)
 Importance of components:
                              Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
-Standard deviation     4044.3736894 1798.6253625 1.050480e+03 2.796536e+02 231.96887709 1.156519e+02
-Proportion of Variance    0.7848485    0.1552261 5.294914e-02 3.752528e-03   0.00258192 6.417840e-04
-Cumulative Proportion     0.7848485    0.9400746 9.930238e-01 9.967763e-01   0.99935822 1.000000e+00
+Standard deviation     1.012266e+04 3743.2460171 1929.9758364 1.365083e+03 4.271252e+02 1.494021e+02
+Proportion of Variance 8.380273e-01    0.1145950    0.0304630 1.524006e-02 1.492036e-03 1.825503e-04
+Cumulative Proportion  8.380273e-01    0.9526223    0.9830853 9.983254e-01 9.998174e-01 1.000000e+00
+
+summary(asc21_pca$model)
+Importance of components:
+                             Comp.1       Comp.2       Comp.3       Comp.4       Comp.5       Comp.6
+Standard deviation     5267.3318780 2436.9964731 1.785421e+03 1.410675e+03 4.611047e+02 1.499936e+02
+Proportion of Variance    0.7096473    0.1519046 8.153468e-02 5.089966e-02 5.438264e-03 5.754487e-04
+Cumulative Proportion     0.7096473    0.8615519 9.430866e-01 9.939863e-01 9.994246e-01 1.000000e+00
+
 
 --------------------------------------------
 par(mfrow=c(2,3))
-plotRGB(ady86_pca$map, 1, 2, 3, stretch="Lin")
-plotRGB(ady96_pca$map, 1, 2, 3, stretch="Lin")
-plotRGB(ady06_pca$map, 1, 2, 3, stretch="Lin")
-plotRGB(ady16_pca$map, 1, 2, 3, stretch="Lin")
-plotRGB(ady21_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc87_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc92_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc97_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc02_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc11_pca$map, 1, 2, 3, stretch="Lin")
+plotRGB(asc21_pca$map, 1, 2, 3, stretch="Lin")
 
-plot(ady86_pca$model)
-plot(ady96_pca$model)
-plot(ady06_pca$model)
-plot(ady16_pca$model)
-plot(ady21_pca$model)
+plot(asc87_pca$model)
+plot(asc92_pca$model)
+plot(asc97_pca$model)
+plot(asc02_pca$model)
+plot(asc11_pca$model)
+plot(asc21_pca$model)
 
 #tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
 
@@ -256,24 +272,26 @@ plot(ady21_pca$model)
 
  Comparison PCA 1986-2021
 par(mfrow=c(2,3))
-plotRGB(ady86_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(ady96_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(ady06_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(ady16_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(ady21_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(asc87_pca$map, 1, 2, 3, stretch="Hist")
+plotRGB(asc92_pca$map, 1, 2, 3, stretch="Hist")
+plotRGB(asc97_pca$map, 1, 2, 3, stretch="Hist")
+plotRGB(asc02_pca$map, 1, 2, 3, stretch="Hist")
+plotRGB(asc11_pca$map, 1, 2, 3, stretch="Hist")
+plotRGB(asc21_pca$map, 1, 2, 3, stretch="Hist")
 
 --------------------------------------
 # multiframe con ggplot
 
-ady86_gg <- ggRGB(ady86_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1986") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ady96_gg <- ggRGB(ady96_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1996") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ady06_gg <- ggRGB(ady06_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2006") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ady16_gg <- ggRGB(ady16_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2016") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ady21_gg <- ggRGB(ady21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc87_gg <- ggRGB(asc87_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc92_gg <- ggRGB(asc92_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1992") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc97_gg <- ggRGB(asc97_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1997") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc02_gg <- ggRGB(asc02_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2002") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc11_gg <- ggRGB(asc11_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2011") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+asc21_gg <- ggRGB(asc21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
 #utilizzo la funzione grid.arrange per visualizzarli assieme 
 
-grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
+grid.arrange(asc87_gg, asc92_gg, asc97_gg, asc02_gg, asc11_gg, asc21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -282,8 +300,8 @@ grid.arrange(ady86_gg, ady96_gg, ady06_gg, ady16_gg, ady21_gg, nrow=2, top=textG
 
 ------------------------------------------------------------------------------------------------------
 # PC1
-ady86_pc1 <- ady86_pca$map$PC1 
-ady21_pc1 <- ady21_pca$map$PC1
+#ady86_pc1 <- ady86_pca$map$PC1 
+#ady21_pc1 <- ady21_pca$map$PC1
 #marz19_pc1 <- marz19_pca$map$PC1
                  
 # level.plot di PC1 sfrutto una gamma di colori più ampia e le immagini sono più definite
@@ -294,56 +312,70 @@ ady21_pc1 <- ady21_pca$map$PC1
 #dev.off()
 
 # funzione focal moving window
-feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
+#feb20_mw <-focal (feb20_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 #marz11_mw <-focal (marz11_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 #marz19_mw <-focal (marz19_pc1, w=matrix(1/9, nrow=3, ncol=3), fun=sd)
 
  -------------------------------------------------------------------------------------------------------------------------------------------------------
- ###   UnSuperClass ##  Unsupervised classification
+ ###   UnSuperClass ##  Unsupervised classification       (PROVARE CON PIu CLASSI E SEPARARE QUELLA CHE MI INTERESSA)
 
 
 set.seed(999)
-ady_un86 <- unsuperClass(ady86_crop, nClasses=10)
+asc_un87 <- unsuperClass(asc87_crop, nClasses=10)
 set.seed(999)
-ady_un96 <- unsuperClass(ady96_crop, nClasses=10)
+asc_un92 <- unsuperClass(asc92_crop, nClasses=10)
 set.seed(999)
-ady_un06 <- unsuperClass(ady06_crop, nClasses=10)
+asc_un97 <- unsuperClass(asc97_crop, nClasses=10)
 set.seed(999)
-ady_un16 <- unsuperClass(ady16_crop, nClasses=10)
+asc_un02 <- unsuperClass(asc02_crop, nClasses=10)
 set.seed(999)
-ady_un21 <- unsuperClass(ady21_crop, nClasses=10)
+asc_un11 <- unsuperClass(asc11_crop, nClasses=10)
+set.seed(999)
+asc_un21 <- unsuperClass(asc21_crop, nClasses=10)
 
 tropical <- colorRampPalette(c("blue","green","red","black"))(100)
+cl <- colorRampPalette(c("yellow", "red", "pink"))(100) 
 # per colorare 
 #cols3 <- brewer.pal(3, "Pastel1")
 
 par(mfrow=c(2,3))
-plot(ady_un86$map, main="1986", col=tropical)
-plot(ady_un96$map, main="1996", col=tropical)
-plot(ady_un06$map,main="2006", col=tropical)
-plot(ady_un16$map,main="2016", col=tropical)
-plot(ady_un21$map, main="2021", col=tropical)
- 
+plot(asc_un87$map, main="1987", col=tropical)
+plot(asc_un92$map, main="1992", col=tropical)
+plot(asc_un97$map, main="1997", col=tropical)
+plot(asc_un02$map, main="2002", col=tropical)
+plot(asc_un11$map, main="2011", col=tropical)
+plot(asc_un21$map, main="2021", col=tropical)
 
 #provo unsuperclass con le bande ridotte
 set.seed(999)
-ady_un86_res <- unsuperClass(ady86_res, nClasses=5)
+asc_un87_res <- unsuperClass(asc87_res, nClasses=3)
 set.seed(999)
-ady_un96_res <- unsuperClass(ady96_res, nClasses=5)
+asc_un92_res <- unsuperClass(asc92_res, nClasses=3)
 set.seed(999)
-ady_un06_res <- unsuperClass(ady06_res, nClasses=5)
+asc_un97_res <- unsuperClass(asc97_res, nClasses=3)
 set.seed(999)
-ady_un16_res <- unsuperClass(ady16_res, nClasses=5)
+asc_un02_res <- unsuperClass(asc02_res, nClasses=3)
 set.seed(999)
-ady_un21_res <- unsuperClass(ady21_res, nClasses=5)
+asc_un11_res <- unsuperClass(asc11_res, nClasses=3)
+set.seed(999)
+asc_un21_res <- unsuperClass(asc21_res, nClasses=3)
 
-cl <- colorRampPalette(c("yellow", "orange", "light blue", "green", "dark green"))(100) 
+par(mfrow=c(2,3))
+plot(asc_un87_res$map, main="1987", col=cl)
+plot(asc_un92_res$map, main="1992", col=cl)
+plot(asc_un97_res$map, main="1997", col=cl)
+plot(asc_un02_res$map, main="2002", col=cl)
+plot(asc_un11_res$map, main="2011", col=cl)
+plot(asc_un21_res$map, main="2021", col=cl)
+
+
+
 cls <- colorRampPalette(c("yellow", "light blue", "orange", "green", "dark green"))(100) 
 par(mfrow=c(1,2))
-plot(ady_un86_res$map, col=cl)
-plot(ady_un21_res$map, col=cls)
-freq(ady_un86_res$map)
-freq(ady_un21_res$map)
+plot(asc_un87_res$map, col=cl)
+plot(asc_un21_res$map, col=cl)
+freq(asc_un87_res$map)
+freq(asc_un21_res$map)
 
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
 plot(ady_un86_res$map, col=cl)
