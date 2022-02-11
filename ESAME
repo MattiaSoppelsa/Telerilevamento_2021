@@ -160,10 +160,10 @@ grid.arrange(NDVI02_lvl, NDVI11_lvl, NDVI21_lvl, nrow=1)
 
 # BSI = (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
 
-BSI86 <- (asc87_crop[[5]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[1]])
-BSI96 <- (asc92_crop[[5]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[1]])
-BSI06 <- (asc97_crop[[5]] - asc97_crop[[3]]) / (asc97_crop[[4]] + asc97_crop[[1]])
-BSI16 <- (asc02_crop[[5]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[1]])
+BSI87 <- (asc87_crop[[5]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[1]])
+BSI92 <- (asc92_crop[[5]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[1]])
+BSI97 <- (asc97_crop[[5]] - asc97_crop[[3]]) / (asc97_crop[[4]] + asc97_crop[[1]])
+BSI02 <- (asc02_crop[[5]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[1]])
 BSI11 <- (asc11_crop[[5]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[1]])
 BSI21 <- (asc21_crop[[5]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[1]])
 
@@ -389,8 +389,6 @@ cls <- colorRampPalette(c("yellow", "light blue", "orange", "green", "dark green
 par(mfrow=c(1,2))
 
 
-
-
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
 plot(asc_un87_res$map, col=cl)
 plot(asc_un92_res$map, col=cl)
@@ -453,8 +451,8 @@ par(mfrow=c(2,3))
 #      value   count
 #[1,]     1 6466925
 #[2,]     2 1812806
-#[3,]     3 4253480
-#[4,]     4  790852
+#[3,]     3 4253480      #zona desertica/sterpaglia 
+#[4,]     4  790852      # vegetazione
 #[5,]     5 6902715
 
  freq(ndvi_un_92$map)
@@ -506,9 +504,11 @@ par(mfrow=c(2,3))
 #             value      count
 #[1,] 4.943941e-08 0.31972097     =   32%
 #[2,] 9.887882e-08 0.08962406     =    9%
-#[3,] 1.483182e-07 0.21028955     =   21%
-#[4,] 1.977576e-07 0.03909926     =    4%
+#[3,] 1.483182e-07 0.21028955     =   21%     #zona desertica/sterpaglia 
+#[4,] 1.977576e-07 0.03909926     =    4%     # vegetazione
 #[5,] 2.471971e-07 0.34126617     =   34%
+
+# tot 100% = 100% suolo di vario genere
 
  prop92 <- freq(ndvi_un_92$map)/tot
  prop92
@@ -556,15 +556,45 @@ par(mfrow=c(2,3))
 #[5,] 2.471971e-07 2.144924e-02     =   2%
 #[6,]           NA 4.943941e-08     =   NA
  
+ 
+ par(mfrow=c(1,2))
+ plot(ndvi_un_97$map, col=cl)
+   plot(bsi_un_97$map, col=cl)
+ plotRGB(asc97_crop, 3, 2, 1, stretch="lin", axes=T, main="1992")
+ 
+ BSI97
+  set.seed(999)
+   bsi_un_97 <- unsuperClass(BSI97, nClasses=5)
+
+  set.seed(999)
+   bsi_un_92 <- unsuperClass(BSI92, nClasses=5)
+
+  par(mfrow=c(1,2))
+    plot(bsi_un_97$map, col=cl)
+     plot(bsi_un_92$map, col=cl)
+  
+#Build a dataframe
+cover <- c("Forest","Agriculture")
+percent_1992 <- c(89.49, 10.50)
+percent_2006 <- c(52.23, 47.76)
+
+percentages <- data.frame(cover, percent_1992, percent_2006)
+percentages
+ 
+ 
+ 
+ 
+ 
+
+
+
+
  set.seed(999)
 k2 <- unsuperClass(NDVI21, nClasses=10)
  plot(k2$map, col=cl)
  
  
- 
- 
- 
- 
+
  par(mfrow=c(1,2))    ##
   plot(ndvi_un_21$map, col=cl)
   plotRGB(asc21_crop, 3, 2, 1, stretch="lin")
@@ -592,15 +622,13 @@ plot(asc21_crop_rec[[4]], col=cl)
  
  gg86 <- ggplot(asc87_crop[[4]], col=cl)
  
- gg86 <- ggplot() + geom_raster(asc87_crop[[4]], mapping = aes(x = x, y = y, fill = layer)) + scale_fill_viridis() + ggtitle("1986")
+ gg86 <- ggplot() + geom_raster(asc87_crop[[4]], mapping = aes(x = x, y = y, fill = layer)) + ggtitle("1986")
  
  
+ p <- ggplot(asc87_crop[[4]])
+g <- p + scale_color_grey()
  
- 
- 
- 
- 
- 
+ grid.arrange(g, nrow=1)
  
  
  
