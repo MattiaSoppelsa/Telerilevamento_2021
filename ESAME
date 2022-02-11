@@ -348,17 +348,17 @@ plot(asc_un21$map, main="2021", col=tropical)
 
 #provo unsuperclass con le bande ridotte
 set.seed(999)
-asc_un87_res <- unsuperClass(asc87_res, nClasses=3)
+asc_un87_res <- unsuperClass(asc87_res, nClasses=10)
 set.seed(999)
-asc_un92_res <- unsuperClass(asc92_res, nClasses=3)
+asc_un92_res <- unsuperClass(asc92_res, nClasses=10)
 set.seed(999)
-asc_un97_res <- unsuperClass(asc97_res, nClasses=3)
+asc_un97_res <- unsuperClass(asc97_res, nClasses=10)
 set.seed(999)
-asc_un02_res <- unsuperClass(asc02_res, nClasses=3)
+asc_un02_res <- unsuperClass(asc02_res, nClasses=10)
 set.seed(999)
-asc_un11_res <- unsuperClass(asc11_res, nClasses=3)
+asc_un11_res <- unsuperClass(asc11_res, nClasses=10)
 set.seed(999)
-asc_un21_res <- unsuperClass(asc21_res, nClasses=3)
+asc_un21_res <- unsuperClass(asc21_res, nClasses=10)
 
 par(mfrow=c(2,3))
 plot(asc_un87_res$map, main="1987", col=cl)
@@ -372,23 +372,24 @@ plot(asc_un21_res$map, main="2021", col=cl)
 
 cls <- colorRampPalette(c("yellow", "light blue", "orange", "green", "dark green"))(100) 
 par(mfrow=c(1,2))
-plot(asc_un87_res$map, col=cl)
-plot(asc_un21_res$map, col=cl)
-freq(asc_un87_res$map)
-freq(asc_un21_res$map)
+
+
+
 
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
-plot(ady_un86_res$map, col=cl)
-plot(ady_un96_res$map, col=cl)
-plot(ady_un06_res$map, col=cl)
-plot(ady_un16_res$map, col=cl)
-plot(ady_un21_res$map, col=cl)
+plot(asc_un87_res$map, col=cl)
+plot(asc_un92_res$map, col=cl)
+plot(asc_un97_res$map, col=cl)
+plot(asc_un02_res$map, col=cl)
+plot(asc_un11_res$map, col=cl)
+plot(asc_un21_res$map, col=cl)
 
-freq(ady_un86_res$map)
-freq(ady_un96_res$map)
-freq(ady_un06_res$map)
-freq(ady_un16_res$map)
-freq(ady_un21_res$map)
+freq(asc_un87_res$map)
+freq(asc_un92_res$map)
+freq(asc_un97_res$map)
+freq(asc_un02_res$map)
+freq(asc_un11_res$map)
+freq(asc_un21_res$map)
 
 
 s1 <- 2087293 + 4697269 + 3313430 + 621084
@@ -410,16 +411,34 @@ ady_tot <- stack(ady86_res,ady96_res,ady06_res,ady16_res,ady21_res)  #PROBLEMA E
 ady_tot_uns <- unsuperClass(ady_tot, nClasses=4)
 plot(ady_tot_uns, col=tropical)
  ---------------------------------------------------------------------------------------------------
+  
+ set.seed(999)
+ ndvi_un_87 <- unsuperClass(NDVI87, nClasses=5)
+ set.seed(999)
+ ndvi_un_92 <- unsuperClass(NDVI92, nClasses=5)
+ set.seed(999)
+ ndvi_un_97 <- unsuperClass(NDVI97, nClasses=5)
+ set.seed(999)
+ ndvi_un_02 <- unsuperClass(NDVI02, nClasses=5)
+ set.seed(999)
+ ndvi_un_11 <- unsuperClass(NDVI11, nClasses=5)
+ set.seed(999)
+ ndvi_un_21 <- unsuperClass(NDVI21, nClasses=5)
+
+
+par(mfrow=c(2,3))
+ plot(ndvi_un_87$map, col=cl)
+ plot(ndvi_un_92$map, col=cl)
+ plot(ndvi_un_97$map, col=cl)
+ plot(ndvi_un_02$map, col=cl)
+ plot(ndvi_un_11$map, col=cl)
+ plot(ndvi_un_21$map, col=cl)
  
+ freq(asc_un87_res$map)
  
- 
- 
- 
- 
- 
- 
- 
- 
+ set.seed(999)
+k2 <- unsuperClass(NDVI21, nClasses=10)
+ plot(k2$map, col=cl)
  
  
  
