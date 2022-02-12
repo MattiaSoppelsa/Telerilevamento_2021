@@ -118,10 +118,14 @@ plot(asc21_crop[[4]], col=cl)
 ## tolgo i valori minori cosi che le immagini abbiano la stessa scala 
 
 asc21_crop_rec <- reclassify(asc21_crop, cbind(-Inf, -0.1, NA), right=FALSE)
+asc92_crop_rec <- reclassify(asc92_crop, cbind(-Inf, -0.1, NA), right=FALSE)
+asc97_crop_rec <- reclassify(asc97_crop, cbind(-Inf, -0.1, NA), right=FALSE)
 
+
+cl <- colorRampPalette(c("white","grey","black","red"))(100)
 par(mfrow=c(1,2))
-plot(asc87_crop[[4]], col=cl)
-plot(asc21_crop_rec[[4]], col=cl)
+plot(asc87_crop[[4]], col=cl, main="1987")
+plot(asc21_crop_rec[[4]], col=cl, main="2021")
 
 
 levelplot(asc87_crop[[4]])
@@ -137,20 +141,23 @@ NDVI02 <- (asc02_crop[[4]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[3
 NDVI11 <- (asc11_crop[[4]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[3]])
 NDVI21 <- (asc21_crop[[4]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[3]])
 
-#cl <- colorRampPalette(c("white","grey","black","red"))(100)
+#cl <- colorRampPalette(c("pink","white","grey","black","red"))(100)
 #changer <- colorRampPalette(c("steelblue3","black","yellow"))(100)
 
 
-NDVI87_lvl <- levelplot(NDVI87)
-NDVI92_lvl <- levelplot(NDVI92)
-NDVI97_lvl <- levelplot(NDVI97)
-NDVI02_lvl <- levelplot(NDVI02)
-NDVI11_lvl <- levelplot(NDVI11)
-NDVI21_lvl <- levelplot(NDVI21)
+NDVI87_lvl <- levelplot(NDVI87,main = "1987") 
+NDVI92_lvl <- levelplot(NDVI92,main = "1992")
+NDVI97_lvl <- levelplot(NDVI97,main = "1997")
+NDVI02_lvl <- levelplot(NDVI02,main = "2002")
+NDVI11_lvl <- levelplot(NDVI11,main = "2011")
+NDVI21_lvl <- levelplot(NDVI21,main = "2021")
 
+ndvi <- stack(NDVI87,NDVI92,NDVI97,NDVI02,NDVI11,NDVI21)
+levelplot(ndvi, main = "NDVI", names.attr=1987,1992,1997,2002,2011,2021)
 grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
 grid.arrange(NDVI02_lvl, NDVI11_lvl, NDVI21_lvl, nrow=1)
 
+k <- grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
 
 #DIFFERENZA NDVI
 
@@ -174,13 +181,13 @@ tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
 
 # To make a simple plot:
 #par(mfrow=c(1,2))
-#plot(BSI86, col=tropical)
+#plot(BSI87, col=tropical)
 #plot(BSI21, col=tropical)
 
 # Faccio un levelplot:
-#BSI86_lvl <- levelplot(BSI86, col.regions=tropical, main="BSI nel 1986")
-#BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
-#grid.arrange(BSI86_lvl, BSI21_lvl, nrow=1)
+BSI87_lvl <- levelplot(BSI87, col.regions=tropical, main="BSI nel 1987")
+BSI21_lvl <- levelplot(BSI21, col.regions=tropical, main="BSI nel 2021")
+grid.arrange(BSI87_lvl, BSI21_lvl, nrow=1)
 
 
 
@@ -192,7 +199,33 @@ tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
 #levelplot(BSIdiff, col.regions=tropinv, main="Differenza nel BSI tra \n l'anno 1986 e il 2021"
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+# CALCOLO DELL NDMI (Normalized Difference Moisture Index) che descrive il livello di stress idrico della coltura
 
+e2 <- extent(410000,442000,3305008,3350010)
+asc87_crop2 <- crop(asc87, e2)
+asc92_crop2 <- crop(asc92, e2)
+asc97_crop2 <- crop(asc97, e2)
+asc02_crop2 <- crop(asc02, e2)
+asc11_crop2 <- crop(asc11, e2)
+asc21_crop2 <- crop(asc21, e2)
+
+# NDMI = (NIR-SWIR)/(NIR+SWIR)
+
+NDMI87 <- (asc87_crop2[[4]] - asc87_crop2[[5]]) / (asc87_crop2[[4]] + asc87_crop2[[5]])
+NDMI11 <- (asc11_crop2[[4]] - asc11_crop2[[5]]) / (asc11_crop2[[4]] + asc11_crop2[[5]])
+NDMI21 <- (asc21_crop2[[4]] - asc21_crop2[[5]]) / (asc21_crop2[[4]] + asc21_crop2[[5]])
+levelplot(NDMI11)
+
+#levelplot(NDMI11, col.regions=rainbow(100))
+
+#viridis, magma, inferno, plasma.
+coul <- inferno(100)
+levelplot(NDMI11, col.regions=coul)
+NDMI11n <- (asc11_crop[[4]] - asc11_crop[[5]]) / (asc11_crop[[4]] + asc11_crop[[5]])
+levelplot(NDMI11n)
+
+ggplot(NDMI11)
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 # calcolo(PCA)
 # Prima del calcolo uso la funzione aggregate per cambiare la grandezza delle immagini di unfact=10
@@ -336,17 +369,17 @@ grid.arrange(asc87_gg, asc92_gg, asc97_gg, asc02_gg, asc11_gg, asc21_gg, nrow=2,
 
 
 set.seed(999)
-asc_un87 <- unsuperClass(asc87_crop, nClasses=10)
+asc_un87 <- unsuperClass(asc87_crop, nClasses=5)
 set.seed(999)
-asc_un92 <- unsuperClass(asc92_crop, nClasses=10)
+asc_un92 <- unsuperClass(asc92_crop, nClasses=5)
 set.seed(999)
-asc_un97 <- unsuperClass(asc97_crop, nClasses=10)
+asc_un97 <- unsuperClass(asc97_crop, nClasses=5)
 set.seed(999)
-asc_un02 <- unsuperClass(asc02_crop, nClasses=10)
+asc_un02 <- unsuperClass(asc02_crop, nClasses=5)
 set.seed(999)
-asc_un11 <- unsuperClass(asc11_crop, nClasses=10)
+asc_un11 <- unsuperClass(asc11_crop, nClasses=5)
 set.seed(999)
-asc_un21 <- unsuperClass(asc21_crop, nClasses=10)
+asc_un21 <- unsuperClass(asc21_crop, nClasses=5)
 
 tropical <- colorRampPalette(c("blue","green","red","black"))(100)
 cl <- colorRampPalette(c("yellow", "red", "pink"))(100) 
@@ -363,17 +396,17 @@ plot(asc_un21$map, main="2021", col=tropical)
 
 #provo unsuperclass con le bande ridotte
 set.seed(999)
-asc_un87_res <- unsuperClass(asc87_res, nClasses=10)
+asc_un87_res <- unsuperClass(asc87_res, nClasses=5)
 set.seed(999)
-asc_un92_res <- unsuperClass(asc92_res, nClasses=10)
+asc_un92_res <- unsuperClass(asc92_res, nClasses=5)
 set.seed(999)
-asc_un97_res <- unsuperClass(asc97_res, nClasses=10)
+asc_un97_res <- unsuperClass(asc97_res, nClasses=5)
 set.seed(999)
-asc_un02_res <- unsuperClass(asc02_res, nClasses=10)
+asc_un02_res <- unsuperClass(asc02_res, nClasses=5)
 set.seed(999)
-asc_un11_res <- unsuperClass(asc11_res, nClasses=10)
+asc_un11_res <- unsuperClass(asc11_res, nClasses=5)
 set.seed(999)
-asc_un21_res <- unsuperClass(asc21_res, nClasses=10)
+asc_un21_res <- unsuperClass(asc21_res, nClasses=5)
 
 par(mfrow=c(2,3))
 plot(asc_un87_res$map, main="1987", col=cl)
@@ -386,16 +419,14 @@ plot(asc_un21_res$map, main="2021", col=cl)
 
 
 cls <- colorRampPalette(c("yellow", "light blue", "orange", "green", "dark green"))(100) 
-par(mfrow=c(1,2))
-
 
 par(mfrow=c(2,3),  mar=c(2,2,2,2))
-plot(asc_un87_res$map, col=cl)
-plot(asc_un92_res$map, col=cl)
-plot(asc_un97_res$map, col=cl)
-plot(asc_un02_res$map, col=cl)
-plot(asc_un11_res$map, col=cl)
-plot(asc_un21_res$map, col=cl)
+plot(asc_un87_res$map, col=cls)
+plot(asc_un92_res$map, col=cls)
+plot(asc_un97_res$map, col=cls)
+plot(asc_un02_res$map, col=cls)
+plot(asc_un11_res$map, col=cls)
+plot(asc_un21_res$map, col=cls)
 
 freq(asc_un87_res$map)
 freq(asc_un92_res$map)
@@ -608,8 +639,8 @@ k2 <- unsuperClass(NDVI21, nClasses=10)
 -------------------------------------------------------------------------------------------------------------------------------------------
 ### come salvare  ####
 
-png("D:/lab/asc/ndvi_un_21.png", width = 4000, height = 1800, res = 300)
-plot(ndvi_un_21$map)
+png("D:/lab/asc/imm/k.png", width = 4000, height = 1800, res = 300)
+plot(k$map)
 dev.off()
  
  
