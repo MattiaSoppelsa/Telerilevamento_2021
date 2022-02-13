@@ -82,10 +82,108 @@ asc97_crop <- crop(asc97, e)
 asc02_crop <- crop(asc02, e)
 asc11_crop <- crop(asc11, e)
 asc21_crop <- crop(asc21, e)
+
+
+
+#############################seconda estensione per crop, per calcolare area coltivata tramite unsuperclass
+e10 <- extent(405000,480000,3280000,3360000)
+asc21_crop10 <- crop(asc21, e10)
+plotRGB(asc21_crop10, 3, 2, 1, stretch="lin")
+
+
+
+#provo unsuperclass con pezzi croppati ma non aggregati, 
+
+set.seed(999)
+asc_un21_10 <- unsuperClass(asc21_crop10, nClasses=3)
+plot(asc_un21_10$map, main="2021")
+
+#bsi= (SWIR1+Red)-(NIR+Blue)/(SWIR1+Red)+(NIR+Blue)
+
+BSI21_crop10 <- ((asc21_crop10[[5]] + asc21_crop10[[3]]) - (asc21_crop10[[4]] + asc21_crop10[[1]])) / ((asc21_crop10[[5]] + asc21_crop10[[3]]) + (asc21_crop10[[4]] + asc21_crop10[[1]]))
+plot(BSI21_crop10)
+asc_un21_10_bsi <- unsuperClass(BSI21_crop10, nClasses=3)
+plot(asc_un21_10_bsi$map, main="2021")
+asc_un21_10_bsiand <- reclassify(BSI21_crop10, cbind(4, Inf, NA), right=FALSE)
+asc_un21_10_bsiand_un <- unsuperClass(asc_un21_10_bsiand, nClasses=3)
+plot(asc_un21_10_bsiand_un$map, main="2021")
+
+-------------------------------------------------------------------------------------------
+
+NDMI21_crop10 <- (asc21_crop10[[4]] - asc21_crop10[[5]]) / (asc21_crop10[[4]] + asc21_crop10[[5]])
+plot(NDMI21_crop10)
+NDMI21_crop10and <- reclassify(NDMI21_crop10, cbind(-Inf, 0, NA)
+plot(NDMI21_crop10and)
+
+asc_un21_10_ndmi <- unsuperClass(NDMI21_crop10and, nClasses=3)
+plot(asc_un21_10_ndmi$map, main="2021")
+
+
+----------------------------------------------------------------------------
+
+-------------------------------------------------------------------------------------------------
+## altro indice UI
+
+UI87_crop_10 <- (asc87_crop10[[6]] - asc87_crop10[[4]])/(asc87_crop10[[6]] + asc87_crop10[[4]])
+UI92_crop_10 <- (asc92_crop10[[6]] - asc92_crop10[[4]])/(asc92_crop10[[6]] + asc92_crop10[[4]])
+UI97_crop_10 <- (asc97_crop10[[6]] - asc97_crop10[[4]])/(asc97_crop10[[6]] + asc97_crop10[[4]])
+UI02_crop_10 <- (asc02_crop10[[6]] - asc02_crop10[[4]])/(asc02_crop10[[6]] + asc02_crop10[[4]])
+UI11_crop_10 <- (asc11_crop10[[6]] - asc11_crop10[[4]])/(asc11_crop10[[6]] + asc11_crop10[[4]])
+UI21_crop_10 <- (asc21_crop10[[6]] - asc21_crop10[[4]])/(asc21_crop10[[6]] + asc21_crop10[[4]])
+
+
+
+
+UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI21_crop_10re <- reclassify(UI21_crop_10and, cbind(-Inf, -1, NA))
+plot(UI21_crop_10re)
+
+
+
+UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI21_crop_10re <- reclassify(UI21_crop_10and, cbind(-Inf, -1, NA))
+plot(UI21_crop_10re)
+
+
+asc_un21_10_ui <- unsuperClass(UI_crop_10and_and, nClasses=3)
+plot(asc_un21_10_ui$map, main="2021")
+
+###Con la divisione in classe possiamo notare facilmente i campi coltivati e le strutture rispetto al suolo arido
+# Conoscendo l'area di studio posso andare a trovare l'area colonizzata dall'uomo negli ultimi 40 anni (87-21) attraverso una proporzione 
+# 100% (area di studio) : x = % : terreno occupato
+
+#Purtroppo bisogna indicare che l'area occupata è sottostimata in quanto molti campi non attivi risultano aridi e nell'UnSuperClass non sono riuscito a distinguerli con il #deserto. Aggiungo immagine in cui campi sono visibili in light green
+
+#trovo percentuali
+
+ freq(asc_un21_10_ui$map)
+      value   count
+[1,]     1  982300
+[2,]     2  383949
+[3,]     3 5301075
+[4,]    NA     176
+ 
+--------------------------------------------------------------------------------------------------------------
+
+
+#utilizzo la funzione aggregate per ridurre il numero di pixels di un fattore 10, risoluzione da (30x30) -> (300x300)
+# da spostare quando si utilizza                                                                                                                  #####################
+asc87_res <- aggregate(asc87_crop, fact=10) 
+asc92_res <- aggregate(asc92_crop, fact=10) 
+asc97_res <- aggregate(asc97_crop, fact=10) 
+asc02_res <- aggregate(asc02_crop, fact=10) 
+asc11_res <- aggregate(asc11_crop, fact=10) 
+asc21_res <- aggregate(asc21_crop, fact=10) 
+
+
+
+
+
+
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 # confronto dei diverse anni con diverse combinazioni di colori attraverso plottaggio in RGB 
 
-# plottaggio con colori naturali                                     # SALVO IMMAGINE DEL PLOTTAGGIO 6 immagini 
+# plottaggio delle immagini nel tempo attraverso uso di colori naturali (RGB)                                    # SALVO IMMAGINE DEL PLOTTAGGIO 6 immagini 
 
 par(mfrow=c(2,3)) mar(2,2,2,2)
 plotRGB(asc87_crop, 3, 2, 1, stretch="lin", axes=T, main="1987")
@@ -95,7 +193,7 @@ plotRGB(asc02_crop, 3, 2, 1, stretch="lin", axes=T, main="2002")
 plotRGB(asc11_crop, 3, 2, 1, stretch="lin", axes=T, main="2011")
 plotRGB(asc21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
 
-#plottaggio con R= Nir, G= Red, B= blue                              
+#plottaggio con R= Nir, G= Red, B= blue, per evidenziare la vege                             
 par(mfrow=c(3,2))
 plotRGB(asc87_crop, 4, 3, 1, stretch="lin", axes=T, main="1987")
 plotRGB(asc92_crop, 4, 3, 1, stretch="lin", axes=T, main="1992")
@@ -104,13 +202,23 @@ plotRGB(asc02_crop, 4, 3, 1, stretch="lin", axes=T, main="2002")
 plotRGB(asc11_crop, 4, 3, 1, stretch="lin", axes=T, main="2011")
 plotRGB(asc21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
 
+# NDWI
+mono <- colorRampPalette(c("black","yellow","red","white"))(100)
+NDWI87 <- (asc87_crop[[2]] - asc87_crop[[4]])/(asc87_crop[[2]] + asc87_crop[[4]])
+NDWI21 <- (asc21_crop[[2]] - asc21_crop[[4]])/(asc21_crop[[2]] + asc21_crop[[4]])
+NDWI87_lvl <- levelplot(NDWI87,main = "1987") 
+NDWI21_lvl <- levelplot(NDWI21,main = "1987") 
+
+NDWI_diff <- NDWI87 - NDWI21 
+plot(NDWI_diff, col=mono)
+
 #Plottaggio con R= Nir, G= red, B= green 
 #par(mfrow=c(2,3))
-#plotRGB(ady86_crop, 4, 3, 2, stretch="lin", axes=T, main="1986")
+#plotRGB(asc87_crop, 4, 3, 2, stretch="lin", axes=T, main="1987")
 #plotRGB(ady96_crop, 4, 3, 2, stretch="lin", axes=T, main="1996")
 #plotRGB(ady06_crop, 4, 3, 2, stretch="lin", axes=T, main="2006")
 #plotRGB(ady16_crop, 4, 3, 2, stretch="lin", axes=T, main="2016")
-#plotRGB(ady21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
+#plotRGB(asc21_crop, 4, 3, 2, stretch="lin", axes=T, main="2021")
 
 plot(asc87_crop[[4]], col=cl)
 plot(asc21_crop[[4]], col=cl)
@@ -174,15 +282,17 @@ BSI02 <- (asc02_crop[[5]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[1]
 BSI11 <- (asc11_crop[[5]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[1]])
 BSI21 <- (asc21_crop[[5]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[1]])
 
+BSI21_rec <- (asc21_crop_rec[[5]] - asc21_crop_rec[[3]]) / (asc21_crop_rec[[4]] + asc21_crop_rec[[1]])
+
 # Bare sandy beaches without any vegetation are shown at one extremity and urbanized areas are at the other extremity.
 # Urban areas have a slightly more extreme value compared to vegetation.
 
 tropical <- colorRampPalette(c("pink","navy","yellow"))(100)
 
 # To make a simple plot:
-#par(mfrow=c(1,2))
-#plot(BSI87, col=tropical)
-#plot(BSI21, col=tropical)
+par(mfrow=c(1,2))
+plot(BSI87, col=mono)
+levelplot(BSI21_rec)
 
 # Faccio un levelplot:
 BSI87_lvl <- levelplot(BSI87, col.regions=tropical, main="BSI nel 1987")
