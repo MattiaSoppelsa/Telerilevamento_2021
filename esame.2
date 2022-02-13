@@ -666,9 +666,11 @@ asc02_gg <- ggRGB(asc02_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2002") 
 asc11_gg <- ggRGB(asc11_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2011") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 asc21_gg <- ggRGB(asc21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
+
+
 #utilizzo la funzione grid.arrange per visualizzarli assieme 
 
-grid.arrange(asc87_gg, asc92_gg, asc97_gg, asc02_gg, asc11_gg, asc21_gg, nrow=2, top=textGrob("PCA in the years"))   #forse basta anche la funzione top="top label"
+grid.arrange(asc87_gg, asc92_gg, asc97_gg, asc02_gg, asc11_gg, asc21_gg, nrow=2) #forse basta anche la funzione top="top label"
 
 ------------------------------------------------------------------------------------------------------------
 
@@ -999,12 +1001,48 @@ g <- p + scale_color_grey()
  
  
  
+ # multiframe con ggplot
+
+gg87 <- ggRGB(asc87_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg92 <- ggRGB(asc92_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1992") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg97 <- ggRGB(asc97_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 1997") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg02 <- ggRGB(asc02_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2002") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg11 <- ggRGB(asc11_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2011") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg21 <- ggRGB(asc21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+grid.arrange(gg87, gg92, gg97, gg02, gg11, gg21, nrow=2, top=textGrob("Plot RGB a colori naturali"))   #forse basta anche la funzione top="top label"
+png("D:/lab/asc/imm/reale.png", 4000, 1800, 3)
+plot(reale$map)
+dev.off()
+
+
+#utilizzo la funzione grid.arrange per visualizzarli assieme 
+
+gg87 <- ggRGB(asc87_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg92 <- ggRGB(asc92_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg97 <- ggRGB(asc97_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg02 <- ggRGB(asc02_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg11 <- ggRGB(asc11_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+gg21 <- ggRGB(asc21_res, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+grid.arrange(gg87, gg92, gg97, gg02, gg11, gg21, nrow=2, top=textGrob("Plot RGB a colori naturali"))   #forse basta anche la funzione top="top label"
+png("D:/lab/asc/imm/reale.png", 4000, 1800, 3)
+plot(reale$map)
+dev.off()
+ 
+p1 <- grid.arrange(gg87, gg92, gg97, gg02, gg11, gg21, nrow=1)
+ ggsave("D:/lab/asc/imm/real2.png", p1)
+ # 1. Create a plot
+# The plot is displayed on the screen
+ggplot(l, aes(wt, mpg)) + geom_point()
+# 2. Save the plot to a png
+ggsave("D:/lab/asc/imm/realee.png")
  
  
- 
- 
- 
- 
+ png("myplot.png")
+myplot <- ggplot(mtcars, aes(wt, mpg)) + geom_point()
+print(myplot)
+dev.off()
  
  
  
