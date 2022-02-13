@@ -87,7 +87,15 @@ asc21_crop <- crop(asc21, e)
 
 #############################seconda estensione per crop, per calcolare area coltivata tramite unsuperclass
 e10 <- extent(405000,480000,3280000,3360000)
+asc87_crop10 <- crop(asc87, e10)
+asc92_crop10 <- crop(asc92, e10)
+asc97_crop10 <- crop(asc97, e10)
+asc02_crop10 <- crop(asc02, e10)
+asc11_crop10 <- crop(asc11, e10)
 asc21_crop10 <- crop(asc21, e10)
+
+par(mfrow=c(1,2))
+plotRGB(asc87_crop10, 3, 2, 1, stretch="lin")
 plotRGB(asc21_crop10, 3, 2, 1, stretch="lin")
 
 
@@ -131,22 +139,159 @@ UI02_crop_10 <- (asc02_crop10[[6]] - asc02_crop10[[4]])/(asc02_crop10[[6]] + asc
 UI11_crop_10 <- (asc11_crop10[[6]] - asc11_crop10[[4]])/(asc11_crop10[[6]] + asc11_crop10[[4]])
 UI21_crop_10 <- (asc21_crop10[[6]] - asc21_crop10[[4]])/(asc21_crop10[[6]] + asc21_crop10[[4]])
 
+UI87_crop_10r <- reclassify(UI87_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI87_crop_10re <- reclassify(UI87_crop_10r , cbind(-Inf, -1, NA))
+plot(UI87_crop_10re)
 
+UI92_crop_10r <- reclassify(UI92_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI92_crop_10re <- reclassify(UI92_crop_10r, cbind(-Inf, -1, NA))
+plot(UI92_crop_10re)
 
+UI97_crop_10r <- reclassify(UI97_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI97_crop_10re <- reclassify(UI97_crop_10r, cbind(-Inf, -1, NA))
+plot(UI97_crop_10re)
+
+UI02_crop_10r <- reclassify(UI02_crop_10, cbind(0.23, Inf, NA), right=FALSE)
+UI02_crop_10re <- reclassify(UI02_crop_10r, cbind(-Inf, -1, NA))
+plot(UI02_crop_10re)
+
+UI11_crop_10r <- reclassify(UI11_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI11_crop_10re <- reclassify(UI11_crop_10r, cbind(-Inf, -1, NA))
+plot(UI11_crop_10re)
 
 UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
-UI21_crop_10re <- reclassify(UI21_crop_10and, cbind(-Inf, -1, NA))
+UI21_crop_10re <- reclassify(UI21_crop_10r, cbind(-Inf, -1, NA))
 plot(UI21_crop_10re)
 
-
-
-UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
-UI21_crop_10re <- reclassify(UI21_crop_10and, cbind(-Inf, -1, NA))
+par(mfrow=c(2,3))
+plot(UI87_crop_10re)
+plot(UI92_crop_10re)
+plot(UI97_crop_10re)
+plot(UI02_crop_10re)
+plot(UI11_crop_10re)
 plot(UI21_crop_10re)
 
+#faccio UnsuperClass dell'ultima cosi da ricavare la percentuale di terra colonizzata 
 
-asc_un21_10_ui <- unsuperClass(UI_crop_10and_and, nClasses=3)
-plot(asc_un21_10_ui$map, main="2021")
+set.seed(999)
+UI87_crop_10re_un <- unsuperClass(UI87_crop_10re, nClasses=3)
+
+set.seed(999)
+UI92_crop_10re_un <- unsuperClass(UI82_crop_10re, nClasses=3)
+
+set.seed(999)
+UI97_crop_10re_un <- unsuperClass(UI97_crop_10re, nClasses=3)
+
+set.seed(999)
+UI02_crop_10re_un <- unsuperClass(UI02_crop_10re, nClasses=3)
+
+set.seed(999)
+UI11_crop_10re_un <- unsuperClass(UI11_crop_10re, nClasses=3)
+
+set.seed(999)
+UI21_crop_10re_un <- unsuperClass(UI21_crop_10re, nClasses=3)
+
+
+c1 <- colorRampPalette(c("white", "purple", "purple"))(100)
+c2 <- colorRampPalette(c("purple", "white", "purple"))(100)
+c3 <- colorRampPalette(c("white", "purple", "purple"))(100)
+c4 <- colorRampPalette(c("white", "purple", "white"))(100)
+
+
+par(mfrow=c(2,3))
+plot(UI87_crop_10re_un$map, main="1987")
+plot(UI92_crop_10re_un$map, main="1992", col=c4)
+plot(UI97_crop_10re_un$map, main="1997", col=c3)
+plot(UI02_crop_10re_un$map, main="2002", col=c2)
+plot(UI11_crop_10re_un$map, main="2011", col=c2)
+plot(UI21_crop_10re_un$map, main="2021", col=c1)
+
+freq(UI87_crop_10re_un$map)
+#     value   count
+#[1,]     1 3014916  
+#[2,]     2 3038791  # 100 % suolo nudo
+#[3,]     3  613793 
+
+freq(UI92_crop_10re_un$map)
+#     value   count
+#[1,]     1 4757008  #terreno arido
+#[2,]     2  198665  # Campi coltivati 
+#[3,]     3 1711800  #terreno arido
+#[4,]    NA      27
+freq(UI97_crop_10re_un$map)
+#     value   count
+#[1,]     1 6060856  #terreno arido
+#[2,]     2  499145  #campi coltivati 
+#[3,]     3  107350  #campi coltivati
+#[4,]    NA     149
+
+freq(UI02_crop_10re_un$map)
+     value   count
+#[1,]     1  974950  #campi coltivati
+#[2,]     2 5601663  #terreno arido
+#[3,]     3   90683  #campi coltivati
+#[4,]    NA     204
+
+freq(UI11_crop_10re_un$map)
+#     value   count
+#[1,]     1  931581  #campi coltivati
+#[2,]     2 5212167  #terreno arido
+#[3,]     3  523698  #campi coltivati
+#[4,]    NA      54
+
+freq(UI21_crop_10re_un$map)
+#     value   count
+#[1,]     1 5300464  #terreno arido
+#[2,]     2  386088  #campi coltivati
+#[3,]     3  980772  #campi coltivati 
+#[4,]    NA     176
+
+s_tot <- 6667500
+
+prop87 <- freq(UI87_crop_10re_un$map)/s_tot
+prop92 <- freq(UI92_crop_10re_un$map)/s_tot
+prop97 <- freq(UI97_crop_10re_un$map)/s_tot
+prop02 <- freq(UI02_crop_10re_un$map)/s_tot
+prop11 <- freq(UI11_crop_10re_un$map)/s_tot
+prop21 <- freq(UI21_crop_10re_un$map)/s_tot
+
+prop87  
+# 100 % deserto
+
+prop92
+            value        count
+#[1,] 1.499813e-07 7.134620e-01
+#[2,] 2.999625e-07 2.979603e-02
+#[3,] 4.499438e-07 2.567379e-01
+#[4,]           NA 4.049494e-06
+
+prop97
+            value        count
+#[1,] 1.499813e-07 9.090148e-01
+#[2,] 2.999625e-07 7.486239e-02
+#[3,] 4.499438e-07 1.610049e-02
+#[4,]           NA 2.234721e-05
+
+prop02
+            value        count
+#[1,] 1.499813e-07 1.462242e-01
+#[2,] 2.999625e-07 8.401444e-01
+#[3,] 4.499438e-07 1.360075e-02
+#[4,]           NA 3.059618e-05
+
+prop11
+#            value        count
+#[1,] 1.499813e-07 1.397197e-01
+#[2,] 2.999625e-07 7.817273e-01
+#[3,] 4.499438e-07 7.854488e-02
+#[4,]           NA 8.098988e-06
+
+prop21
+#            value        count
+#[1,] 1.499813e-07 0.7949702287
+#[2,] 2.999625e-07 0.0579059618
+#[3,] 4.499438e-07 0.1470974128
+#[4,]           NA 0.0000263967
 
 ###Con la divisione in classe possiamo notare facilmente i campi coltivati e le strutture rispetto al suolo arido
 # Conoscendo l'area di studio posso andare a trovare l'area colonizzata dall'uomo negli ultimi 40 anni (87-21) attraverso una proporzione 
