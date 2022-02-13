@@ -192,14 +192,13 @@ set.seed(999)
 UI21_crop_10re_un <- unsuperClass(UI21_crop_10re, nClasses=3)
 
 
-c1 <- colorRampPalette(c("white", "purple", "purple"))(100)
-c2 <- colorRampPalette(c("purple", "white", "purple"))(100)
-c3 <- colorRampPalette(c("white", "purple", "purple"))(100)
-c4 <- colorRampPalette(c("white", "purple", "white"))(100)
+c1 <- colorRampPalette(c("lavender","orangered2", "orangered2"))(100)
+c2 <- colorRampPalette(c("orangered2", "lavender", "orangered2"))(100)
+c3 <- colorRampPalette(c("lavender", "orangered2", "orangered2"))(100)
+c4 <- colorRampPalette(c("lavender", "orangered2", "lavender"))(100)
 
 
 par(mfrow=c(2,3))
-plot(UI87_crop_10re_un$map, main="1987")
 plot(UI92_crop_10re_un$map, main="1992", col=c4)
 plot(UI97_crop_10re_un$map, main="1997", col=c3)
 plot(UI02_crop_10re_un$map, main="2002", col=c2)
@@ -259,43 +258,54 @@ prop87
 # 100 % deserto
 
 prop92
-            value        count
-#[1,] 1.499813e-07 7.134620e-01
-#[2,] 2.999625e-07 2.979603e-02
-#[3,] 4.499438e-07 2.567379e-01
-#[4,]           NA 4.049494e-06
+#                value            count          %            Stato terreno          
+                 
+#[1,]     1.499813e-07     7.134620e-01         71            Terreno arido               
+#[2,]     2.999625e-07     2.979603e-02          3            Campi coltivati          
+#[3,]     4.499438e-07     2.567379e-01         26            Terreno arido
+#[4,]               NA     4.049494e-06         NA
 
 prop97
-            value        count
-#[1,] 1.499813e-07 9.090148e-01
-#[2,] 2.999625e-07 7.486239e-02
-#[3,] 4.499438e-07 1.610049e-02
-#[4,]           NA 2.234721e-05
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     9.090148e-01         91            Terreno arido
+#[2,]     2.999625e-07     7.486239e-02        7.5            Campi coltivati     
+#[3,]     4.499438e-07     1.610049e-02        1.5            Campi coltivati 
+#[4,]               NA     2.234721e-05         NA
 
 prop02
-            value        count
-#[1,] 1.499813e-07 1.462242e-01
-#[2,] 2.999625e-07 8.401444e-01
-#[3,] 4.499438e-07 1.360075e-02
-#[4,]           NA 3.059618e-05
+#                value            count
+#[1,]      1.499813e-07    1.462242e-01         15            Campi coltivati
+#[2,]      2.999625e-07    8.401444e-01         84            Terreno arido
+#[3,]      4.499438e-07    1.360075e-02          1            Campi coltivati
+#[4,]                NA    3.059618e-05         NA
 
 prop11
-#            value        count
-#[1,] 1.499813e-07 1.397197e-01
-#[2,] 2.999625e-07 7.817273e-01
-#[3,] 4.499438e-07 7.854488e-02
-#[4,]           NA 8.098988e-06
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     1.397197e-01         14            Campi coltivati
+#[2,]     2.999625e-07     7.817273e-01         78            Terreno arido
+#[3,]     4.499438e-07     7.854488e-02          8            Campi coltivati
+#[4,]               NA     8.098988e-06         NA
 
 prop21
-#            value        count
-#[1,] 1.499813e-07 0.7949702287
-#[2,] 2.999625e-07 0.0579059618
-#[3,] 4.499438e-07 0.1470974128
-#[4,]           NA 0.0000263967
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     0.7949702287         79            Terreno arido
+#[2,]     2.999625e-07     0.0579059618          6            Campi coltivati
+#[3,]     4.499438e-07     0.1470974128         15            Campi coltivati
+#[4,]               NA     0.0000263967         NA
 
 ###Con la divisione in classe possiamo notare facilmente i campi coltivati e le strutture rispetto al suolo arido
 # Conoscendo l'area di studio posso andare a trovare l'area colonizzata dall'uomo negli ultimi 40 anni (87-21) attraverso una proporzione 
 # 100% (area di studio) : x = % : terreno occupato
+#calcolo area di studio: dalla risoluzione so che 1 pixel equivale a 30mx30m, ed ho un numero totale di pixel pari a 6667500. 
+# (radice del numero di pixel) x 30 = trovo lato della mia area. elevo il mio lato alla seconda per trovare l'area totale 
+
+# Area totale = 6000Km^2
+# anno 1992   = 0.03 x 6000 =  180 Km^2
+# anno 1997   = 0.09 x 6000 =  540 Km^2
+# anno 1902   = 0.16 x 6000 =  960 Km^2
+# anno 2011   = 0.22 x 6000 = 1320 Km^2
+# anno 2021   = 0.21 x 6000 = 1260 Km^2
+
 
 #Purtroppo bisogna indicare che l'area occupata è sottostimata in quanto molti campi non attivi risultano aridi e nell'UnSuperClass non sono riuscito a distinguerli con il #deserto. Aggiungo immagine in cui campi sono visibili in light green
 
