@@ -395,7 +395,7 @@ asc21_res <- aggregate(asc21_crop, fact=10)
 
 # plottaggio delle immagini nel tempo attraverso uso di colori naturali (RGB)                                    # SALVO IMMAGINE DEL PLOTTAGGIO 6 immagini 
 
-par(mfrow=c(2,3)) mar(2,2,2,2)
+par(mfrow=c(2,3)) 
 plotRGB(asc87_crop, 3, 2, 1, stretch="lin", axes=T, main="1987")
 plotRGB(asc92_crop, 3, 2, 1, stretch="lin", axes=T, main="1992")
 plotRGB(asc97_crop, 3, 2, 1, stretch="lin", axes=T, main="1997")
@@ -404,13 +404,22 @@ plotRGB(asc11_crop, 3, 2, 1, stretch="lin", axes=T, main="2011")
 plotRGB(asc21_crop, 3, 2, 1, stretch="lin", axes=T, main="2021")
 
 #plottaggio con R= Nir, G= Red, B= blue, per evidenziare la vege                             
-par(mfrow=c(3,2))
+par(mfrow=c(2,3))
 plotRGB(asc87_crop, 4, 3, 1, stretch="lin", axes=T, main="1987")
 plotRGB(asc92_crop, 4, 3, 1, stretch="lin", axes=T, main="1992")
 plotRGB(asc97_crop, 4, 3, 1, stretch="lin", axes=T, main="1997")
 plotRGB(asc02_crop, 4, 3, 1, stretch="lin", axes=T, main="2002")
 plotRGB(asc11_crop, 4, 3, 1, stretch="lin", axes=T, main="2011")
 plotRGB(asc21_crop, 4, 3, 1, stretch="lin", axes=T, main="2021")
+
+
+par(mfrow=c(2,3))
+plotRGB(asc87_res, 4, 3, 1, stretch="lin", axes=T, main="1987")
+plotRGB(asc92_res, 4, 3, 1, stretch="lin", axes=T, main="1992")
+plotRGB(asc97_res, 4, 3, 1, stretch="lin", axes=T, main="1997")
+plotRGB(asc02_res, 4, 3, 1, stretch="lin", axes=T, main="2002")
+plotRGB(asc11_res, 4, 3, 1, stretch="lin", axes=T, main="2011")
+plotRGB(asc21_res, 4, 3, 1, stretch="lin", axes=T, main="2021")
 
 # NDWI
 mono <- colorRampPalette(c("black","yellow","red","white"))(100)
@@ -985,8 +994,8 @@ g <- p + scale_color_grey()
  
  
  
- 
- 
+ ggname
+ ggplot(asc87_crop, aes(x=x, y=y, fill=rgb(3,2,1)))
  
  
  
