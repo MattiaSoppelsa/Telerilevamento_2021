@@ -349,15 +349,26 @@ prop21
 # anno 2011   = 0.22 x 6000 = 1320 Km^2
 # anno 2021   = 0.21 x 6000 = 1260 Km^2
 
+# per la rappresentazione prima di tutto creo un data frame
 
-xValue <- (1992)(1299)
-yValue <- (180:1260)
-data <- data.frame(xValue,yValue)
+#creo parametri
+Anni <- c(1987,1992,1997,2002,2011,2021)
+Ettari <- c(0,180,540,960,1320,1260)
 
-# Plot
-ggplot(data, aes(x=xValue, y=yValue)) +
-  geom_area( fill="#69b3a2", alpha=0.4) +
-  geom_line(color="#69b3a2", size=2) +
-  geom_point(size=3, color="#69b3a2") +
-  theme_ipsum() +
-  ggtitle("Evolution of something")
+#creo data.frame
+percentages <- data.frame(anni,ettari)  
+ 
+#ora posso plottare con ggplot
+
+graf <- ggplot(percentages, aes(x=Anni, y=Ettari)) +
+   geom_point(size=3, color="#69b3a2") +
+   geom_smooth(method = "loess",
+              se = FALSE,
+              formula = 'y ~ x',
+              span = 0.8) +
+  stat_smooth(se=FALSE, geom="area",
+              method = 'loess', alpha=.5,
+              span = 0.8) +
+                ggtitle("Ettari occupati dall'agricoltura dal 1987 ad oggi")
+                
+ggsave("D:/lab/asc/imm/graf.png", graf)
