@@ -76,7 +76,7 @@ par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
-# 2 row and 1 column? (just invert number)
+# 2 row and 1 column? Just invert number
 par(mfrow=c(2,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
@@ -114,16 +114,16 @@ plot(p224r63_2011$B4_sre, col=clnir)
 
 #DAY4: Visualizing Data by RGB plotting
 
-#Landsat bands (just to remember)
-#B1=blue
-#B2=green
-#B3=red
-#B4=nir
-#B5=mir
-#B6=thermal infrared (tir?)
-#B7=mir*
+#The first  Landsat 4/5's bands                                 #The first Landsat 8's bands:
+#B1=blue                                                        #B1=coastal aerosol
+#B2=green                                                       #B2=blue
+#B3=red                                                         #B3=green
+#B4=nir                                                         #B4=red
+#B5=mir                                                         #B5=nir
+#B6=thermal infrared (tir)                                      #B6=mir
+#B7=mir*                                                        #B7=mir*
 
-#"stretch" function= Linear stretch of values in a Raster object, useful for viewing our bands
+#"stretch" function = Linear stretch of values in a Raster object, useful for viewing our bands
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") #changing the bands in different components allows us to view interesting details
@@ -132,10 +132,11 @@ plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
 #exercise mount a 2x2 multiframe with plotRGB
 par(mfrow=c(2,2))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
-plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") #shift by 1, remove blue band and add nir band on red component
-plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") #changing the bands in different components allows us to view interesting details
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin") 
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin") 
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
-#import image in pdf in "lab" folder (form pdf to dev.off())
+
+#to import image in pdf in "lab" folder (form pdf to dev.off()), similar function also for png and jpeg format
 pdf("il_mio_primo_pdf_con_R.pdf")  
 par(mfrow=c(2,2))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
@@ -221,12 +222,12 @@ plot(lst_2010)
 plot(lst_2015)
 
 #how to import all the file in the same time
-#first at all we have to create a list with all files with using a pattern, and named 
+#first at all we have to create a list with all files with using a pattern, and renamed it 
 rlist<-list.files(pattern="lst")
 rlist
 
 #using import<- lapply(rlist,raster)
-#lapply serve per applicare la funzione raster a tutta la lista appena creata (o meglio "selezionata")
+# the function "lapply" is used to apply the "raster" function to the entire list just created (or rather "selected")
 import<- lapply(rlist,raster)  #lapply (1°function), raster (2°f.), rlist (list of data) 
 import
 
@@ -238,18 +239,18 @@ plotRGB(TGr, 4, 3, 2, stretch="Lin")
 
 levelplot(TGr)                     #library("rasterVis")
   
-levelplot(TGr$lst_2000) #evidence level you want
+levelplot(TGr$lst_2000) #display level you want
 
-cl <- colorRampPalette(c("blue","light blue","pink","red"))(100) #range of level of color, 100, from blue to red.
+cl <- colorRampPalette(c("blue","light blue","pink","red"))(100) #100 is the range of levels of colors, from blue to red.
 levelplot(TGr, col.regions=cl) #show level with different color (of cl, blue->red)
 
 levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) # "names.attr=c()" to name the single attributes, name always with ""
 levelplot(TGr,col.regions=cl,main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015")) #("main" to add title of page/graph)
 
-# Melt,scioglimento ghiacciai dal 1979 al 2007
-meltlist <- list.files(pattern="melt") #raccolgo/seleziono tutti i file denominati.melt in "meltlist"
-melt_import <- lapply(meltlist,raster) #applico la funzione raster alla lista "meltlist", applicando malt_import a tutti i file
-melt <- stack(melt_import) #raccolgo i vari files in un "vettore" unico =melt
+#melting glaciers from 1979 to 2007
+meltlist <- list.files(pattern="melt") #select all files named ".melt" in "meltlist"
+melt_import <- lapply(meltlist,raster) #apply "raster function on melt_list and renamed it
+melt <-stack(melt_import) # Collect all the files in a single "vector" (this case "melt")
 melt
 
 levelplot(melt)
@@ -257,9 +258,9 @@ levelplot(melt)
 #matrix algebra, we can reduct a single pixel's value of a matrix with the same pixels of other matrix   ("melt$" per legarlo al file melt da cui ricaviamo le 2 matrici)
 melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
 
-clb <- colorRampPalette(c("blue","white","red"))(100)   #gli mettiamo una colorRampPalette con i colori che ci aggradano
-plot(melt_amount, col=clb)               #visualiziamo e possiamo vedere in rosso i valori più alti (ghiacciai sciolti)
-melt_amount #per vedere i parametri, come ad esempio i valori minimi e massimi di differenza
+clb <- colorRampPalette(c("blue","white","red"))(100)   
+plot(melt_amount, col=clb)               #red for maximum values (melted ice)
+melt_amount # to see parameters, like minimum and maximum difference values.
 levelplot(melt_amount, col.regions=clb)
 
 
@@ -276,30 +277,28 @@ levelplot(melt_amount, col.regions=clb)
 #to see the library netCDF we have to add we packages
 #install.packages("ncdf4")
 
-#richiamo i due pacchetti che mi servono
+#at first we call the two packages we need
 library(raster)
 library(ncdf4)
 
-setwd("D:/lab/") #selezioniamo la cartella dalla quale andremo a prendere i dati
-#diamo un nome al file che analizzeremo 
+setwd("D:/lab/") #select the directory
+#we can put a name to the file we will use for our analysis 
 wain<-raster("index.nc") #ho rinominato il file raster e l'ho collegato ad R. "wain"="water.index" 
-wain #per vedere i parametri dell'immagine 
-#per il plottaggio abbiamo un singolo layer quindi non useremo il metodo rgb ma colourRampPalette
+wain #to see the parameters of th image
+
+#for plotting we have a single layer so we will use colourRampPalette and not the rgb method
 cl<-colorRampPalette(c("light blue","green","red","pink"))(100) 
 plot(wain,col=cl)
-#per diminuire la risoluzione andando ad aumentare la grandezza dei pixels
-# con la funzione main="" posso aggiungere un titolo
+
+#ca we use "aggregate" function to change pixels size, it's usefull when wee have to process the images that have too high number of pixels
+# we can add title with main="" 
 plot(wain,col=cl,main="2016-04-01")
-#se la funzione è troppo pesante posso aggregare un'area di pixels e la trasformiamo in un unico pixel "medio"
-wain50 <-aggregate(wain,fact=50)  #ogni 50x50 pixel è come se fosse 1
-wain100 <-aggregate(wain,fact=100)  # ogni 100x100
+wain50 <-aggregate(wain,fact=50)  #every 50x50 pixels it's like it's be 1pixel
+wain100 <-aggregate(wain,fact=100)  #  100x100pixels = 1pixel
 
-#ricorda usare file sempre con estensione .nc
 
-#per esportazione file in pdf (file r -> file TEX -> pdf
-library(knitr)
 # stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
-stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #serve .txt finale 
+stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #attention that last .txt is required  
 
 #--------------------------------------------------------------------------------
 
@@ -313,14 +312,14 @@ setwd("D:/lab/")
 
 
 
-#per esportazione file in pdf (file r -> file TEX -> pdf
+#to export file in pdf (file r -> file TEX -> pdf)
 library(knitr)
 
 #tinytex::install_tinytex()
 #texlive-msg-translations
 
-# stitch("R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
-stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #serve .txt finale 
+# stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
+stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #attention that last .txt is required  
 
 #-------------------------------------------------------------------------------
 
@@ -333,8 +332,8 @@ library(RStoolbox)
  
 setwd("D:/lab/")
 
-# landsat usa 7 bande, la funzione da usare è brick per caricare un set multiplo di dati 
-#raster invece carica solo un set alla volta
+# to load a multiple set of data we use the "brick" function
+#raster instead load 1 set in a time
 p224r63_2011 <- brick("p224r63_2011.grd")
 
 #to see first rappresentation 
@@ -342,42 +341,40 @@ plot(p224r63_2011)
 # to check info
 p224r63_2011
 
-#plottiamo i valori della banda 1 vs i valori della banda 2 in pixels
-
+#plot  values of first band vs values of 2th banda in pixels
 plot(p224r63_2011$B1_sre, p224r63_2011$B2_sre, col="red", pch=19, cex=2) 
-#ci darà un warning perchè ci dice che sta plottando un campiopne, ovvero il 2.2% dei pixels
+
+#the syste will warn us that it's plotting a sample, or rather 2.2% of the totalspixels
 plot(p224r63_2011$B2_sre, p224r63_2011$B1_sre, col="red", pch=19, cex=2) 
 
-#per farlo per tutte le bande? usiamo la funzione "pairs"
+#to see all band together we can us function "pairs"
 #per plottare tutte le correlazioni possibili (2 a 2) tra le variabili (ovvero tutte le bande)
 pairs(p224r63_2011)
 
 
 #aggregate function
-#per diminuire o allargare la larghezza dei pixel, quindi se vogliamo modificare la risoluzione
 #aggregate cells, res: resampling (ricampionamento)
 p224r63_2011res <- aggregate(p224r63_2011, fact=10)
 
-p224r63_2011res #vedo che ho aumentato la grandezza del pixel quindi ho ridotto la risoluzione
+p224r63_2011res # to check new parameters
 
 par(mfrow=c(2,1))
 plotRGB(p224r63_2011, r=4, g=3, b=2,stretch="lin")
 plotRGB(p224r63_2011res, r=4, g=3, b=2, stretch="lin")
 
-#PCA principal component analysis per ridurre n dimensioni in un numero minore. 
-p224r63_2011res_pca <- rasterPCA(p224r63_2011res)
-# ma viene generato un file con all'interno un modello, una mappa etc..
+#PCA principal component analysis to reduce the number on bands in a few pseudobands
+p224r63_2011res_pca <- rasterPCA(p224r63_2011res)     # File is generated, with different information ($map, $model,...)
 
-summary(p224r63_2011res_pca$model) #per vedere la varianza delle componenti 
-# e vedo che la componente 1 (PC1) spiega il 99% della variabilità. Possiede la maggior parte dell'informazione    
-# l'ultime componenti avranno un'informazione minima, sarà rumore.                                 
+summary(p224r63_2011res_pca$model) #to check the variance of the components
+# we can see that component 1 (PC1) show us 99% of variance. So CP1 has the most of information about the image     
+# Last components have few information, we can considerate like (background) rumors.                                  
                                  
 
 p224r63_2011res_pca 
 
 plotRGB(p224r63_2011res_pca$map, r=1, g=2, b=3, stretch="lin") #map 
                                  
-str(p224r63_2011res_pca)  #per più informazioni, anche sulla struttura       
+str(p224r63_2011res_pca)  #more information, also about the structure of the file      
 
 #------------------------------------------------------------------------------------------------
 
@@ -404,7 +401,7 @@ plotRGB(so, 1, 2, 3, stretch="lin")
 
 #Unsupervised Classification 
 soc<-unsuperClass(so, nClasses=3)
-#per plottare usiamo l'immagine classificata "soc" e la leghiamo al modello della mappa
+#to plot the classificated image we have to link it to the model "map"
 plot(soc$map)
 
 #Unsupervised Classification with 20 classes
@@ -435,7 +432,7 @@ gc<- brick("dolansprings_oli_2013088_canyon_lrg.jpg") #bring the image on R
 
 plotRGB(gc, r=1, g=2, b=3, stretch="lin") #plot in RGD "mode" in linear mode
 
-#we can use hist to use tutti i legami possibili per visualizzare l'immagine
+#we can use hist to have different stretch, and so different visialization 
 plotRGB(gc, r=1, g=2, b=3, stretch="hist")
 
 gcc2 <- unsuperClass(gc, nClasses=2)
@@ -495,9 +492,9 @@ par(mfrow=c(2,1))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-defor1 #vediamo i nomi delle nostre variabili "names"
+defor1 ##to see the names of our variables  "names"
 
-dvi1 <- defor1$defor1.1 - defor1$defor1.2  #commento
+dvi1 <- defor1$defor1.1 - defor1$defor1.2  #the difference between bands can give us different information
 
 #dev.off()
 plot(dvi1)
@@ -506,31 +503,31 @@ plot(dvi1)
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
 plot(dvi1,col=cl)
 
-#per visualizzare e titolare
+#to plot and title 
 plot(dvi1, col=cl, main="DVI at time 1")
 
 #per defor2
-defor2 #controllo i nomi delle bande
+defor2 # to check the bands
 
-dvi2 <- defor2$defor2.1 - defor2$defor2.2  #in pratica sottraggo la banda NIR alla banda del rosso
+dvi2 <- defor2$defor2.1 - defor2$defor2.2  # Red bands - Nir bands
 
 plot(dvi2)
 
 cl <- colorRampPalette(c('darkblue','yellow','red','black'))(100) # specifying a color scheme
 plot(dvi2,col=cl)
 
-par(mfrow=c(2,1))          #metto a confronto
-plot(dvi1, col=cl, main="DVI at time 1")
+par(mfrow=c(2,1))         # to compare
+plot(dvi1, col=cl, main="DVI at ime 1")
 plot(dvi2, col=cl, main="DVI at time 2")
-#posso anche trovare la differenza tra le due mappe. DVI prima mappa - DVI seconda
 
+#we can find out the diffence between 2 index 
 difdvi <- dvi1 - dvi2 #per ogni pixels
 
-# dev.off() per visualizzare l'immagine meglio
+# dev.off() to have better view 
 cld <- colorRampPalette(c('blue','white','red'))(100)
 plot(difdvi, col=cld)
 
-#calcoliamo NVDI
+#calculate NVDI
 # (NIR-RED)/ (NIR+RED)
 ndvi1 <- (defor1$defor1.1 - defor1$defor1.2) / (defor1$defor1.1 + defor1$defor1.2)
 #ndvi1 <- dvi1 / (defor1$defor1.1 + defor1$defor1.2)
@@ -559,7 +556,7 @@ plot(difndvi, col=cld)
 #day2 Worldwide NDVI
 plot(copNDVI)
 
-#Pixels with values 253, 254 and 255 (water) will be set  as NA's
+#Pixels with values 253, 254 and 255 (water) will be set  as NA's             #useful function to set values we need
 
 copNDVI <- reclassify(copNDVI, cbind(253:255, NA))
 plot(copNDVI)
@@ -601,14 +598,14 @@ par(mfrow=c(1,2))   #par for plotRGB
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-#par semplicemente non funziona con la funzione ggr, quindi si utilizza altro
+#par doesn't work with ggr function, so we have to change method --->  function "grid.arrange"
 #multiframe with ggplot2 and gridExtra
 p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-grid.arrange(p1, p2, nrow=2)
+grid.arrange(p1, p2, nrow=2)  #to plot our image in ggplot
 
-#Unsupervides classification 
+#Unsupervides classification      # function usfull to separate the values on the images in different classes.
 d1c <- unsuperClass(defor1, nClasses=2)
 
 plot(d1c$map) 
@@ -618,19 +615,19 @@ plot(d1c$map)
 d2c <- unsuperClass(defor2, nClasses=2) #classe 2 foresta, classe 1 campi coltivati (fiume indistinto) 
 plot(d2c$map)
 
-d2c3 <- unsuperClass(defor2, nClasses=3) # with 3 classi nell'immagine c'è un'ulteriore distinzione nella parte agricola (bianco giallo)
+d2c3 <- unsuperClass(defor2, nClasses=3) # with 3 class we can see also a different land, that is farmland in our case
 plot(d2c3$map)
 
 #frequency
-freq(d1c$map)
+freq(d1c$map)          #value represent different class, count are the pixel for each class 
 #     value  count
 #[1,]     1  35867
 #[2,]     2 305425
 
-#prima di tutto si somma 
+#first at all we summ the pixel
 s1 <- 305425 + 35867  
 s1 #341292
-#continuiamo con la proporzione
+#calculate the ratio
 prop1 <- freq(d1c$map)/s1 
 prop1
 
@@ -653,21 +650,21 @@ cover <- c("Forest","Agriculture")
 percent_1992 <- c(89.49, 10.50)
 percent_2006 <- c(52.23, 47.76)
 
-percentages <- data.frame(cover, percent_1992, percent_2006)
-percentages
+percentages <- data.frame(cover, percent_1992, percent_2006)  
+percentages   #the name of our data frame
 
-#with ggplot we can plot 
+#with ggplot we can plot it
 
 ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
 
 # 2006 plot percentages 
 ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
 
-#assegnamo nomi!
+#renamed our ggplot
 p1 <- ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
 p2 <- ggplot(percentages, aes(x=cover, y=percent_2006, color=cover)) + geom_bar(stat="identity", fill="white")
 
-#mettiamo a confronto le percentuali di copertura vegetale e campi coltivati anni 1992/2006
+#we can check the difference in % of land covered and farmland between 1992-2006. 
 grid.arrange(p1, p2, nrow=1)
 
 #------------------------------------------------------------------------------------------------------------------
@@ -678,7 +675,7 @@ grid.arrange(p1, p2, nrow=1)
 
 #R_code_variability.r
 
-#set the packages we will use
+set the packages we will use
 library(raster)
 library(RStoolbox)
 library(ggplot2)
@@ -699,7 +696,7 @@ plotRGB(sent, r=2, g=1, b=3, stretch="lin")
 nir <- sent$sentinel.1
 red <- sent$sentinel.2
  
-ndvi <- (nir-red) / (nir+red)
+ndvi <- (nir-red) / (nir+red)    # operation to calculate NDVI (Normalized Difference Vegetation Index)
 plot(ndvi)
 cl <- colorRampPalette(c('black','white','red','magenta','green'))(100) # 
 plot(ndvi,col=cl)
@@ -715,7 +712,7 @@ plot(ndvisd5, col=clsd)
 ndvimean3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol=3), fun=mean)
 clsd <- colorRampPalette(c('blue','green','pink','magenta','orange','brown','red','yellow'))(100) # 
 plot(ndvimean3, col=clsd)
-#---------------------------------------------------------------------------------------------------
+
 #PCA 
 sentpca <- rasterPCA(sent)
 plot(sentpca$map)
@@ -723,52 +720,50 @@ plot(sentpca$map)
 summary(sentpca$model) 
 #the first PC contains 67% circa delle informazioni originali
 
-#day 2
 pc1 <- sentpca$map$PC1
 
 pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 clsd <- colorRampPalette(c("blue", "green","pink","magenta","orange", "brown", "red", "yellow"))(100)
 plot(ndvisd5, col=clsd)
 
-#(SOURCE command: per caricare direttamente un codice in R senza nemmeno aprire il file)
+#(SOURCE command: to load a code in R without open the file where the code is)
 #esempio:
 source("source_test_lezione.r")
 source("source_ggplot.r")
 
-#per creare una nuova finestra vuota
-ggplot() +  # "+" per aggiungere nuovi blocchi
+#to open a new window
+ggplot() +                                                             # "+" to add new blocks
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis() + #come defoult posso scrivere viridis(), oppure possiamo scegliere di aggiungere un colore
-ggtitle("Standard deviation of PC1 by viridis colour scale")  #posso aggiungere un titolo o legenda
+scale_fill_viridis() +                                                 #to defoult can write viridis(), o we can choose the colore we want
+ggtitle("Standard deviation of PC1 by viridis colour scale")           #to add title or legend
 
-#facciamo un altro ggplot con il colore magma
+#ggplot with magma colors
 p1 <- ggplot() +  # "+" per aggiungere nuovi blocchi
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "magma") + # magma oppure avrei potuto scrivere "A"
+scale_fill_viridis(option = "magma") +                                  #we can also write "A", it's the same
 ggtitle("Standard deviation of PC1 by viridis colour scale")  
 
-#usiamo il colore INFERNO
-p2 <- ggplot() +  # "+" per aggiungere nuovi blocchi
+#ggplot with INFERNO colors
+p2 <- ggplot() +   
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "B") + # magma oppure avrei potuto scrivere "inferno"
+scale_fill_viridis(option = "B") +                                      # or "inferno"
 ggtitle("Standard deviation of PC1 by viridis colour scale") 
 
-#usiamo il colore TURBO
-p3 <- ggplot() +  # "+" per aggiungere nuovi blocchi
+#ggplot with TURBO colors
+p3 <- ggplot() +  
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "H") + # magma oppure avrei potuto scrivere "turbo"
+scale_fill_viridis(option = "H") 
 ggtitle("Standard deviation of PC1 by viridis colour scale") 
 
 #usiamo il colore CIVIDIS
-p4 <- ggplot() +  # "+" per aggiungere nuovi blocchi
+p4 <- ggplot() +  
 geom_raster(pc1sd5, mapping = aes(x = x, y = y, fill = layer)) +
-scale_fill_viridis(option = "E") + # magma oppure avrei potuto scrivere "cividis"
+scale_fill_viridis(option = "E") + 
 ggtitle("Standard deviation of PC1 by viridis colour scale") 
 
-#possiamo unire tutti i file raster visualizzati precedentemente
-#prima di tutto bisogna associare ogni plot precedente ad un oggetto/nome
-grid.arrange(p1, p2, p3, p4, nrow=1) 
-
+#we can merge all the previously viewed raster files and named  
+total <- grid.arrange(p1, p2, p3, p4, nrow=1)      
+total                                                                   #to dispaly all image in 1 row
 #-----------------------------------------------------------------------------------------------------------------------------
 
 
