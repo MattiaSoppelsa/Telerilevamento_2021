@@ -157,6 +157,14 @@ asc02_crop10 <- crop(asc02, e10)
 asc11_crop10 <- crop(asc11, e10)
 asc21_crop10 <- crop(asc21, e10)
 
+#Visualizzo l'immagine a colori reali della porzione tagliata
+plotRGB(asc87_crop10, 3, 2, 1, stretch="lin")
+
+#Per salvare
+#png(file="D:/lab/asc/cropped.png",width=600, height=350)
+#plotRGB(asc87_crop10, 3, 2, 1, stretch="lin")
+#dev.off()
+
 
 UI87_crop_10 <- (asc87_crop10[[6]] - asc87_crop10[[4]])/(asc87_crop10[[6]] + asc87_crop10[[4]])
 UI92_crop_10 <- (asc92_crop10[[6]] - asc92_crop10[[4]])/(asc92_crop10[[6]] + asc92_crop10[[4]])
