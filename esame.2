@@ -164,12 +164,12 @@ UI21_crop_10re <- reclassify(UI21_crop_10r, cbind(-Inf, -1, NA))
 plot(UI21_crop_10re)
 
 par(mfrow=c(2,3))
-plot(UI87_crop_10re)
-plot(UI92_crop_10re)
-plot(UI97_crop_10re)
-plot(UI02_crop_10re)
-plot(UI11_crop_10re)
-plot(UI21_crop_10re)
+plot(UI87_crop_10re, main="1987")
+plot(UI92_crop_10re, main="1992")
+plot(UI97_crop_10re, main="1997")
+plot(UI02_crop_10re, main="2002")
+plot(UI11_crop_10re, main="2011")
+plot(UI21_crop_10re, main="2021")
 
 #faccio UnsuperClass dell'ultima cosi da ricavare la percentuale di terra colonizzata 
 
@@ -483,6 +483,13 @@ ndvi <- stack(NDVI87,NDVI92,NDVI97,NDVI02,NDVI11,NDVI21)
 levelplot(ndvi, main = "NDVI", names.attr=1987,1992,1997,2002,2011,2021)
 grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
 grid.arrange(NDVI02_lvl, NDVI11_lvl, NDVI21_lvl, nrow=1)
+grid.arrange(NDVI87, NDVI92, NDVI97, nrow=1)
+
+
+
+#cl <- colorRampPalette(c("pink","white","grey","black","red"))(100)
+#changer <- colorRampPalette(c("steelblue3","black","yellow"))(100)
+
 
 k <- grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
 
@@ -541,9 +548,9 @@ asc21_crop2 <- crop(asc21, e2)
 
 # NDMI = (NIR-SWIR)/(NIR+SWIR)
 
-NDMI87 <- (asc87_crop2[[4]] - asc87_crop2[[5]]) / (asc87_crop2[[4]] + asc87_crop2[[5]])
-NDMI11 <- (asc11_crop2[[4]] - asc11_crop2[[5]]) / (asc11_crop2[[4]] + asc11_crop2[[5]])
-NDMI21 <- (asc21_crop2[[4]] - asc21_crop2[[5]]) / (asc21_crop2[[4]] + asc21_crop2[[5]])
+NDMI87 <- (asc87_crop[[4]] - asc87_crop[[5]]) / (asc87_crop[[4]] + asc87_crop[[5]])
+NDMI11 <- (asc11_crop[[4]] - asc11_crop[[5]]) / (asc11_crop[[4]] + asc11_crop2[[5]])
+NDMI21 <- (asc21_crop[[4]] - asc21_crop[[5]]) / (asc21_crop[[4]] + asc21_crop2[[5]])
 levelplot(NDMI11)
 
 #levelplot(NDMI11, col.regions=rainbow(100))
@@ -666,7 +673,8 @@ asc02_gg <- ggRGB(asc02_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2002") 
 asc11_gg <- ggRGB(asc11_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2011") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 asc21_gg <- ggRGB(asc21_pca$map, 1, 2, 3, stretch="Lin") + ggtitle("Anno 2021") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
-
+asc21_pca_re <- reclassify(asc21_pca, cbind(-Inf, 0, NA)
+plot(NDMI21_crop10and)
 
 #utilizzo la funzione grid.arrange per visualizzarli assieme 
 
