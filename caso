@@ -1,459 +1,62 @@
-library(raster) 
-library(rgdal)
+cover <- c("Ettari", "anno")
+anno_1987 <- (0, 1987)
+anno_1992 <- (180, 1992)
+anno_1997 <- (540, 1997)
+anno_2002 <- (960, 2002)
+anno_2011 <- (1320, 2011)
+anno_2021 <- (1260, 2021)
 
-setwd("D:/lab/SA/")
-em <- brick("SA_eMAH_NDVI.2002.187-196.QKM.VI_NDVI.006.2017153175537.tif")
-um <- brick("SA_eVSH_NDVI.2012.092-101.3KM.VI_NDVI.006.2021145222042.tif")
-om <- brick("SA_eMAH_NDVI.2021.249-258.QKM.VI_NDVI.006.2021260150414.tif")
-oom <- brick("SA_eVSH_NDVI.2021.299-309.3KM.VI_NDVI.006.2021320050136.tif")
-am <- brick("SA_eVSH_NDVI.2021.172-181.3KM.VI_NDVI.006.2021212123158.tif")
- par(mfrow=c(2,2))
- plot(em)
- plot(om)
- plot(oom)
- plot(am)
+percentages <- data.frame(cover, anno_1987, anno_1992, anno_1997, anno_2002, anno_2011, anno_2021)  
+percentages   #the name of our data frame
+
+ggplot(percentages, aes(x=cover, y=anno_1997, color=cover)) + geom_bar(stat="identity", fill="white")
 
 
--------------------------------------------------------------------------------
-r = raster("MSK_CLDPRB_20m.jp2", band = 3)
-g = raster("MSK_CLDPRB_20m.jp2", band = 2)
-b = raster("MSK_CLDPRB_20m.jp2", band = 1)
-rgb = brick(b,g,r)
-plot(rgb)
-plotRGB(rgb, r = 3, g = 2, b = 1, stretch = "lin")
-
-r = raster(f, band = 3)
-g = raster(f, band = 2)
-b = raster(f, band = 1)
-rgb = brick(b,g,r)
-plot(rgb)
-plotRGB(rgb, r = 3, g = 2, b = 1, stretch = "lin")
-
------------------------------------------------------------
-
-library(raster)
-library(rgdal)
-setwd("D:/lab/padua/")
-
-B02 <- brick("T32TQR_20180713T101029_B02_20m.jp2")
-B03 <- brick("T32TQR_20180713T101029_B03_20m.jp2")
-B04 <- brick("T32TQR_20180713T101029_B04_20m.jp2")
-B05 <- brick("T32TQR_20180713T101029_B05_20m.jp2")
-par(mfrow=c(2,2))
-plot(B02)
-plot(B03)
-plot(B04)
-plot(B05)
 
 
-----------------------------------------------------------------------
-library(raster)
-library(rgdal)
-setwd("D:/lab/padua/")
+anni <- c(1987,1992,1997,2002,2011,2021)
+ettari <- c(0,180,540,960,1320,1260)
 
-B01 <- brick("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B1.TIF")
-B02 <- brick("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B2.TIF")
-B03 <- brick("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B3.TIF")
-B04 <- brick("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B4.TIF")
-par(mfrow=c(2,2))
-plot(B01)
-plot(B02)
-plot(B03)
-plot(B04)
-cl <- colorRampPalette(c("black","grey","light grey"))(100)
-par(mfrow=c(2,2))
-plot(B01, col=cl)
-plot(B02, col=cl)
-plot(B03, col=cl)
-plot(B04, col=cl)
+percentages <- data.frame(anni,ettari)  
 
-BO <- brick("LC08_L2SP_192029_20211028_20211104_02_T1_SR_QA_AEROSOL.TIF")
-plot(BO)
+ggplot(percentages, aes(x=anni, y=ettari)) +
+  geom_area( fill="#69b3a2", alpha=0.4) +
+  geom_smooth(method = "loess", se = FALSE, formula = 'y ~ x', span = 0.8) + 
 
------------------------------------------------------------------
-q <- brick("L1C_T32TQR_A011030_20170802T101051.tif")
-w <- brick("L1C_T32TQR_A024644_20211124T101240.tif")
-
-par(mfrow=c(1,2))
-plot(q)
-plot(w)
-
-r <- brick("LE07_L2SP_192028_20210902_20210928_02_T1_SR_B5.TIF")
-------------------------------------------------------------------
-library(raster)
-
-B01 <- raster("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B1.TIF")
-B02 <- raster("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B2.TIF")
-B03 <- raster("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B3.TIF")
-B04 <- raster("LC08_L2SP_192029_20211028_20211104_02_T1_SR_B4.TIF")
-
-padua <- stack(B01,B02,B03,B04)
-
-plotRGB(padua, 3,2,1, stretch="lin")
-plotRGB(padua, 5,4,3, stretch="lin")
-plotRGB(padua, 4,3,2, stretch="lin")
-
-
-ndvi <- (B04 - B03) / (B04 + B03)
-
-h5ls("D:/lab/congo/VNP15A2H.A2021321.h20v09.001.2021329102942.h5")
-my <- h5read(h5ls)
- my <- h5read("D:/lab/R.congo/VNP15A2H.A2021321.h20v09.001.2021329102942.h5")
- 
------------------------------------------------------------------------
-#REPUBBLICA DEMOCRATICA DEL CONGO
-
-library(raster)
-setwd("D:/lab/R.congo/")
-
-b1 <- raster("LC08_L1TP_169057_20211112_20211125_02_T1_B2.TIF")
-b2 <- raster("LC08_L1TP_169057_20211112_20211125_02_T1_B3.TIF")
-b3 <- raster("LC08_L1TP_169057_20211112_20211125_02_T1_B4.TIF")
-b4 <- raster("LC08_L1TP_169057_20211112_20211125_02_T1_B5.TIF")
-
-congo <- stack(b1,b2,b3,b4)
-
-plotRGB(congo, 3,2,1, stretch="lin")
-plotRGB(congo, 4,3,2, stretch="lin")
-
-ndvi <- (b4-b3)/(b4+b3)
-plot(ndvi)
-
-#NICE#
-
-a1 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B2.TIF")
-a2 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B3.TIF")
-a3 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B4.TIF")
-a4 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B5.TIF")
-
-congo1 <- stack(a1,a2,a3,a4)
-
-plotRGB(congo1, 4,3,2, stretch="lin")
-ndvi1 <- (a4-a3)/(a4+a3)
-plot(ndvi1)
-
-par(mfrow=c(1,2))
-plot(ndvi)
-plot(ndvi1)
-
-par(mfrow=c(2,2))
-plot(ndvi)
-plot(ndvi1)
-plot(ndvi-ndvi1)
-plot(ndvi1-ndvi)
-
-#Per titolo
-plot(ndvi1,main = "LAGO TURKANA",
-     axes = FALSE, box = FALSE)
-     
-     
-     
-#Per istogramma     
-# view distribution of NDVI values (e comparati)
-
-par(mfrow=c(1,2))
-hist(ndvi1,
-  main = "LAGO TURKANA 2013",
-  col = "springgreen",
-  xlab = "NDVI Index Value")
+  geom_point(size=3, color="#69b3a2") +
+  theme_ipsum() +
+  ggtitle("Evolution of something")
   
-hist(ndvi,
-  main = "LAGO TURKANA 2021",
-  col = "springgreen",
-  xlab = "NDVI Index Value")
-  
-#PER ESPORTARE (in QGIS)
-# Export your raster
-writeRaster(x = ndvi1,
-              filename="lago2013.tif", #la cartella R.congo era già stata settata dal comando setwd
-              format = "GTiff", # save as a tif
-              datatype="INT2S", # save as a INTEGER rather than a float
-             # # overwrite = TRUE)  # OPTIONAL - be careful. This will OVERWRITE previous files.
 
-
-# # how to efficiently import multiple raster (.tif) files into R # #
-
-#first import all files in a single folder as a list 
-rastlist <- list.files(path = "/path/to/wd", pattern='.TIF$', 
-all.files=TRUE, full.names=FALSE)
-
-#import all raster files in folder using lapply
-allrasters <- lapply(rastlist, raster)
-
-#to check the index numbers of all imported raster list elements
-allrasters
-
-#call single raster element
-allrasters[[1]]
-
-#to run a function on an individual raster e.g., plot 
-plot(allrasters[[1]])
-
-
-------------------------------------------------------------------------------------------------------------------------------
-#TUTTO PERCORSO PER NDVI R.CONGO
-#importo immagini lago turkana (a)1984 - (b)1990 - (c)2013 - (d)2021
-library(sp)
-library(rgdal)
-library(raster)
-setwd("D:/lab/R.congo/")
-
-
-c1 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B2.TIF")
-c2 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B3.TIF")
-c3 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B4.TIF")
-c4 <- raster("LC08_L1TP_169057_20130701_20200912_02_T1_B5.TIF")
-
-
-d1 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B2.TIF")
-d2 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B3.TIF")
-d3 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B4.TIF")
-d4 <- raster("LC08_L2SP_169057_20210824_20210901_02_T1_SR_B5.TIF")
-
-congo2 <- stack(c1,c2,c3,c4)
-ndvi2 <- (c4-c3)/(c4+c3)
-plot(ndvi2)
-
-par(mfrow=c(2,2))
-plot(ndvi1)
-plot(ndvi)
-plot(ndvi2)
-
---da finire--
-
-#prova con lapply e rasterlist
-
-rastlist <- list.files(path = "D:/lab/R.congo/", pattern='.TIF$', all.files=TRUE, full.names=FALSE)
-allrasters <- lapply(rastlist, raster)
-allrasters
-allrasters[[1]]
-
-ndvi84 <- (allrasters[[16]] - allrasters[[15]]) / (allrasters[[16]] + allrasters[[15]])
-ndvi90 <- (allrasters[[12]] - allrasters[[11]]) / (allrasters[[12]] + allrasters[[11]])
-ndvi13 <- (allrasters[[8]] - allrasters[[7]]) / (allrasters[[8]] + allrasters[[7]])
-ndvi21 <- (allrasters[[4]] - allrasters[[3]]) / (allrasters[[4]] + allrasters[[3]])
-
-par(mfrow=c(2,2))
-plot(ndvi84)
-plot(ndvi90)
-plot(ndvi13)
-plot(ndvi21)
-
-plot(ndvi84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
-plot(ndvi90,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
-plot(ndvi13,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
-plot(ndvi21,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
-
-cl84 <- colorRampPalette(c("blue","grey","green"))(100)
-plot(ndvi84, col=cl84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
-cl90 <- colorRampPalette(c("blue","grey","green"))(100)
-plot(ndvi90, col=cl90,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
-cl13 <- colorRampPalette(c("blue","grey","green"))(100)
-plot(ndvi13, col=cl13,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
-cl21 <- colorRampPalette(c("blue","grey","green"))(100)
-plot(ndvi21, col=cl21,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
-
-#oppure anche con "transparent"
-
-cl84 <- colorRampPalette(c("blue","transparent","green"))(100)
-plot(ndvi84, col=cl84,main = "LAGO TURKANA '84", axes = FALSE, box = FALSE)
-plot(ndvi90, col=cl84,main = "LAGO TURKANA '90", axes = FALSE, box = FALSE)
-plot(ndvi13, col=cl84,main = "LAGO TURKANA '13", axes = FALSE, box = FALSE)
-plot(ndvi21, col=cl84,main = "LAGO TURKANA '21", axes = FALSE, box = FALSE)
-
-
-hist(ndvi84, main = "LAGO TURKANA 1984", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi90, main = "LAGO TURKANA 1990", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi13, main = "LAGO TURKANA 2013", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi21, main = "LAGO TURKANA 2021", col = "springgreen", xlab = "NDVI Index Value")
-
-
--------------------------------------------------------------------------------------------------
-
-## CASO MALAWI ##
-library(raster)
-library(rgdal)
-
-setwd("D:/lab/malawi/")
-rastlist <- list.files(path = "D:/lab/malawi/", pattern='.TIF$', all.files=TRUE, full.names=FALSE)
-m <- lapply(rastlist, raster)
-m
-
-ndvi12 <- (m[[8]] - m[[7]])/(m[[8]] + m[[7]])
-ndvi13 <- (m[[2]] - m[[1]])/(m[[2]] + m[[1]])
-ndvi14 <- (m[[4]] - m[[3]])/(m[[4]] + m[[3]])
-ndvi15 <- (m[[6]] - m[[5]])/(m[[6]] + m[[5]])
-
-cl <- colorRampPalette(c("blue","transparent","green"))(100)
-par(mfrow=c(2,2))
-plot(ndvi12, col=cl,main = "MALAWI 2012", axes = FALSE, box = FALSE)
-plot(ndvi13, col=cl,main = "MALAWI 2013", axes = FALSE, box = FALSE)
-plot(ndvi14, col=cl,main = "MALAWI 2014", axes = FALSE, box = FALSE)
-plot(ndvi15, col=cl,main = "MALAWI 2015", axes = FALSE, box = FALSE)
-
-par(mfrow=c(2,2))
-hist(ndvi12, main = "MALAWI 2012", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi13, main = "MALAWI 2013", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi14, main = "MALAWI 2014", col = "springgreen", xlab = "NDVI Index Value")
-hist(ndvi15, main = "MALAWI 2015", col = "springgreen", xlab = "NDVI Index Value")
-
-#INSOMMA :/
-
-...............................................................................................................................................
-
-
-## ABRUZZO - PIANA DEL FUCINO ##
-
-library(raster) 
-library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
-library(rgdal) # mi permette di analizzare le firme spettrali
-library(ggplot2) # mi permette l'uso delle funzioni ggplot
-library(RStoolbox)# permette l'uso della Unsupervised Classification
-library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
-library(grid)
-
-setwd("D:/lab/abru/R20m/")
-rlist <- list.files(pattern="T33TUG")
-rlist
-import <- lapply(rlist,raster)
-ab20 <- stack(import)
-# Funzione plot: del singolo file
-plot(ab20)
-# Funzione plotRGB: crea plot con immagini sovrapposte
-plotRGB(ab20, 1, 2, 3, stretch="Lin")
-plotRGB(ab20, 2, 3, 4, stretch="Lin")
-
-# Funzione levelplot: disegna più grafici di colore falso con una singola legenda
-levelplot(ab20)
-# Cambio di colori a piacimento (colorRampPalette si può usare solo su immagine singole, non su RGB)
-clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
-
-rastlist <- list.files(path = "D:/lab/abru/", pattern='.T33TUG$', all.files=TRUE, full.names=FALSE)
-allrasters <- lapply(rastlist, raster)
-allrasters
-
---------------------------------------------------------------------------------------------------------------------------
-#  CASO GRAN CANARIE  #
-
-library(raster)
-library(rgdal)
-setwd("D:/lab/granca/")
-
-rastlist <- list.files(path = "D:/lab/granca/", pattern='20190806', all.files=TRUE, full.names=FALSE)
-p <- lapply(rastlist, raster)
-rastlist <- list.files(path = "D:/lab/granca/", pattern='20190822', all.files=TRUE, full.names=FALSE)
-d <- lapply(rastlist, raster)
-
-
- par(mfrow=c(2,2))
- plot(m[[1]])
- plot(m[[2]])
- plot(m[[3]])
- plot(m[[4]])
- 
- par(mfrow=c(2,2))
- plot(n[[5]])
- plot(n[[6]])
- plot(n[[7]])
- plot(n[[8]])
-
-
-cl <- colorRampPalette(c("blue","green","red"))(100)
-plot(m[[4]], col=cl,main = "NIR G.C. 6 agosto 2019 ", axes = FALSE, box = FALSE)
-
-######ab20 <- stack(m)
-# Funzione plot: del singolo file
-######plot(ab20)
-
-
-rastlist <- list.files(path = "D:/lab/granca/", pattern='20190806', all.files=TRUE, full.names=FALSE)
-p <- lapply(rastlist, raster)
-import <- lapply(rastlist, raster)
-gc06 <- stack(import)
-rlist <- list.files(path = "D:/lab/granca/", pattern='20190822', all.files=TRUE, full.names=FALSE)
-d <- lapply(rlist, raster)
-importa <- lapply(rlist,raster)
-gc22 <- stack(importa)
-
-plotRGB(gc06, r=3, g=2, b=1)
-
-## riscontrato errore!! Errore in grDevices::rgb(RGB[, 1], RGB[, 2], RGB[, 3], alpha = alpha, maxColorValue = scale) : 
-##  intensità colore 7243, non in 0:255
-
-# devo ridimensionare, guardo il range delle bande:
-print(gc06)
-# o più in dettaglio:
-cellStats(gc06, min)
-cellStats(gc06, max)
-# If you know the maximum and 0 is the minimum then this would be enough:
-# plotRGB(gc06, r=3, g=2, d=1, scale = [max])  #MEGLIO COSI
-
-setValues(m[[1]], scales::rescale(values(m[[1]]), to = c(0, 255)))  
-setValues(m[[2]], scales::rescale(values(m[[2]]), to = c(0, 255)))  
-setValues(m[[3]], scales::rescale(values(m[[3]]), to = c(0, 255)))  
-setValues(m[[4]], scales::rescale(values(m[[4]]), to = c(0, 255)))  
-
-plotRGB(gc06, r=3, g=2, b=1, scale = 65535)  
-plotRGB(gc22, r=3, g=2, b=1, scale = 65535)  
-
-plotRGB(gc06, r=4, g=3, b=1, scale = 65535)  
-plotRGB(gc22, r=4, g=3, b=1, scale = 65535)
-
-par(mfrow=c(2,1))
-plotRGB(gc06, r=4, g=3, b=2, scale = 65535, stretch="lin")  
-plotRGB(gc22, r=4, g=3, b=2, scale = 65535, stretch="lin")
-
-par(mfrow=c(2,1))
-plotRGB(gc06, r=4, g=3, b=2, scale = 65535, stretch="hist")  
-plotRGB(gc22, r=4, g=3, b=2, scale = 65535, stretch="hist")
-
-#cl <- colorRampPalette(c("green","yellow","red"))(300)
-#plot(gc06[[4]], col=cl,main = "2006", axes = FALSE, box = FALSE)
-
-cl <- colorRampPalette(c("blue","orange","red"))(100)
-> levelplot(gc06[[1]], col.regions=cl)
-> levelplot(gc06, col.regions=cl)
-
---------------------------------------------------------------------------------------------
-
-## Caso PERU' ##
-
-#Library:
-library(raster) 
-library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
-library(rgdal) # mi permette di analizzare le firme spettrali
-library(ggplot2) # mi permette l'uso delle funzioni ggplot
-library(RStoolbox)# permette l'uso della Unsupervised Classification
-library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
-library(grid)
-
-setwd("D:/lab/perù")
-
-# Funzione list.files crea una lista di file
-list.files()
-# Importare i file tutti insieme (invece che singolarmente)
-# Funzione list.files: crea lista di file per la funzione lapply 
-rlist <- list.files(pattern="B")
-
-# Funzione per avere le info sul file
-rlist
-# Funzione lapply permette di importare la lista di file e applicarvi la funzione raster
-import <- lapply(rlist,raster)
-pe <- stack(import)
-
-plot(pe)
-# Funzione plotRGB: crea plot con immagini sovrapposte
-plotRGB(pe, 1, 2, 3, stretch="Lin")
-plotRGB(pe, 2, 3, 4, stretch="Lin")
-
-# Funzione levelplot: disegna più grafici di colore falso con una singola legenda
-
-levelplot(pe) 
-# Cambio di colori a piacimento (colorRampPalette si può usare solo su immagine singole, non su RGB)
-clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
-# Nuovo levelplot col cambio di colori, nome e titolo
-levelplot(pe,col.regions=clr, main="perù deforestation ", names.attr=c("1","2", "3", "4", "5", "6", "7", "10"))
-ggRGB(NPY, r=1, g=2, b=3, stretch="lin")
-
---------------------------------------------------------------------------------------------------------------------
-
+   geom_line(color="linen", size=2) +
+   
+   ggplot(percentages, aes(x=anni, y=ettari)) +
+   geom_point(size=3, color="#69b3a2") +
+   geom_smooth(method = "loess",
+              se = FALSE,
+              formula = 'y ~ x',
+              span = 0.8) +
+  stat_smooth(se=FALSE, geom="area",
+              method = 'loess', alpha=.5,
+              span = 0.8) +
+                ggtitle("Ettari occupato dall'agricoltura dal 1987 ad oggi")
+                
+                
+                
+                   ggplot(percentages, aes(x=anni, y=ettari)) +
+   geom_point(size=3, color="#69b3a2") +
+   geom_smooth(method = NULL,
+              se = FALSE,
+              formula = 'y ~ x',
+              span = 0.8) +
+  stat_smooth(se=FALSE, geom="area",
+              method = NULL, alpha=.5,
+              span = 0.8) +
+                ggtitle("Evolution of something")
+                
+                
+                
+  f <- plot(UI21_crop_10re)
+png(file="D:/lab/asc/ui21.png",width=600, height=350)
+plot(UI21_crop_10re)
+dev.off()
