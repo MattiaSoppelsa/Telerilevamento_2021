@@ -1,0 +1,340 @@
+library(raster) 
+library(rasterVis) # posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
+library(grid)
+
+
+setwd("D:/lab/asc")
+
+## INDICE
+# 0: Lista bande utilizzate
+# 1: importazione immagini satellitari (x mese e anno) con aggiunta estensioni
+# 2: Rappresentazione area di studio tramite RGB 
+#
+# 4: Raggruppamento degli anni per banda
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+# 0 Lista bande utilizzate
+
+# Landsat 4/5 spectral bands:  
+# nBanda = freq    -->  nome riassegnato 
+# Band 1 = Blue    -->   [[1]]
+# Band 2 = Green   -->    [[2]]
+# Band 3 = Red     -->    [[3]]
+# Band 4 = NIR     -->    [[4]]
+# Band 5 = SWIR-1  -->   [[5]]
+# Band 6 = Thermal infrared   --> removed
+# Band 7 = SWIR-2  -->  B7  [[6]]
+
+# Landsat 8 spectral bands:
+# Band 1 = Coastal / Aerosol  --> removed
+# Band 2 = Blue         B1     [[1]]
+# Band 3 = Green        B2     [[2]]
+# Band 4 = Red          B3     [[3]]
+# Band 5 = NIR          B4     [[4]]
+# Band 6 = SWIR-1       B5     [[5]]
+# Band 7 = SWIR-2       B7     [[6]]
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+#### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
+
+
+#immagine del 29/06/1987, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
+list87 <-list.files(pattern="19870629")
+imp87 <-lapply(list87, raster)
+asc87 <- stack(imp87)
+
+#immagine del 28/07/1992
+list92 <-list.files(pattern="19920728")
+imp92 <-lapply(list92, raster)
+asc92 <- stack(imp92)
+
+#immagine del 24/06/1997
+list97 <-list.files(pattern="19970624")
+imp97 <-lapply(list97, raster)
+asc97 <- stack(imp97)
+
+#immagine del 08/07/2002
+list02 <-list.files(pattern="20020708")
+imp02 <-lapply(list02, raster)
+asc02 <- stack(imp02)
+
+#immagine del 17/07/2011
+list11 <-list.files(pattern="20110717")
+imp11 <-lapply(list11, raster)
+asc11 <- stack(imp11)
+
+#immagine del 12/07/2021
+list21 <-list.files(pattern="20210712")
+imp21 <-lapply(list21, raster)
+asc21 <- stack(imp21)
+
+# Estensioni utilizzate nello studio (tramite funzione crop)
+
+e <- extent(350000,480000,3280000,3420000)
+e10 <- extent(405000,480000,3280000,3360000)
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+
+##### 2. RAPPRESENTAZIONE AREA DI STUDIO TRAMITE RGB  #####
+
+ggr87 <- ggRGB(asc87_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggr92 <- ggRGB(asc92_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggr97 <- ggRGB(asc97_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggr02 <- ggRGB(asc02_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggr11 <- ggRGB(asc11_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggr21 <- ggRGB(asc21_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+#utilizzo la funzione grid.arrange per visualizzarli assieme 
+ 
+cr <- grid.arrange(ggr87, ggr92, ggr97, ggr02, ggr11, ggr21, nrow=1)   #forse basta anche la funzione top="top label"
+ggsave("D:/lab/asc/imm/cr.png", cr)
+
+
+#utilizzo la funzione aggregate per ridurre il numero di pixels di un fattore 10, risoluzione da (30x30) -> (300x300)
+# da spostare quando si utilizza                                                                                                                 
+asc87_res <- aggregate(asc87_crop, fact=10) 
+asc92_res <- aggregate(asc92_crop, fact=10) 
+asc97_res <- aggregate(asc97_crop, fact=10) 
+asc02_res <- aggregate(asc02_crop, fact=10) 
+asc11_res <- aggregate(asc11_crop, fact=10) 
+asc21_res <- aggregate(asc21_crop, fact=10) 
+
+
+ggnir87 <- ggRGB(asc87_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir92 <- ggRGB(asc92_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir97 <- ggRGB(asc97_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir02 <- ggRGB(asc02_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir11 <- ggRGB(asc11_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir21 <- ggRGB(asc21_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+
+nir <- grid.arrange(ggnir87, ggnir92, ggnir97, ggnir02, ggnir11, ggnir21, nrow=1)   #forse basta anche la funzione top="top label"
+ggsave("D:/lab/asc/imm/nir.png", nir)
+
+
+#utilizzo la funzione grid.arrange per visualizzarli assieme 
+ 
+
+------------------------------------------------------------------------------------------------
+
+## CALCOLO DELL'NDVI ##
+# NDVI = (NIR - red)/(NIR + red)
+
+NDVI87 <- (asc87_crop[[4]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[3]])
+NDVI92 <- (asc92_crop[[4]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[3]])
+NDVI97 <- (asc97_crop[[4]] - asc97_crop[[3]]) / (asc97_crop[[4]] + asc97_crop[[3]])
+NDVI02 <- (asc02_crop[[4]] - asc02_crop[[3]]) / (asc02_crop[[4]] + asc02_crop[[3]])
+NDVI11 <- (asc11_crop[[4]] - asc11_crop[[3]]) / (asc11_crop[[4]] + asc11_crop[[3]])
+NDVI21 <- (asc21_crop[[4]] - asc21_crop[[3]]) / (asc21_crop[[4]] + asc21_crop[[3]])
+
+NDVI87_lvl <- levelplot(NDVI87,main = "1987") 
+NDVI92_lvl <- levelplot(NDVI92,main = "1992")
+NDVI97_lvl <- levelplot(NDVI97,main = "1997")
+NDVI02_lvl <- levelplot(NDVI02,main = "2002")
+NDVI11_lvl <- levelplot(NDVI11,main = "2011")
+NDVI21_lvl <- levelplot(NDVI21,main = "2021")
+NDVI_diff_lvl <- levelplot(ndvi_diff,main = "differenza NDVI 1989-2021")
+
+ndvi87_97 <- grid.arrange(NDVI87_lvl, NDVI92_lvl, NDVI97_lvl, nrow=1)
+ggsave("D:/lab/asc/imm/ndvi87_97.png", ndvi87_97)
+ndvi02_21 <- grid.arrange(NDVI02_lvl, NDVI11_lvl, NDVI21_lvl, nrow=1)
+ggsave("D:/lab/asc/imm/ndvi02_21.png", ndvi02_21)
+
+grid.arrange(NDVI87)
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+#Calcolo indice UI 
+# UI = (SWIR2-NIR)/(SWIR2+NIR)
+# Urbanized areas occupy one extremity of the scale, exposed sand and water at the other extreme with vegetated areas having an intermediate value.
+
+e10 <- extent(405000,480000,3280000,3360000)
+asc87_crop10 <- crop(asc87, e10)
+asc92_crop10 <- crop(asc92, e10)
+asc97_crop10 <- crop(asc97, e10)
+asc02_crop10 <- crop(asc02, e10)
+asc11_crop10 <- crop(asc11, e10)
+asc21_crop10 <- crop(asc21, e10)
+
+
+UI87_crop_10 <- (asc87_crop10[[6]] - asc87_crop10[[4]])/(asc87_crop10[[6]] + asc87_crop10[[4]])
+UI92_crop_10 <- (asc92_crop10[[6]] - asc92_crop10[[4]])/(asc92_crop10[[6]] + asc92_crop10[[4]])
+UI97_crop_10 <- (asc97_crop10[[6]] - asc97_crop10[[4]])/(asc97_crop10[[6]] + asc97_crop10[[4]])
+UI02_crop_10 <- (asc02_crop10[[6]] - asc02_crop10[[4]])/(asc02_crop10[[6]] + asc02_crop10[[4]])
+UI11_crop_10 <- (asc11_crop10[[6]] - asc11_crop10[[4]])/(asc11_crop10[[6]] + asc11_crop10[[4]])
+UI21_crop_10 <- (asc21_crop10[[6]] - asc21_crop10[[4]])/(asc21_crop10[[6]] + asc21_crop10[[4]])
+
+UI87_crop_10r <- reclassify(UI87_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI87_crop_10re <- reclassify(UI87_crop_10r , cbind(-Inf, -1, NA))
+plot(UI87_crop_10re)
+
+UI92_crop_10r <- reclassify(UI92_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI92_crop_10re <- reclassify(UI92_crop_10r, cbind(-Inf, -1, NA))
+plot(UI92_crop_10re)
+
+UI97_crop_10r <- reclassify(UI97_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI97_crop_10re <- reclassify(UI97_crop_10r, cbind(-Inf, -1, NA))
+plot(UI97_crop_10re)
+
+UI02_crop_10r <- reclassify(UI02_crop_10, cbind(0.23, Inf, NA), right=FALSE)
+UI02_crop_10re <- reclassify(UI02_crop_10r, cbind(-Inf, -1, NA))
+plot(UI02_crop_10re)
+
+UI11_crop_10r <- reclassify(UI11_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI11_crop_10re <- reclassify(UI11_crop_10r, cbind(-Inf, -1, NA))
+plot(UI11_crop_10re)
+
+UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
+UI21_crop_10re <- reclassify(UI21_crop_10r, cbind(-Inf, -1, NA))
+plot(UI21_crop_10re)
+
+png("D:/lab/asc/imm/UIra.png")
+par(mfrow=c(2,3))
+plot(UI87_crop_10re, main="1987", axes = FALSE)
+plot(UI92_crop_10re, main="1992", axes = FALSE)
+plot(UI97_crop_10re, main="1997", axes = FALSE)
+plot(UI02_crop_10re, main="2002", axes = FALSE)
+plot(UI11_crop_10re, main="2011", axes = FALSE)
+plot(UI21_crop_10re, main="2021", axes = FALSE)
+dev.off()
+
+###  ENSUPERVISED CLASSIFICATION
+
+#faccio UnsuperClass dell'ultima cosi da ricavare la percentuale di terra colonizzata 
+
+set.seed(999)
+UI87_crop_10re_un <- unsuperClass(UI87_crop_10re, nClasses=3)
+
+set.seed(999)
+UI92_crop_10re_un <- unsuperClass(UI82_crop_10re, nClasses=3)
+
+set.seed(999)
+UI97_crop_10re_un <- unsuperClass(UI97_crop_10re, nClasses=3)
+
+set.seed(999)
+UI02_crop_10re_un <- unsuperClass(UI02_crop_10re, nClasses=3)
+
+set.seed(999)
+UI11_crop_10re_un <- unsuperClass(UI11_crop_10re, nClasses=3)
+
+set.seed(999)
+UI21_crop_10re_un <- unsuperClass(UI21_crop_10re, nClasses=3)
+
+c1 <- colorRampPalette(c("lavender","orangered2", "orangered2"))(100)
+c2 <- colorRampPalette(c("orangered2", "lavender", "orangered2"))(100)
+c3 <- colorRampPalette(c("lavender", "orangered2", "orangered2"))(100)
+c4 <- colorRampPalette(c("lavender", "orangered2", "lavender"))(100)
+
+
+par(mfrow=c(2,3))
+plot(UI92_crop_10re_un$map, main="1992", col=c4)
+plot(UI97_crop_10re_un$map, main="1997", col=c3)
+plot(UI02_crop_10re_un$map, main="2002", col=c2)
+plot(UI11_crop_10re_un$map, main="2011", col=c2)
+plot(UI21_crop_10re_un$map, main="2021", col=c1)
+
+freq(UI87_crop_10re_un$map)
+#     value   count
+#[1,]     1 3014916  
+#[2,]     2 3038791  # 100 % suolo nudo
+#[3,]     3  613793 
+
+freq(UI92_crop_10re_un$map)
+#     value   count
+#[1,]     1 4757008  #terreno arido
+#[2,]     2  198665  # Campi coltivati 
+#[3,]     3 1711800  #terreno arido
+#[4,]    NA      27
+freq(UI97_crop_10re_un$map)
+#     value   count
+#[1,]     1 6060856  #terreno arido
+#[2,]     2  499145  #campi coltivati 
+#[3,]     3  107350  #campi coltivati
+#[4,]    NA     149
+
+freq(UI02_crop_10re_un$map)
+     value   count
+#[1,]     1  974950  #campi coltivati
+#[2,]     2 5601663  #terreno arido
+#[3,]     3   90683  #campi coltivati
+#[4,]    NA     204
+
+freq(UI11_crop_10re_un$map)
+#     value   count
+#[1,]     1  931581  #campi coltivati
+#[2,]     2 5212167  #terreno arido
+#[3,]     3  523698  #campi coltivati
+#[4,]    NA      54
+
+freq(UI21_crop_10re_un$map)
+#     value   count
+#[1,]     1 5300464  #terreno arido
+#[2,]     2  386088  #campi coltivati
+#[3,]     3  980772  #campi coltivati 
+#[4,]    NA     176
+
+s_tot <- 6667500
+
+prop87 <- freq(UI87_crop_10re_un$map)/s_tot
+prop92 <- freq(UI92_crop_10re_un$map)/s_tot
+prop97 <- freq(UI97_crop_10re_un$map)/s_tot
+prop02 <- freq(UI02_crop_10re_un$map)/s_tot
+prop11 <- freq(UI11_crop_10re_un$map)/s_tot
+prop21 <- freq(UI21_crop_10re_un$map)/s_tot
+
+prop87  
+# 100 % deserto
+
+prop92
+#                value            count          %            Stato terreno          
+                 
+#[1,]     1.499813e-07     7.134620e-01         71            Terreno arido               
+#[2,]     2.999625e-07     2.979603e-02          3            Campi coltivati          
+#[3,]     4.499438e-07     2.567379e-01         26            Terreno arido
+#[4,]               NA     4.049494e-06         NA
+
+prop97
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     9.090148e-01         91            Terreno arido
+#[2,]     2.999625e-07     7.486239e-02        7.5            Campi coltivati     
+#[3,]     4.499438e-07     1.610049e-02        1.5            Campi coltivati 
+#[4,]               NA     2.234721e-05         NA
+
+prop02
+#                value            count
+#[1,]      1.499813e-07    1.462242e-01         15            Campi coltivati
+#[2,]      2.999625e-07    8.401444e-01         84            Terreno arido
+#[3,]      4.499438e-07    1.360075e-02          1            Campi coltivati
+#[4,]                NA    3.059618e-05         NA
+
+prop11
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     1.397197e-01         14            Campi coltivati
+#[2,]     2.999625e-07     7.817273e-01         78            Terreno arido
+#[3,]     4.499438e-07     7.854488e-02          8            Campi coltivati
+#[4,]               NA     8.098988e-06         NA
+
+prop21
+#                value            count          %            Stato terreno
+#[1,]     1.499813e-07     0.7949702287         79            Terreno arido
+#[2,]     2.999625e-07     0.0579059618          6            Campi coltivati
+#[3,]     4.499438e-07     0.1470974128         15            Campi coltivati
+#[4,]               NA     0.0000263967         NA
+
+
+
+###Con la divisione in classe possiamo notare facilmente i campi coltivati e le strutture rispetto al suolo arido
+# Conoscendo l'area di studio posso andare a trovare l'area colonizzata dall'uomo negli ultimi 40 anni (87-21) attraverso una proporzione 
+# 100% (area di studio) : x = % : terreno occupato
+#calcolo area di studio: dalla risoluzione so che 1 pixel equivale a 30mx30m, ed ho un numero totale di pixel pari a 6667500. 
+# (radice del numero di pixel) x 30 = trovo lato della mia area. elevo il mio lato alla seconda per trovare l'area totale 
+
+# Area totale = 6000Km^2
+# anno 1992   = 0.03 x 6000 =  180 Km^2
+# anno 1997   = 0.09 x 6000 =  540 Km^2
+# anno 1902   = 0.16 x 6000 =  960 Km^2
+# anno 2011   = 0.22 x 6000 = 1320 Km^2
+# anno 2021   = 0.21 x 6000 = 1260 Km^2
+
+
