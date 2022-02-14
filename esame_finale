@@ -14,23 +14,23 @@
 # 0 Lista bande utilizzate
 
 # Landsat 4/5 spectral bands:  
-# nBanda = freq    -->  nome riassegnato 
-# Band 1 = Blue    -->   [[1]]
-# Band 2 = Green   -->    [[2]]
-# Band 3 = Red     -->    [[3]]
-# Band 4 = NIR     -->    [[4]]
-# Band 5 = SWIR-1  -->   [[5]]
+# nBanda = freqq    -->   Posizione nell'immagine        
+# Band 1 = Blue     -->                     [[1]]
+# Band 2 = Green    -->                     [[2]] 
+# Band 3 = Red      -->                     [[3]]   
+# Band 4 = NIR     -->                      [[4]]                  ###   per semplicità ho rimosso la banda Coastal dalle immagini di Landsat 8   ###
+# Band 5 = SWIR-1  -->                      [[5]]                    ##     e rinominato le bande di landsat 8 scalandole di una posizione      ##
 # Band 6 = Thermal infrared   --> removed
 # Band 7 = SWIR-2  -->  B7  [[6]]
 
 # Landsat 8 spectral bands:
 # Band 1 = Coastal / Aerosol  --> removed
-# Band 2 = Blue         B1     [[1]]
-# Band 3 = Green        B2     [[2]]
-# Band 4 = Red          B3     [[3]]
-# Band 5 = NIR          B4     [[4]]
-# Band 6 = SWIR-1       B5     [[5]]
-# Band 7 = SWIR-2       B7     [[6]]
+# Band 2 = Blue         B1                  [[1]]
+# Band 3 = Green        B2                  [[2]]
+# Band 4 = Red          B3                  [[3]]
+# Band 5 = NIR          B4                  [[4]]
+# Band 6 = SWIR-1       B5                  [[5]]
+# Band 7 = SWIR-2       B7                  [[6]]
 
 
 library(raster) 
@@ -94,14 +94,13 @@ ggr02 <- ggRGB(asc02_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + them
 ggr11 <- ggRGB(asc11_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 ggr21 <- ggRGB(asc21_crop, 3, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
-#utilizzo la funzione grid.arrange per visualizzarli assieme 
- 
+# Utilizzo la funzione grid.arrange per visualizzarli assieme 
 cr <- grid.arrange(ggr87, ggr92, ggr97, ggr02, ggr11, ggr21, nrow=1)   #forse basta anche la funzione top="top label"
 ggsave("D:/lab/asc/imm/cr.png", cr)
 
 
-#utilizzo la funzione aggregate per ridurre il numero di pixels di un fattore 10, risoluzione da (30x30) -> (300x300)
-# da spostare quando si utilizza                                                                                                                 
+
+# Utilizzo la funzione aggregate per ridurre il numero di pixels di un fattore 10, risoluzione da (30x30) -> (300x300)
 asc87_res <- aggregate(asc87_crop, fact=10) 
 asc92_res <- aggregate(asc92_crop, fact=10) 
 asc97_res <- aggregate(asc97_crop, fact=10) 
@@ -110,6 +109,7 @@ asc11_res <- aggregate(asc11_crop, fact=10)
 asc21_res <- aggregate(asc21_crop, fact=10) 
 
 
+# Preparo le immagini aggiungendo il titolo e rimuovendo le assi, inoltre assegno un nome alla funzione ggRGB cosi da poterla richiamare con grid.arrange
 ggnir87 <- ggRGB(asc87_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 ggnir92 <- ggRGB(asc92_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 ggnir97 <- ggRGB(asc97_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
@@ -117,18 +117,14 @@ ggnir02 <- ggRGB(asc02_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + the
 ggnir11 <- ggRGB(asc11_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 ggnir21 <- ggRGB(asc21_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
-nir2 <- grid.arrange(ggnir87, ggnir92, ggnir97, ggnir02, ggnir11, ggnir21, nrow=1)   #forse basta anche la funzione top="top label"
-ggsave("D:/lab/asc/imm/nir2.png", nir2)
-
-
 #utilizzo la funzione grid.arrange per visualizzarli assieme 
- 
+nir2 <- grid.arrange(ggnir87, ggnir92, ggnir97, ggnir02, ggnir11, ggnir21, nrow=1)  
 
 ------------------------------------------------------------------------------------------------
 
 #####   3. CALCOLO DELL'NDVI   #####
 
-# NDVI = (NIR - red)/(NIR + red)
+# NDVI = (NIR - red)/(NIR + red)       
 
 NDVI87 <- (asc87_crop[[4]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[3]])
 NDVI92 <- (asc92_crop[[4]] - asc92_crop[[3]]) / (asc92_crop[[4]] + asc92_crop[[3]])
