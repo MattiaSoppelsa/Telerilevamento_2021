@@ -1,21 +1,16 @@
-library(raster) 
-library(rasterVis) # permettedi utilizzare la funzione levelplot
-library(rgdal) # mi permette di analizzare le firme spettrali
-library(ggplot2) # mi permette l'uso delle funzioni ggplot
-library(RStoolbox)# permette l'uso della Unsupervised Classification
-library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par(mfrow.. in ggplot 2 non funziona
-library(grid)
+# Esame Mattia Soppelsa - codice della presentazione: "Evoluzione nel tempo delle aree coltivate nel deserto dell'Arabia Saudita"
 
-
-setwd("D:/lab/asc")
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ## INDICE
-# 0: Lista bande utilizzate
+# 0: Lista bande utilizzate e pacchetti utilizzati
 # 1: importazione immagini satellitari (x mese e anno) con aggiunta estensioni
 # 2: Rappresentazione area di studio tramite RGB 
-#
-# 4: Raggruppamento degli anni per banda
+# 3: Calcolo dell'NDVI (Normalized Difference Vegetation Index)
+# 4: Calcolo dell'UI (Urban Index)
+# 5: Classificazione tramite Unsupervised Classification 
+# 6: Calcolo percentuali e rappresentazione grafica
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 # 0 Lista bande utilizzate
 
 # Landsat 4/5 spectral bands:  
@@ -36,6 +31,18 @@ setwd("D:/lab/asc")
 # Band 5 = NIR          B4     [[4]]
 # Band 6 = SWIR-1       B5     [[5]]
 # Band 7 = SWIR-2       B7     [[6]]
+
+
+library(raster) 
+library(rasterVis)
+library(rgdal) 
+library(ggplot2) 
+library(RStoolbox)
+library(gridExtra)  
+library(grid)
+
+#Richiamo la mia directory
+setwd("D:/lab/asc")
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 #### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
@@ -119,7 +126,8 @@ ggsave("D:/lab/asc/imm/nir2.png", nir2)
 
 ------------------------------------------------------------------------------------------------
 
-## CALCOLO DELL'NDVI ##
+#####   3. CALCOLO DELL'NDVI   #####
+
 # NDVI = (NIR - red)/(NIR + red)
 
 NDVI87 <- (asc87_crop[[4]] - asc87_crop[[3]]) / (asc87_crop[[4]] + asc87_crop[[3]])
@@ -145,7 +153,7 @@ ggsave("D:/lab/asc/imm/ndvi02_21.png", ndvi02_21)
 grid.arrange(NDVI87)
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 
-#Calcolo indice UI 
+#####  4. Calcolo indice UI  ###### 
 # UI = (SWIR2-NIR)/(SWIR2+NIR)
 # Urbanized areas occupy one extremity of the scale, exposed sand and water at the other extreme with vegetated areas having an intermediate value.
 
@@ -207,9 +215,9 @@ plot(UI97_crop_10re, main="1997", axes = FALSE)
 plot(UI02_crop_10re, main="2002", axes = FALSE)
 plot(UI11_crop_10re, main="2011", axes = FALSE)
 plot(UI21_crop_10re, main="2021", axes = FALSE)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-###  ENSUPERVISED CLASSIFICATION
+#####  5. UNSUPERVISED CLASSIFICATION  #####
 
 #faccio UnsuperClass dell'ultima cosi da ricavare la percentuale di terra colonizzata 
 
@@ -245,6 +253,9 @@ plot(UI02_crop_10re_un$map, main="2002", col=c2)
 plot(UI11_crop_10re_un$map, main="2011", col=c2)
 plot(UI21_crop_10re_un$map, main="2021", col=c1)
 dev.off()
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+######  6. Calcolo percentuali e rappresentazione grafica  ######
 
 freq(UI87_crop_10re_un$map)
 #     value   count
@@ -359,7 +370,6 @@ Ettari <- c(0,180,540,960,1320,1260)
 percentages <- data.frame(anni,ettari)  
  
 #ora posso plottare con ggplot
-
 graf <- ggplot(percentages, aes(x=Anni, y=Ettari)) +
    geom_point(size=3, color="#69b3a2") +
    geom_smooth(method = "loess",
@@ -370,5 +380,6 @@ graf <- ggplot(percentages, aes(x=Anni, y=Ettari)) +
               method = 'loess', alpha=.5,
               span = 0.8) +
                 ggtitle("Ettari occupati dall'agricoltura dal 1987 ad oggi")
-                
+
+#infine salvo 
 ggsave("D:/lab/asc/imm/graf.png", graf)
