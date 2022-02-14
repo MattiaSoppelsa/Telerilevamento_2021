@@ -103,15 +103,15 @@ asc11_res <- aggregate(asc11_crop, fact=10)
 asc21_res <- aggregate(asc21_crop, fact=10) 
 
 
-ggnir87 <- ggRGB(asc87_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ggnir92 <- ggRGB(asc92_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ggnir97 <- ggRGB(asc97_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ggnir02 <- ggRGB(asc02_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ggnir11 <- ggRGB(asc11_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
-ggnir21 <- ggRGB(asc21_res, 4, 2, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir87 <- ggRGB(asc87_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir92 <- ggRGB(asc92_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir97 <- ggRGB(asc97_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir02 <- ggRGB(asc02_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir11 <- ggRGB(asc11_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
+ggnir21 <- ggRGB(asc21_res, 4, 3, 1, stretch="Lin") + ggtitle("Anno 1987") + theme(axis.title.x = element_blank(), axis.title.y = element_blank())
 
-nir <- grid.arrange(ggnir87, ggnir92, ggnir97, ggnir02, ggnir11, ggnir21, nrow=1)   #forse basta anche la funzione top="top label"
-ggsave("D:/lab/asc/imm/nir.png", nir)
+nir2 <- grid.arrange(ggnir87, ggnir92, ggnir97, ggnir02, ggnir11, ggnir21, nrow=1)   #forse basta anche la funzione top="top label"
+ggsave("D:/lab/asc/imm/nir2.png", nir2)
 
 
 #utilizzo la funzione grid.arrange per visualizzarli assieme 
@@ -189,7 +189,6 @@ UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
 UI21_crop_10re <- reclassify(UI21_crop_10r, cbind(-Inf, -1, NA))
 plot(UI21_crop_10re)
 
-png("D:/lab/asc/imm/UIra.png")
 par(mfrow=c(2,3))
 plot(UI87_crop_10re, main="1987", axes = FALSE)
 plot(UI92_crop_10re, main="1992", axes = FALSE)
@@ -197,7 +196,7 @@ plot(UI97_crop_10re, main="1997", axes = FALSE)
 plot(UI02_crop_10re, main="2002", axes = FALSE)
 plot(UI11_crop_10re, main="2011", axes = FALSE)
 plot(UI21_crop_10re, main="2021", axes = FALSE)
-dev.off()
+
 
 ###  ENSUPERVISED CLASSIFICATION
 
@@ -227,12 +226,14 @@ c3 <- colorRampPalette(c("lavender", "orangered2", "orangered2"))(100)
 c4 <- colorRampPalette(c("lavender", "orangered2", "lavender"))(100)
 
 
+png("D:/lab/asc/imm/Unsuper.png")
 par(mfrow=c(2,3))
 plot(UI92_crop_10re_un$map, main="1992", col=c4)
 plot(UI97_crop_10re_un$map, main="1997", col=c3)
 plot(UI02_crop_10re_un$map, main="2002", col=c2)
 plot(UI11_crop_10re_un$map, main="2011", col=c2)
 plot(UI21_crop_10re_un$map, main="2021", col=c1)
+dev.off()
 
 freq(UI87_crop_10re_un$map)
 #     value   count
