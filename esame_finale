@@ -1,9 +1,9 @@
 library(raster) 
-library(rasterVis) # posso utilizzare la funzione levelplot
+library(rasterVis) # permettedi utilizzare la funzione levelplot
 library(rgdal) # mi permette di analizzare le firme spettrali
 library(ggplot2) # mi permette l'uso delle funzioni ggplot
 library(RStoolbox)# permette l'uso della Unsupervised Classification
-library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par in ggplot 2 non funge
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici, da aggiugere a ggplot2 perchè la funzione par(mfrow.. in ggplot 2 non funziona
 library(grid)
 
 
@@ -165,13 +165,15 @@ plotRGB(asc87_crop10, 3, 2, 1, stretch="lin")
 #plotRGB(asc87_crop10, 3, 2, 1, stretch="lin")
 #dev.off()
 
-
+#calcolo del UI
 UI87_crop_10 <- (asc87_crop10[[6]] - asc87_crop10[[4]])/(asc87_crop10[[6]] + asc87_crop10[[4]])
 UI92_crop_10 <- (asc92_crop10[[6]] - asc92_crop10[[4]])/(asc92_crop10[[6]] + asc92_crop10[[4]])
 UI97_crop_10 <- (asc97_crop10[[6]] - asc97_crop10[[4]])/(asc97_crop10[[6]] + asc97_crop10[[4]])
 UI02_crop_10 <- (asc02_crop10[[6]] - asc02_crop10[[4]])/(asc02_crop10[[6]] + asc02_crop10[[4]])
 UI11_crop_10 <- (asc11_crop10[[6]] - asc11_crop10[[4]])/(asc11_crop10[[6]] + asc11_crop10[[4]])
 UI21_crop_10 <- (asc21_crop10[[6]] - asc21_crop10[[4]])/(asc21_crop10[[6]] + asc21_crop10[[4]])
+
+#riclassifico le immagini con i valori appropriati per poter confrontare le immagini
 
 UI87_crop_10r <- reclassify(UI87_crop_10, cbind(4, Inf, NA), right=FALSE)
 UI87_crop_10re <- reclassify(UI87_crop_10r , cbind(-Inf, -1, NA))
@@ -197,6 +199,7 @@ UI21_crop_10r <- reclassify(UI21_crop_10, cbind(4, Inf, NA), right=FALSE)
 UI21_crop_10re <- reclassify(UI21_crop_10r, cbind(-Inf, -1, NA))
 plot(UI21_crop_10re)
 
+#con un "par" visualizzo tutte le immagini 
 par(mfrow=c(2,3))
 plot(UI87_crop_10re, main="1987", axes = FALSE)
 plot(UI92_crop_10re, main="1992", axes = FALSE)
@@ -347,3 +350,14 @@ prop21
 # anno 2021   = 0.21 x 6000 = 1260 Km^2
 
 
+xValue <- (1992)(1299)
+yValue <- (180:1260)
+data <- data.frame(xValue,yValue)
+
+# Plot
+ggplot(data, aes(x=xValue, y=yValue)) +
+  geom_area( fill="#69b3a2", alpha=0.4) +
+  geom_line(color="#69b3a2", size=2) +
+  geom_point(size=3, color="#69b3a2") +
+  theme_ipsum() +
+  ggtitle("Evolution of something")
