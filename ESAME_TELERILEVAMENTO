@@ -160,8 +160,9 @@ grid.arrange(NDVI87)
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 #####  4. Calcolo indice UI  ###### 
+
 # UI = (SWIR2-NIR)/(SWIR2+NIR)
-# Urbanized areas occupy one extremity of the scale, exposed sand and water at the other extreme with vegetated areas having an intermediate value.
+#Attraverso questo indice riesco a distinguere molto facilmente le 2 principali tipologie di terreno (campi coltivati - terreno arido/deserto)
 
 e10 <- extent(405000,480000,3280000,3360000)
 asc87_crop10 <- crop(asc87, e10)
@@ -225,7 +226,8 @@ plot(UI21_crop_10re, main="2021", axes = FALSE)
 
 #####  5. UNSUPERVISED CLASSIFICATION  #####
 
-#faccio UnsuperClass dell'ultima cosi da ricavare la percentuale di terra colonizzata 
+#Eseguo un Unsupervised classification delle immagini del par precedente cosi da poter ricavare in seguito la percentuale di terra colonizzata 
+#eseguo la funzione "unsuperClass" per una divisione in 3 classi
 
 set.seed(999)
 UI87_crop_10re_un <- unsuperClass(UI87_crop_10re, nClasses=3)
@@ -245,12 +247,13 @@ UI11_crop_10re_un <- unsuperClass(UI11_crop_10re, nClasses=3)
 set.seed(999)
 UI21_crop_10re_un <- unsuperClass(UI21_crop_10re, nClasses=3)
 
+#Creo una serie di colorRampPalette per assegnare le giuste colorazioni alle classi appena create
 c1 <- colorRampPalette(c("lavender","orangered2", "orangered2"))(100)
 c2 <- colorRampPalette(c("orangered2", "lavender", "orangered2"))(100)
 c3 <- colorRampPalette(c("lavender", "orangered2", "orangered2"))(100)
 c4 <- colorRampPalette(c("lavender", "orangered2", "lavender"))(100)
 
-
+#visualizzo
 png("D:/lab/asc/imm/Unsuper.png")
 par(mfrow=c(2,3))
 plot(UI92_crop_10re_un$map, main="1992", col=c4)
@@ -262,6 +265,9 @@ dev.off()
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 ######  6. Calcolo percentuali e rappresentazione grafica  ######
+
+#Calcolo le frequenze e assegno le classi alla tipologia del terreno 
+#Ho scelto di dividere il terreno in 2 classi finali: Campi coltivati, terreno restante(pressochè terreno arido/deserto)
 
 freq(UI87_crop_10re_un$map)
 #     value   count
@@ -304,6 +310,8 @@ freq(UI21_crop_10re_un$map)
 #[4,]    NA     176
 
 s_tot <- 6667500
+
+#trovo percentuale delle varie classi
 
 prop87 <- freq(UI87_crop_10re_un$map)/s_tot
 prop92 <- freq(UI92_crop_10re_un$map)/s_tot
@@ -353,11 +361,12 @@ prop21
 
 
 
-###Con la divisione in classe possiamo notare facilmente i campi coltivati e le strutture rispetto al suolo arido
-# Conoscendo l'area di studio posso andare a trovare l'area colonizzata dall'uomo negli ultimi 40 anni (87-21) attraverso una proporzione 
-# 100% (area di studio) : x = % : terreno occupato
+### Sapendo la percentuale dei campi coltivati, dei terreno aridi e conoscendo l'area di studio posso andare a trovare
+### l'area colonizzata dall'uomo negli ultimi 40 anni (87-21)
+
 #calcolo area di studio: dalla risoluzione so che 1 pixel equivale a 30mx30m, ed ho un numero totale di pixel pari a 6667500. 
 # (radice del numero di pixel) x 30 = trovo lato della mia area. elevo il mio lato alla seconda per trovare l'area totale 
+
 
 # Area totale = 6000Km^2
 # anno 1992   = 0.03 x 6000 =  180 Km^2
@@ -366,8 +375,8 @@ prop21
 # anno 2011   = 0.22 x 6000 = 1320 Km^2
 # anno 2021   = 0.21 x 6000 = 1260 Km^2
 
-# per la rappresentazione prima di tutto creo un data frame
 
+# per la rappresentazione prima di tutto creo un data frame
 #creo parametri
 Anni <- c(1987,1992,1997,2002,2011,2021)
 Ettari <- c(0,180,540,960,1320,1260)
