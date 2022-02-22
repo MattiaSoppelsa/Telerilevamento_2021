@@ -379,3 +379,40 @@ graf <- ggplot(percentages, aes(x=Anni, y=Ettari)) +
 
 #infine salvo 
 ggsave("D:/lab/asc/imm/graf.png", graf)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------
+
+####    7. Calcolo delle firme spettrali    #### 
+
+
+plotRGB(asc21_crop10, r=3, g=2, b=1, stretch="lin") 
+# Bisogna avere la mappa fatta con plotRGB aperta sotto
+# Funzione: click, usa immagine plotRGB per creare le firme spettrali 
+click(asc21_crop10, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+       x       y    cell       B1       B2       B3      B4      B5     B7
+1 426060 3329610 2533202    10950    13684    16274   19352   23201  19400
+2 434640 3327000 2750988     9281     9985    10840   12334   15214  15204
+3 453240 3335700 2026608    12334    15984    20082   22909   27643  25996
+
+# Creo un data.frame
+Bande <- c(1,2,3,4,5,6)
+campo_nc <- c(10950,13684,16274,19352,23201,19400)
+campo_c <- c(9281,9985,10840,12334,15214,15204)
+deserto <- c(12334,15984,20082,22909,27643,25996)
+
+spectrals_21 <- data.frame(campo_nc,campo_black, deserto)
+
+spectrals_21 # to visualize the data.frame
+
+#creo il grafico e assegno un nome
+firm <- spct_21 <- ggplot(spectrals_21, aes(x=Bande)) +
+ geom_line(aes(y=campo_nc), color="grey") +
+ geom_line(aes(y=campo_black), color="green") +
+ geom_line(aes(y=deserto), color="orange") +
+ labs(x="Bande",y="riflettanza") +
+  ggtitle("Firme spettrali") +
+  theme(plot.title = element_text(hjust = 0.5))
+
+#visualizzazione
+spct_21
