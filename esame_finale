@@ -9,6 +9,7 @@
 # 4: Calcolo dell'UI (Urban Index)
 # 5: Classificazione tramite Unsupervised Classification 
 # 6: Calcolo percentuali e rappresentazione grafica
+# 7: Firme Spettrali
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 # 0 Lista bande utilizzate
@@ -395,7 +396,7 @@ click(asc21_crop10, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
 2 434640 3327000 2750988     9281     9985    10840   12334   15214  15204
 3 453240 3335700 2026608    12334    15984    20082   22909   27643  25996
 
-# Creo un data.frame
+# create a data.frame
 Bande <- c(1,2,3,4,5,6)
 campo_nc <- c(10950,13684,16274,19352,23201,19400)
 campo_c <- c(9281,9985,10840,12334,15214,15204)
@@ -405,7 +406,7 @@ spectrals_21 <- data.frame(campo_nc,campo_black, deserto)
 
 spectrals_21 # to visualize the data.frame
 
-#creo il grafico e assegno un nome
+#create a chart and rename it
 firm <- spct_21 <- ggplot(spectrals_21, aes(x=Bande)) +
  geom_line(aes(y=campo_nc), color="grey") +
  geom_line(aes(y=campo_black), color="green") +
@@ -414,7 +415,7 @@ firm <- spct_21 <- ggplot(spectrals_21, aes(x=Bande)) +
   ggtitle("Firme spettrali") +
   theme(plot.title = element_text(hjust = 0.5))
 
-#visualizzazione
+# to visualize
 spct_21
 
 #FINE
