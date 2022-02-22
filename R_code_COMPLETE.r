@@ -296,10 +296,6 @@ plot(wain,col=cl,main="2016-04-01")
 wain50 <-aggregate(wain,fact=50)  #every 50x50 pixels it's like it's be 1pixel
 wain100 <-aggregate(wain,fact=100)  #  100x100pixels = 1pixel
 
-
-# stitch("R_code_greenland.r", template=system.file("misc", "knitr-template.Rnw", package="knitr"))
-stitch("D:/lab/greenland/R_code_greenland.r.txt", template=system.file("misc", "knitr-template.Rnw", package="knitr")) #attention that last .txt is required  
-
 #--------------------------------------------------------------------------------
 
 # day 4. R_code_knitr.r
