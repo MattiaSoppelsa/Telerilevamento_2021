@@ -724,7 +724,7 @@ pc1 <- sentpca$map$PC1
 
 pc1sd5 <- focal(pc1, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
 clsd <- colorRampPalette(c("blue", "green","pink","magenta","orange", "brown", "red", "yellow"))(100)
-plot(ndvisd5, col=clsd)
+plot(pc1sd5, col=clsd)
 
 #(SOURCE command: to load a code in R without open the file where the code is)
 #esempio:
