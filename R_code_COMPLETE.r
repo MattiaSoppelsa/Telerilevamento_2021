@@ -702,7 +702,7 @@ cl <- colorRampPalette(c('black','white','red','magenta','green'))(100) #
 plot(ndvi,col=cl)
 
 ndvisd5 <- focal(ndvi, w=matrix(1/25, nrow=5, ncol=5), fun=sd)
-clsd <- colorRampPalette(c("blue", "green","pink",magenta","orange", "brown", "red", "yellow"))(100)
+clsd <- colorRampPalette(c("blue", "green","pink","magenta","orange", "brown", "red", "yellow"))(100)
 plot(ndvisd5, col=clsd)
 
 ndvisd3 <- focal(ndvi, w=matrix(1/9, nrow=3, ncol==3), fun=mean)
