@@ -762,7 +762,40 @@ total <- grid.arrange(p1, p2, p3, p4, nrow=1)
 total                                                                   #to dispaly all image in 1 row
 #-----------------------------------------------------------------------------------------------------------------------------
 
+#Spectral signature
 
+#-----------------------------------------------------------------------------------------------------------------------------
+
+# we will use defor1 to calculate Spectral signatures:
+#we have to import with "brick" function
+defor1 <- brick("defor1.jpg")
+
+#we plot the image with natural color
+plotRGB(defor1, r=1, g=2, b=3, stretch="lin")
+
+#with function "click" we can obtain information of the pixel we click.
+click(defor1, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+# Spectral signatures of defor2:
+plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
+click(defor2, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
+
+# we have to define the columns of the dataset:
+band <- c(1,2,3)
+time1 <- c(220,11,38)
+time2 <- c(197,152,157)
+
+# and create a data frame:
+spectralst <- data.frame(band, time1, time2)
+
+# at last we plot the sepctral signatures:
+ggplot(spectrals, aes(x=band)) +
+ geom_line(aes(y=time1), color="red") +
+ geom_line(aes(y=time2), color="gray") +
+ labs(x="band",y="reflectance") 
+
+#----------------------------------------------------------------------------------------------------------
+#                                                END
 
 
 
