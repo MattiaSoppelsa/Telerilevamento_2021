@@ -416,3 +416,5 @@ firm <- spct_21 <- ggplot(spectrals_21, aes(x=Bande)) +
 
 #visualizzazione
 spct_21
+
+#FINE
