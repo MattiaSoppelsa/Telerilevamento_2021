@@ -98,7 +98,7 @@ asc02_crop <- crop(asc02, e)
 asc11_crop <- crop(asc11, e)
 asc21_crop <- crop(asc21, e)
 
-#confronto immagine del 1987 con quella del 2021, utilizzo una colorRampPalette per evidenziare in rosso i campi coltivati
+#confronto le immagini della banda del nir del 1987 con quella del 2021, utilizzo una colorRampPalette per evidenziare in rosso i campi coltivati
 cl <- colorRampPalette(c("white","grey","black","red"))(100)
 par(mfrow=c(1,2))
 plot(asc87_crop[[4]], col=cl, main="1987")
