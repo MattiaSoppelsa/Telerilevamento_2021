@@ -90,13 +90,19 @@ e10 <- extent(405000,480000,3280000,3360000)
 
 #per prima cosa ritaglio le immagini con l'estensione scelta
 
-e <- extent(405000,480000,3280000,3360000)
-asc87_crop <- crop(asc87, e10)
-asc92_crop <- crop(asc92, e10)
-asc97_crop <- crop(asc97, e10)
-asc02_crop <- crop(asc02, e10)
-asc11_crop <- crop(asc11, e10)
-asc21_crop <- crop(asc21, e10)
+e <- extent(350000,480000,3280000,3420000)
+asc87_crop <- crop(asc87, e)
+asc92_crop <- crop(asc92, e)
+asc97_crop <- crop(asc97, e)
+asc02_crop <- crop(asc02, e)
+asc11_crop <- crop(asc11, e)
+asc21_crop <- crop(asc21, e)
+
+
+cl <- colorRampPalette(c("white","grey","black","red"))(100)
+par(mfrow=c(1,2))
+plot(asc87_crop[[4]], col=cl, main="1987")
+plot(asc21_crop_rec[[4]], col=cl, main="2021")
 
 # Utilizzo la funzione aggregate per ridurre il numero di pixels di un fattore 10, risoluzione da (30x30) -> (300x300)
 asc87_res <- aggregate(asc87_crop, fact=10) 
