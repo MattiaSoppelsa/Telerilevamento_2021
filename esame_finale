@@ -49,7 +49,7 @@ setwd("D:/lab/asc")
 #### 1. IMPORTAZIONE IMMAGINI SATELLITARI X MESE e ANNO  ####
 
 
-#immagine del 29/06/1987, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande 
+#immagine del 29/06/1987, creo una lista delle bande con un pattern, la importo e creo un file unico con le varie bande
 list87 <-list.files(pattern="19870629")
 imp87 <-lapply(list87, raster)
 asc87 <- stack(imp87)
@@ -98,7 +98,7 @@ asc02_crop <- crop(asc02, e)
 asc11_crop <- crop(asc11, e)
 asc21_crop <- crop(asc21, e)
 
-
+#confronto immagine del 1987 con quella del 2021, utilizzo una colorRampPalette per evidenziare in rosso i campi coltivati
 cl <- colorRampPalette(c("white","grey","black","red"))(100)
 par(mfrow=c(1,2))
 plot(asc87_crop[[4]], col=cl, main="1987")
